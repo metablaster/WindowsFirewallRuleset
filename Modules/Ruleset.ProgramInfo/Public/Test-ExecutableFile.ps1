@@ -212,7 +212,7 @@ function Test-ExecutableFile
 			{
 				# TODO: Learn extension description
 				Write-Error -Category InvalidArgument -TargetObject $LiteralPath `
-					-Message "Specified file is not recognized as an executable file '$ExpandedPath'"
+					-Message "The specified file is not recognized as an executable file '$ExpandedPath'"
 			}
 			else
 			{

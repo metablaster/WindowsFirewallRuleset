@@ -61,7 +61,7 @@ None. You cannot pipe objects to qBittorrent.ps1
 None. qBittorrent.ps1 does not generate any output
 
 .NOTES
-None.
+Listening ports need to be adjusted in qBitTorrent
 #>
 
 #Requires -Version 5.1

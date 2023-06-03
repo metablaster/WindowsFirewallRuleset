@@ -124,12 +124,12 @@ if ((Confirm-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $ForceLo
 	$Program = "$EdgeChromiumRoot\msedge.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Edge-Chromium HTTP" `
+		New-NetFirewallRule -DisplayName "Edge-Chromium HTTP\S" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 80 `
+			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Hyper text transfer protocol." | Format-RuleOutput
@@ -147,25 +147,20 @@ if ((Confirm-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $ForceLo
 Experimental transport layer network protocol developed by Google and implemented in 2013." |
 		Format-RuleOutput
 
-		New-NetFirewallRule -DisplayName "Edge-Chromium HTTPS" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "Hyper text transfer protocol over SSL." | Format-RuleOutput
-
-		New-NetFirewallRule -DisplayName "Edge-Chromium speedtest" `
+		#
+		# IRC: 8605
+		# Pokerist: 3103-3110
+		# speedtest: 5060, 8080
+		#
+		New-NetFirewallRule -DisplayName "Edge-Chromium special sites" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 5060, 8080 `
+			-LocalPort Any -RemotePort 3103-3110, 5060, 8080, 8605 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "Ports needed for https://speedtest.net" | Format-RuleOutput
+			-Description "Ports needed for IRC, pokerist.com and speedtest.net" | Format-RuleOutput
 
 		New-NetFirewallRule -DisplayName "Edge-Chromium FTP" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -176,27 +171,6 @@ Experimental transport layer network protocol developed by Google and implemente
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "File transfer protocol." | Format-RuleOutput
-
-		New-NetFirewallRule -DisplayName "Edge-Chromium pokerist" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 3103-3110 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "Ports needed for pokerist casino game" | Format-RuleOutput
-
-		New-NetFirewallRule -DisplayName "Edge-Chromium IRC" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 8605 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "Allow IRC communication with MS-Edge, some sites might provide IRC chat" |
-		Format-RuleOutput
 
 		if ($false)
 		{

@@ -61,7 +61,7 @@ None. You cannot pipe objects to uTorrent.ps1
 None. uTorrent.ps1 does not generate any output
 
 .NOTES
-None.
+Listening ports need to be adjusted in uTorrent
 #>
 
 #Requires -Version 5.1

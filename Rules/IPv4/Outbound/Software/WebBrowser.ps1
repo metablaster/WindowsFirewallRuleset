@@ -113,8 +113,8 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 #
 # Browser installation directories
-# TODO: update path for all users?
-# TODO: returned path will miss browser updaters
+# TODO: Update path for all users?
+# TODO: Returned path will miss browser updaters
 #
 $ChromeRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Google"
 $FirefoxRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Mozilla Firefox"
@@ -141,25 +141,15 @@ if ((Confirm-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
 	$Program = "$ChromeRoot\Chrome\Application\chrome.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Chrome HTTP" `
+		New-NetFirewallRule -DisplayName "Chrome HTTP\S" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 80 `
+			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Hyper text transfer protocol." | Format-RuleOutput
-
-		New-NetFirewallRule -DisplayName "Chrome HTTPS" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "Hyper text transfer protocol over SSL." | Format-RuleOutput
 
 		New-NetFirewallRule -DisplayName "Chrome FTP" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -263,6 +253,21 @@ within small networks that do not include a local name server." | Format-RuleOut
 			-InterfaceType $DefaultInterface `
 			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "Allow Chromecast outbound UDP data" | Format-RuleOutput
+
+		#
+		# IRC: 8605
+		# Pokerist: 3103-3110
+		# speedtest: 5060, 8080
+		#
+		New-NetFirewallRule -DisplayName "Chrome special sites" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 3103-3110, 5060, 8080, 8605 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Ports needed for IRC, pokerist.com and speedtest.net" | Format-RuleOutput
 	}
 
 	$Program = "$ChromeRoot\Update\GoogleUpdate.exe"
@@ -290,25 +295,15 @@ if ((Confirm-Installation "Firefox" ([ref] $FirefoxRoot)) -or $ForceLoad)
 	$Program = "$FirefoxRoot\firefox.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Firefox HTTP" `
+		New-NetFirewallRule -DisplayName "Firefox HTTP\S" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 80 `
+			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Hyper text transfer protocol." | Format-RuleOutput
-
-		New-NetFirewallRule -DisplayName "Firefox HTTPS" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "Hyper text transfer protocol over SSL." | Format-RuleOutput
 
 		New-NetFirewallRule -DisplayName "Firefox FTP" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -319,6 +314,34 @@ if ((Confirm-Installation "Firefox" ([ref] $FirefoxRoot)) -or $ForceLoad)
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "File transfer protocol." | Format-RuleOutput
+
+		New-NetFirewallRule -DisplayName "Firefox QUIC" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "Quick UDP Internet Connections,
+Experimental transport layer network protocol developed by Google and implemented in 2013." |
+		Format-RuleOutput
+
+		#
+		# IRC: 8605
+		# Pokerist: 3103-3110
+		# speedtest: 5060, 8080
+		#
+		New-NetFirewallRule -DisplayName "Firefox special sites" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 3103-3110, 5060, 8080, 8605 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Ports needed for IRC, pokerist.com and speedtest.net" | Format-RuleOutput
 	}
 
 	$Program = "$FirefoxRoot\pingsender.exe"
@@ -348,25 +371,15 @@ if ((Confirm-Installation "Yandex" ([ref] $YandexRoot)) -or $ForceLoad)
 	$Program = "$YandexRoot\YandexBrowser\Application\browser.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Yandex HTTP" `
+		New-NetFirewallRule -DisplayName "Yandex HTTP\S" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 80 `
+			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Hyper text transfer protocol." | Format-RuleOutput
-
-		New-NetFirewallRule -DisplayName "Yandex HTTPS" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "Hyper text transfer protocol over SSL." | Format-RuleOutput
 
 		New-NetFirewallRule -DisplayName "Yandex FTP" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -377,11 +390,39 @@ if ((Confirm-Installation "Yandex" ([ref] $YandexRoot)) -or $ForceLoad)
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "File transfer protocol." | Format-RuleOutput
+
+		New-NetFirewallRule -DisplayName "Yandex QUIC" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "Quick UDP Internet Connections,
+Experimental transport layer network protocol developed by Google and implemented in 2013." |
+		Format-RuleOutput
+
+		#
+		# IRC: 8605
+		# Pokerist: 3103-3110
+		# speedtest: 5060, 8080
+		#
+		New-NetFirewallRule -DisplayName "Yandex special sites" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 3103-3110, 5060, 8080, 8605 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Ports needed for IRC, pokerist.com and speedtest.net" | Format-RuleOutput
 	}
 }
 
 #
-# Tor
+# Tor Browser
 #
 
 # Test if installation exists on system
@@ -391,25 +432,43 @@ if ((Confirm-Installation "Tor" ([ref] $TorRoot)) -or $ForceLoad)
 	$Program = "$TorRoot\Browser\TorBrowser\Tor\tor.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Tor HTTP" `
+		New-NetFirewallRule -DisplayName "Tor HTTP\S" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 80 `
+			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Hyper text transfer protocol." | Format-RuleOutput
 
-		New-NetFirewallRule -DisplayName "Tor HTTPS" `
+		New-NetFirewallRule -DisplayName "Tor QUIC" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 			-LocalAddress Any -RemoteAddress Internet4 `
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "Hyper text transfer protocol over SSL." | Format-RuleOutput
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "Quick UDP Internet Connections,
+Experimental transport layer network protocol developed by Google and implemented in 2013." |
+		Format-RuleOutput
+
+		#
+		# IRC: 8605
+		# Pokerist: 3103-3110
+		# speedtest: 5060, 8080
+		#
+		New-NetFirewallRule -DisplayName "Tor special sites" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 3103-3110, 5060, 8080, 8605 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Ports needed for IRC, pokerist.com and speedtest.net" | Format-RuleOutput
 
 		New-NetFirewallRule -DisplayName "Tor DNS" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -504,25 +563,15 @@ if ((Confirm-Installation "Brave" ([ref] $BraveRoot)) -or $ForceLoad)
 	$Program = "$BraveRoot\brave.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Brave HTTP" `
+		New-NetFirewallRule -DisplayName "Brave HTTP\S" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 80 `
+			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Hyper text transfer protocol." | Format-RuleOutput
-
-		New-NetFirewallRule -DisplayName "Brave HTTPS" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "Hyper text transfer protocol over SSL." | Format-RuleOutput
 
 		New-NetFirewallRule -DisplayName "Brave FTP" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -533,6 +582,34 @@ if ((Confirm-Installation "Brave" ([ref] $BraveRoot)) -or $ForceLoad)
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "File transfer protocol." | Format-RuleOutput
+
+		New-NetFirewallRule -DisplayName "Brave QUIC" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "Quick UDP Internet Connections,
+Experimental transport layer network protocol developed by Google and implemented in 2013." |
+		Format-RuleOutput
+
+		#
+		# IRC: 8605
+		# Pokerist: 3103-3110
+		# speedtest: 5060, 8080
+		#
+		New-NetFirewallRule -DisplayName "Brave special sites" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 3103-3110, 5060, 8080, 8605 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Ports needed for IRC, pokerist.com and speedtest.net" | Format-RuleOutput
 	}
 
 	$Program = "$(Format-Path $BraveUpdateRoot)\BraveUpdate.exe"
@@ -554,7 +631,9 @@ if ((Confirm-Installation "Brave" ([ref] $BraveRoot)) -or $ForceLoad)
 			-Description "Update Brave browser" | Format-RuleOutput
 	}
 
-	# TODO: What follows is not subject to ForceLoad
+	#
+	# Rule for Brave over Tor network
+	#
 	$VersionFolder = Invoke-Command -Session $SessionInstance -ScriptBlock {
 		$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($using:BraveTorRoot)
 
@@ -584,8 +663,8 @@ if ((Confirm-Installation "Brave" ([ref] $BraveRoot)) -or $ForceLoad)
 		else
 		{
 			$Program = Format-Path "$BraveTorRoot\$VersionFolder\$FileName"
-			# TODO: This will fail because file has no extension, needed to manually create rule
-			if ((Test-ExecutableFile $Program) -or $ForceLoad)
+			# NOTE: Not using Test-ExecutableFile here because it would fail since tor file has no extension
+			if ((Test-Path -Path $Program) -or $ForceLoad)
 			{
 				New-NetFirewallRule -DisplayName "Brave Tor" `
 					-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `

@@ -61,7 +61,7 @@ None. You cannot pipe objects to Motrix.ps1
 None. Motrix.ps1 does not generate any output
 
 .NOTES
-None.
+Listening ports need to be adjusted in Motrix
 #>
 
 #Requires -Version 5.1
