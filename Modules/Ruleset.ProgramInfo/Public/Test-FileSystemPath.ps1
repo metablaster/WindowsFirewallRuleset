@@ -320,7 +320,7 @@ function Test-FileSystemPath
 					return $true
 				}
 
-				$Status = "Specified directory does not exist"
+				$Status = "The specified directory does not exist"
 			}
 			elseif ($PathType -eq "File")
 			{

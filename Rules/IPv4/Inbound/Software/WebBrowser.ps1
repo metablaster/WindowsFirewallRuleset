@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Inbound firewall rules for InternetBrowser
+Inbound firewall rules for WebBrowser
 
 .DESCRIPTION
-Inbound firewall rules for 3rd party internet browsers
+Inbound firewall rules for 3rd party web browsers
 
 .PARAMETER Domain
 Computer name onto which to deploy rules
@@ -52,13 +52,13 @@ program path does not exist or if it's of an invalid syntax needed for firewall.
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\InternetBrowser.ps1
+PS> .\WebBrowser.ps1
 
 .INPUTS
-None. You cannot pipe objects to InternetBrowser.ps1
+None. You cannot pipe objects to WebBrowser.ps1
 
 .OUTPUTS
-None. InternetBrowser.ps1 does not generate any output
+None. WebBrowser.ps1 does not generate any output
 
 .NOTES
 None.
@@ -93,13 +93,13 @@ Initialize-Project
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
-$Group = "Internet Browser"
+$Group = "Web Browser"
 
 # Chromecast IP
 # Adjust to the Chromecast IP in your local network
 [IPAddress] $CHROMECAST_IP = "192.168.8.50"
-$Accept = "Inbound rules for 3rd party internet browsers will be loaded, recommended if such browsers are installed to let them access to network"
-$Deny = "Skip operation, inbound rules for internet browsers will not be loaded into firewall"
+$Accept = "Inbound rules for 3rd party web browsers will be loaded, recommended if such browsers are installed to let them access to network"
+$Deny = "Skip operation, inbound rules for web browsers will not be loaded into firewall"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 
 $PSDefaultParameterValues["Confirm-Installation:Quiet"] = $Quiet
@@ -117,7 +117,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 $ChromeRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Google"
 
 #
-# Internet browser rules
+# Web browser rules
 #
 
 #

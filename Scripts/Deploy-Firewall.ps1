@@ -304,11 +304,13 @@ if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for 3rd party software
 		$AllScriptParams["Force"] = $AllCurrent
+		& "$Destination\Software\Calibre.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\FileZilla.ps1" @ScriptParams @AllScriptParams
-		& "$Destination\Software\InternetBrowser.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\qBittorrent.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\Steam.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\TeamViewer.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\uTorrent.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\WebBrowser.ps1" @ScriptParams @AllScriptParams
 		$AllCurrent = $YesToAll
 	}
 
@@ -392,8 +394,10 @@ if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for 3rd party development software
 		$AllScriptParams["Force"] = $AllCurrent
+		& "$Destination\Development\Audacity.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Development\Chocolatey.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Development\CMake.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Development\ColorMania.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Development\EpicGames.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Development\GitHub.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Development\Incredibuild.ps1" @ScriptParams @AllScriptParams
@@ -414,6 +418,7 @@ if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for Microsoft development software
 		$AllScriptParams["Force"] = $AllCurrent
+		& "$Destination\Development\Microsoft\AzureDataStudio.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Development\Microsoft\dotnet.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Development\Microsoft\HelpViewer.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Development\Microsoft\NuGet.ps1" @ScriptParams @AllScriptParams
@@ -480,6 +485,7 @@ if (Approve-Execute @ExecuteParams)
 		# Rules for 3rd party programs
 		$AllScriptParams["Force"] = $AllCurrent
 		& "$Destination\Software\Adobe.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\Calibre.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\CPUID.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\DnsCrypt.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\FileZilla.ps1" @ScriptParams @AllScriptParams
@@ -487,10 +493,12 @@ if (Approve-Execute @ExecuteParams)
 		& "$Destination\Software\GPG.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\Greenshot.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\Intel.ps1" @ScriptParams @AllScriptParams
-		& "$Destination\Software\InternetBrowser.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\Java.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\Logitech.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\MetaTrader.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\Motrix.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\MSI.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\nmap.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\Nvidia.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\OBSStudio.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\OpenSpace.ps1" @ScriptParams @AllScriptParams
@@ -503,6 +511,8 @@ if (Approve-Execute @ExecuteParams)
 		& "$Destination\Software\TeamViewer.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\Thunderbird.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\uTorrent.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\WebBrowser.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\yt-dlp.ps1" @ScriptParams @AllScriptParams
 		$AllCurrent = $YesToAll
 	}
 
