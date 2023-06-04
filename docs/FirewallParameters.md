@@ -159,9 +159,9 @@ From addresses below, only the IPv4 loopback range is valid for Windows firewall
 ### InterfaceType
 
 - `Any` All interface types (BLANK field)
-- `Wired` Wired (Lan)
-- `Wireless` Wireless (Wireless)
-- `RemoteAccess` Remote access (RemoteAccess)
+- `Wired` Wired (Lan) - Network adapters which use wired network physical layers
+- `Wireless` Wireless (Wireless) - Network adapters which use the wireless 802 network physical layer
+- `RemoteAccess` Remote access (RemoteAccess) - Network adapters which use VPN connections
 
 ### InterfaceAlias
 

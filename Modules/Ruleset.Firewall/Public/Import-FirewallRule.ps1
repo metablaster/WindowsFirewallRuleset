@@ -46,8 +46,9 @@ Wildcard characters are supported.
 .PARAMETER FileName
 Export file file containing firewall rules
 
-.PARAMETER JSON
-Input from JSON instead of CSV format
+.PARAMETER FileType
+Specify input file format.
+Supported file formats are JSON, CSV or REG
 
 .PARAMETER Force
 If specified, overwrites existing rules with same name as rules being imported
@@ -115,7 +116,8 @@ function Import-FirewallRule
 		[string] $FileName = "FirewallRules",
 
 		[Parameter()]
-		[switch] $JSON,
+		[ValidateSet("CSV", "JSON", "REG")]
+		[string] $FileType = "CSV",
 
 		[Parameter()]
 		[switch] $Force
@@ -135,12 +137,12 @@ function Import-FirewallRule
 	$FileExtension = [System.IO.Path]::GetExtension($FileName)
 	[array] $FirewallRules = @()
 
-	if ($JSON)
+	if ($FileType -eq "JSON")
 	{
-		# read JSON file
+		# Read *.json file
 		if (!$FileExtension)
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension to input file"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding *.json extension to input file"
 			$FileName += ".json"
 		}
 		elseif ($FileExtension -ne ".json")
@@ -152,12 +154,12 @@ function Import-FirewallRule
 		Confirm-FileEncoding "$Path\$FileName"
 		$FirewallRules += Get-Content "$Path\$FileName" -Encoding $DefaultEncoding | ConvertFrom-Json
 	}
-	else
+	elseif ($FileType -eq "CSV")
 	{
-		# read CSV file
+		# Read *.csv file
 		if (!$FileExtension)
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension to input file"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding *.csv extension to input file"
 			$FileName += ".csv"
 		}
 		elseif ($FileExtension -ne ".csv")
@@ -168,6 +170,24 @@ function Import-FirewallRule
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading CSV file"
 		Confirm-FileEncoding "$Path\$FileName"
 		$FirewallRules += Get-Content "$Path\$FileName" -Encoding $DefaultEncoding | ConvertFrom-Csv -Delimiter ";"
+	}
+	else
+	{
+		# Read *.reg file
+		if (!$FileExtension)
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding *.reg extension to input file"
+			$FileName += ".reg"
+		}
+		elseif ($FileExtension -ne ".reg")
+		{
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected file extension '$FileExtension'"
+		}
+
+		# TODO: Not Tested and no PS session
+		reg.exe import $FileName
+		#$Status = Invoke-Process reg.exe -NoNewWindow -ArgumentList "import $FileName" -Raw @SessionParams
+		#Write-Debug -Message "[$($MyInvocation.InvocationName)] reg import status is '$Status'"
 	}
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Iterating rules"

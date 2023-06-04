@@ -22,6 +22,7 @@ In addition, general questions and answers regarding this firewall.
   - [PowerShell Core throws a black console window](#powershell-core-throws-a-black-console-window)
   - [Duplicate log entries](#duplicate-log-entries)
   - [For your security, some setting are controlled by Group Policy](#for-your-security-some-setting-are-controlled-by-group-policy)
+  - [Where are firewall rules stored in the registry](#where-are-firewall-rules-stored-in-the-registry)
 
 ## Firewall rule doesn't work, program "some-program.exe" fails to connect to internet
 
@@ -433,6 +434,49 @@ To get rid of this message GPO firewall needs to be cleared to system defaults.
 - If nothing helps, in GPO firewall right click on node:
   `Windows Defender Firewall with Advanced Security - Local Group Policy Object` and select
   `Clear Policy`
+
+[Table of Contents](#table-of-contents)
+
+## Where are firewall rules stored in the registry
+
+Control panel firewal rules (which include rules from GPO) are stored in:
+
+```none
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules
+```
+
+GPO rules are stored in:
+
+```none
+HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\FirewallRules
+```
+
+Default rules are store in:
+
+```none
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Defaults\FirewallPolicy\FirewallRules
+```
+
+WFP binary blobs are stored in:
+
+```none
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BFE\Parameters\Policy\Persistent\Filter
+```
+
+When you start the group policy editor and edit a local policy, the settings are loaded by the editor
+in the following location (which includes a bunch of firewall rule entries):
+
+```none
+HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Group Policy Objects
+```
+
+> If the group policy editor ends, the key "Group Policy Objects" deleted again.
+> From time to time it can happen that the entries are retained (if the group policy editor crashes
+> or the keys could not be deleted).
+> You can then delete these keys yourself, otherwise these keys will remain as registry corpses,
+> since the group policy editor will start the entries under a new one next time UID will leave there.
+
+[Source](http://www.winfaq.de/faq_html/Content/tip2000/onlinefaq.php?h=tip2011.htm)
 
 [Table of Contents](#table-of-contents)
 

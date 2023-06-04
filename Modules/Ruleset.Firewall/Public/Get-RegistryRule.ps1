@@ -64,6 +64,11 @@ Specifies that matching firewall rules of the indicated action are retrieved
 .PARAMETER Enabled
 Specifies that matching firewall rules of the indicated state are retrieved
 
+.PARAMETER Raw
+If specified, instead of PSCustomObject a string array of rules is returned exactly as they are
+stored in the registry.
+Output format is same as for *.reg files
+
 .EXAMPLE
 PS> Get-RegistryRule -GroupPolicy
 
@@ -134,7 +139,10 @@ function Get-RegistryRule
 
 		[Parameter()]
 		[ValidateSet("True", "False")]
-		[string] $Enabled
+		[string] $Enabled,
+
+		[Parameter()]
+		[switch] $Raw
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
@@ -308,6 +316,12 @@ function Get-RegistryRule
 				Write-Progress -Activity "Getting rules from registry" -CurrentOperation $RuleName `
 					-PercentComplete (++$RuleCount / $RuleValueNames.Length * 100) `
 					-SecondsRemaining (($RuleValueNames.Length - $RuleCount + 1) / 10 * 60)
+
+				if ($Raw)
+				{
+					Write-Output ('"' + $RuleName + '"="' + $RuleValue + '"')
+					continue
+				}
 
 				# Prepare hashtable
 				$HashProps = [ordered]@{
