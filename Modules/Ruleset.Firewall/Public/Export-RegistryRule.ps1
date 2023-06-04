@@ -56,9 +56,8 @@ DisplayName is case sensitive.
 Display group of the rules to be processed. Wildcard character * is allowed.
 DisplayGroup is case sensitive.
 
-.PARAMETER FileType
-Specify output file format.
-Supported file formats are JSON, CSV or REG
+.PARAMETER JSON
+Output in JSON instead of CSV format
 
 .PARAMETER Inbound
 Export inbound rules
@@ -113,6 +112,7 @@ TODO: In one case no export file was made (with Backup-Firewall.ps1), rerunning 
 TODO: We should probably handle duplicate rule name entires, ex. replace or error,
 because if file with duplicates is imported it will cause removal of duplicate rules.
 TODO: Export CP firewall
+NOTE: Exporting to REG makes no sense because reg file can't be simply imported or executed
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-RegistryRule.md
@@ -144,8 +144,7 @@ function Export-RegistryRule
 		[string] $DisplayGroup = "*",
 
 		[Parameter()]
-		[ValidateSet("CSV", "JSON", "REG")]
-		[string] $FileType = "CSV",
+		[switch] $JSON,
 
 		[Parameter()]
 		[switch] $Inbound,
@@ -184,7 +183,7 @@ function Export-RegistryRule
 	# NOTE: Split-Path -Extension is not available in Windows PowerShell
 	$FileExtension = [System.IO.Path]::GetExtension($FileName)
 
-	if ($FileType -eq "JSON")
+	if ($JSON)
 	{
 		# Output rules in JSON format
 		if (!$FileExtension -or ($FileExtension -ne ".json"))
@@ -193,22 +192,13 @@ function Export-RegistryRule
 			$FileName += ".json"
 		}
 	}
-	elseif ($FileType -eq "CSV")
+	else
 	{
 		# Output rules in CSV format
 		if (!$FileExtension -or ($FileExtension -ne ".csv"))
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding .csv extension to input file"
 			$FileName += ".csv"
-		}
-	}
-	else
-	{
-		# Output rules in reg format
-		if (!$FileExtension -or ($FileExtension -ne ".reg"))
-		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding .reg extension to input file"
-			$FileName += ".reg"
 		}
 	}
 
@@ -244,11 +234,6 @@ function Export-RegistryRule
 	if ($Allow -and !$Block) { $FilterParams.Action = "Allow" }
 	elseif (!$Allow -and $Block) { $FilterParams.Action = "Block" }
 
-	if ($FileType -eq "REG")
-	{
-		$FilterParams.Raw = $true
-	}
-
 	# Read firewall rules
 	[array] $FirewallRules = @()
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting firewall rules from registry on '$Domain' computer..."
@@ -259,28 +244,6 @@ function Export-RegistryRule
 	{
 		Write-Warning -Message "[$($MyInvocation.InvocationName)] No rules were retrieved from registry to export"
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: possible cause is either no match or an error ocurred"
-		return
-	}
-
-	if ($FileType -eq "REG")
-	{
-		# NOTE: File encoding must be UTF16
-		if ($Append -and $FileExists)
-		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Appending to existing REG file"
-			$FirewallRules | Add-Content -Path $DestinationFile -Encoding unicode
-		}
-		else
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Writing rules to '$FileName'"
-			Set-Content -Path $DestinationFile -Encoding unicode -Value @"
-Windows Registry Editor Version 5.00
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\FirewallRules]
-"@
-			$FirewallRules | Add-Content -Path $DestinationFile -Encoding unicode
-		}
-
 		return
 	}
 

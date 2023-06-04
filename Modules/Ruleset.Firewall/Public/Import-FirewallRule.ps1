@@ -46,9 +46,8 @@ Wildcard characters are supported.
 .PARAMETER FileName
 Export file file containing firewall rules
 
-.PARAMETER FileType
-Specify input file format.
-Supported file formats are JSON, CSV or REG
+.PARAMETER JSON
+Input from JSON instead of CSV format
 
 .PARAMETER Force
 If specified, overwrites existing rules with same name as rules being imported
@@ -116,8 +115,7 @@ function Import-FirewallRule
 		[string] $FileName = "FirewallRules",
 
 		[Parameter()]
-		[ValidateSet("CSV", "JSON", "REG")]
-		[string] $FileType = "CSV",
+		[switch] $JSON,
 
 		[Parameter()]
 		[switch] $Force
@@ -137,7 +135,7 @@ function Import-FirewallRule
 	$FileExtension = [System.IO.Path]::GetExtension($FileName)
 	[array] $FirewallRules = @()
 
-	if ($FileType -eq "JSON")
+	if ($JSON)
 	{
 		# Read *.json file
 		if (!$FileExtension)
@@ -154,7 +152,7 @@ function Import-FirewallRule
 		Confirm-FileEncoding "$Path\$FileName"
 		$FirewallRules += Get-Content "$Path\$FileName" -Encoding $DefaultEncoding | ConvertFrom-Json
 	}
-	elseif ($FileType -eq "CSV")
+	else
 	{
 		# Read *.csv file
 		if (!$FileExtension)
@@ -170,24 +168,6 @@ function Import-FirewallRule
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading CSV file"
 		Confirm-FileEncoding "$Path\$FileName"
 		$FirewallRules += Get-Content "$Path\$FileName" -Encoding $DefaultEncoding | ConvertFrom-Csv -Delimiter ";"
-	}
-	else
-	{
-		# Read *.reg file
-		if (!$FileExtension)
-		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding *.reg extension to input file"
-			$FileName += ".reg"
-		}
-		elseif ($FileExtension -ne ".reg")
-		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected file extension '$FileExtension'"
-		}
-
-		# TODO: Not Tested and no PS session
-		reg.exe import $FileName
-		#$Status = Invoke-Process reg.exe -NoNewWindow -ArgumentList "import $FileName" -Raw @SessionParams
-		#Write-Debug -Message "[$($MyInvocation.InvocationName)] reg import status is '$Status'"
 	}
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Iterating rules"

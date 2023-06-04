@@ -451,7 +451,7 @@ GPO rules are stored in:
 HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\FirewallRules
 ```
 
-Default rules are store in:
+Default rules are stored in:
 
 ```none
 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Defaults\FirewallPolicy\FirewallRules
