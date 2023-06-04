@@ -72,7 +72,7 @@ function Confirm-AdminTemplateCseGuidsArePresent
 	}
 
 	$ValueName = $Matches[1]
-	$guidStrings = @($Matches[2] -split "(?<=\])(?=\[)")
+	$GuidStrings = @($Matches[2] -split "(?<=\])(?=\[)")
 
 	if ($Matches[1] -eq "gPCMachineExtensionNames")
 	{

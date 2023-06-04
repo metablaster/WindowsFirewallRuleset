@@ -116,10 +116,12 @@ function Update-GptIniVersion
 	if ($PSCmdlet.ShouldProcess($Path, "Increment version counter in the gpt.ini file"))
 	{
 		$FoundVersionLine = $false
+		$FoundMachineExtensionLine = $false
+		$FoundUserExtensionLine = $false
 		$Section = ""
 
 		$NewContents = @(
-			foreach ($Line in Get-Content $Path)
+			foreach ($Line in Get-Content -Path $Path)
 			{
 				# This might not be the most unreadable regex ever, but it's trying hard to be!
 				# It's looking for section lines:  [SectionName]
@@ -150,15 +152,15 @@ function Update-GptIniVersion
 
 					$Section = $matches[1]
 				}
-				elseif (($section -eq "General") -and
-				($line -match "^\s*Version\s*=\s*(\d+)\s*$") -and
+				elseif (($Section -eq "General") -and
+				($Line -match "^\s*Version\s*=\s*(\d+)\s*$") -and
 				($null -ne ($Version = $matches[1] -as [uint32])))
 				{
 					$FoundVersionLine = $true
 					$NewVersion = Get-NewVersionNumber -Version $Version -PolicyType $PolicyType
-					$line = "Version=$NewVersion"
+					$Line = "Version=$NewVersion"
 				}
-				elseif ($Section -eq "General" -and $line -match "^\s*gPC(Machine|User)ExtensionNames\s*=")
+				elseif ($Section -eq "General" -and $Line -match "^\s*gPC(Machine|User)ExtensionNames\s*=")
 				{
 					if ($matches[1] -eq "Machine")
 					{
@@ -169,10 +171,10 @@ function Update-GptIniVersion
 						$FoundUserExtensionLine = $true
 					}
 
-					$line = Confirm-AdminTemplateCseGuidsArePresent $line
+					$Line = Confirm-AdminTemplateCseGuidsArePresent $Line
 				}
 
-				$line
+				Write-Output $Line
 			}
 
 			if ($Section -eq "General")

@@ -60,12 +60,12 @@ function Get-KeyValueName
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$key = $KeyValueName -replace "^\\+|\\+$"
+	$Key = $KeyValueName -replace "^\\+|\\+$"
 	$ValueName = ""
 
 	if ($KeyValueName -match "^\\*(?<Key>.+?)\\+(?<ValueName>[^\\]*)$")
 	{
-		$key = $Matches["Key"] -replace "\\{2,}", "\"
+		$Key = $Matches["Key"] -replace "\\{2,}", "\"
 		$ValueName = $Matches["ValueName"]
 	}
 

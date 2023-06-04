@@ -58,7 +58,7 @@ PS> Get-PrincipalSID "User" -CimSession (New-CimSession)
 [PSCustomObject]
 
 .NOTES
-TODO: Should return SID value only? needs to see how function is used
+TODO: Should return SID value only? need to see how function is used
 #>
 function Get-PrincipalSID
 {

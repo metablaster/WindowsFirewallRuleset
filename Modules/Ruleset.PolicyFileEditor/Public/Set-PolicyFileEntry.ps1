@@ -199,120 +199,113 @@ function Set-PolicyFileEntry
 
 			Write-Verbose -Message "Configuring '$Key\$ValueName' to value '$Data' of type '$Type'"
 
-			try
+			switch ($Type)
 			{
-				switch ($Type)
-				{
                 ([Microsoft.Win32.RegistryValueKind]::Binary)
+				{
+					$Bytes = $Data -as [byte[]]
+					if ($null -eq $Bytes)
 					{
-						$Bytes = $Data -as [byte[]]
-						if ($null -eq $Bytes)
-						{
-							$ErrorRecord = Assert-InvalidDataTypeCombinationErrorRecord `
-								-Message "When -Type is set to Binary, -Data must be passed a Byte[] array"
-							$PSCmdlet.ThrowTerminatingError($ErrorRecord)
-						}
-						else
-						{
-							$PolicyFile.SetBinaryValue($Key, $ValueName, $Bytes)
-						}
-
-						break
+						$ErrorRecord = Assert-InvalidDataTypeCombinationErrorRecord `
+							-Message "When -Type is set to Binary, -Data must be passed a Byte[] array"
+						$PSCmdlet.ThrowTerminatingError($ErrorRecord)
 					}
+					else
+					{
+						$PolicyFile.SetBinaryValue($Key, $ValueName, $Bytes)
+					}
+
+					break
+				}
 
                 ([Microsoft.Win32.RegistryValueKind]::String)
+				{
+					$Array = @($Data)
+
+					if ($Array.Count -ne 1)
 					{
-						$Array = @($Data)
-
-						if ($Array.Count -ne 1)
-						{
-							$ErrorRecord = Assert-InvalidDataTypeCombinationErrorRecord `
-								-Message "When -Type is set to String, -Data must be passed a scalar value or single-element array"
-							$PSCmdlet.ThrowTerminatingError($ErrorRecord)
-						}
-						else
-						{
-							$PolicyFile.SetStringValue($Key, $ValueName, $Array[0].ToString())
-						}
-
-						break
+						$ErrorRecord = Assert-InvalidDataTypeCombinationErrorRecord `
+							-Message "When -Type is set to String, -Data must be passed a scalar value or single-element array"
+						$PSCmdlet.ThrowTerminatingError($ErrorRecord)
 					}
+					else
+					{
+						$PolicyFile.SetStringValue($Key, $ValueName, $Array[0].ToString())
+					}
+
+					break
+				}
 
                 ([Microsoft.Win32.RegistryValueKind]::ExpandString)
+				{
+					$Array = @($Data)
+
+					if ($Array.Count -ne 1)
 					{
-						$Array = @($Data)
-
-						if ($Array.Count -ne 1)
-						{
-							$ErrorRecord = Assert-InvalidDataTypeCombinationErrorRecord `
-								-Message "When -Type is set to ExpandString, -Data must be passed a scalar value or single-element array"
-							$PSCmdlet.ThrowTerminatingError($ErrorRecord)
-						}
-						else
-						{
-							$PolicyFile.SetStringValue($Key, $ValueName, $Array[0].ToString(), $true)
-						}
-
-						break
+						$ErrorRecord = Assert-InvalidDataTypeCombinationErrorRecord `
+							-Message "When -Type is set to ExpandString, -Data must be passed a scalar value or single-element array"
+						$PSCmdlet.ThrowTerminatingError($ErrorRecord)
 					}
+					else
+					{
+						$PolicyFile.SetStringValue($Key, $ValueName, $Array[0].ToString(), $true)
+					}
+
+					break
+				}
 
                 ([Microsoft.Win32.RegistryValueKind]::DWord)
+				{
+					$Array = @($Data)
+					$Dword = ($Array | Select-Object -First 1) -as [uint32]
+					if ($null -eq $Dword -or $Array.Count -ne 1)
 					{
-						$Array = @($Data)
-						$Dword = ($Array | Select-Object -First 1) -as [uint32]
-						if ($null -eq $Dword -or $Array.Count -ne 1)
-						{
-							$ErrorRecord = Assert-InvalidDataTypeCombinationErrorRecord `
-								-Message "When -Type is set to DWord, -Data must be passed a valid UInt32 value"
-							$PSCmdlet.ThrowTerminatingError($ErrorRecord)
-						}
-						else
-						{
-							$PolicyFile.SetDWORDValue($Key, $ValueName, $Dword)
-						}
-
-						break
+						$ErrorRecord = Assert-InvalidDataTypeCombinationErrorRecord `
+							-Message "When -Type is set to DWord, -Data must be passed a valid UInt32 value"
+						$PSCmdlet.ThrowTerminatingError($ErrorRecord)
 					}
+					else
+					{
+						$PolicyFile.SetDWORDValue($Key, $ValueName, $Dword)
+					}
+
+					break
+				}
 
                 ([Microsoft.Win32.RegistryValueKind]::QWord)
+				{
+					$Array = @($Data)
+					$Qword = ($Array | Select-Object -First 1) -as [UInt64]
+					if ($null -eq $Qword -or $Array.Count -ne 1)
 					{
-						$Array = @($Data)
-						$Qword = ($Array | Select-Object -First 1) -as [UInt64]
-						if ($null -eq $Qword -or $Array.Count -ne 1)
-						{
-							$ErrorRecord = Assert-InvalidDataTypeCombinationErrorRecord `
-								-Message "When -Type is set to QWord, -Data must be passed a valid UInt64 value"
-							$PSCmdlet.ThrowTerminatingError($ErrorRecord)
-						}
-						else
-						{
-							$PolicyFile.SetQWORDValue($Key, $ValueName, $Qword)
-						}
-
-						break
+						$ErrorRecord = Assert-InvalidDataTypeCombinationErrorRecord `
+							-Message "When -Type is set to QWord, -Data must be passed a valid UInt64 value"
+						$PSCmdlet.ThrowTerminatingError($ErrorRecord)
 					}
+					else
+					{
+						$PolicyFile.SetQWORDValue($Key, $ValueName, $Qword)
+					}
+
+					break
+				}
 
                 ([Microsoft.Win32.RegistryValueKind]::MultiString)
-					{
-						$Strings = [string[]] @(
-							foreach ($item in @($Data))
-							{
-								$item.ToString()
-							}
-						)
+				{
+					$Strings = [string[]] @(
+						foreach ($item in @($Data))
+						{
+							$item.ToString()
+						}
+					)
 
-						$PolicyFile.SetMultiStringValue($Key, $ValueName, $Strings)
+					$PolicyFile.SetMultiStringValue($Key, $ValueName, $Strings)
 
-						break
-					}
-				} # switch ($Type)
+					break
+				}
+			} # switch ($Type)
 
-				$Dirty = $true
-			}
-			catch
-			{
-				throw
-			}
+			$Dirty = $true
 		}
 	}
 

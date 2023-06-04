@@ -147,7 +147,7 @@ function Remove-PolicyFileEntry
 
 			Write-Verbose -Message "Removing entry '$Key\$ValueName' from file '$Path'"
 			$policyFile.DeleteValue($Key, $ValueName)
-			$dirty = $true
+			$Dirty = $true
 		}
 	}
 

@@ -119,7 +119,7 @@ function Get-PolicyFileEntry
 
 	try
 	{
-		$policyFile = Open-PolicyFile -Path $Path -ErrorAction Stop
+		$PolicyFile = Open-PolicyFile -Path $Path -ErrorAction Stop
 	}
 	catch
 	{
@@ -128,7 +128,7 @@ function Get-PolicyFileEntry
 
 	if ($PSCmdlet.ParameterSetName -eq "ByKeyAndValue")
 	{
-		$Entry = $policyFile.GetValue($Key, $ValueName)
+		$Entry = $PolicyFile.GetValue($Key, $ValueName)
 
 		if ($null -ne $Entry)
 		{
@@ -137,7 +137,7 @@ function Get-PolicyFileEntry
 	}
 	else
 	{
-		foreach ($Entry in $policyFile.Entries)
+		foreach ($Entry in $PolicyFile.Entries)
 		{
 			Convert-PolicyEntryToPsObject -PolicyEntry $Entry
 		}

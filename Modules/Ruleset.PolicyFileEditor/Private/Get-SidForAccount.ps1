@@ -61,22 +61,21 @@ function Get-SidForAccount
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$Acc = $Account
-	if ($Acc -notlike "*\*") { $Acc = "$env:COMPUTERNAME\$Acc" }
+	if ($Account -notlike "*\*") { $Account = "$env:COMPUTERNAME\$Account" }
 
 	try
 	{
-		$NTAccount = [System.Security.Principal.NTAccount] $Acc
+		$NTAccount = [System.Security.Principal.NTAccount] $Account
 		return $NTAccount.Translate([System.Security.Principal.SecurityIdentifier])
 	}
 	catch
 	{
-		$Message = "Could not translate account '$Acc' to a security identifier"
+		$Message = "Could not translate account '$Account' to a security identifier"
 		$Exception = New-Object System.Exception($Message, $_.Exception)
 
 		$ErrorRecord = New-Object System.Management.Automation.ErrorRecord(
 			$Exception, "CouldNotGetSidForAccount",
-			[System.Management.Automation.ErrorCategory]::ObjectNotFound, $Acc
+			[System.Management.Automation.ErrorCategory]::ObjectNotFound, $Account
 		)
 
 		throw $ErrorRecord
