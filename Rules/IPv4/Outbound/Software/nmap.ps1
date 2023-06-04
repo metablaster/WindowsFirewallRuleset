@@ -62,7 +62,7 @@ None. You cannot pipe objects to OutboundRule.ps1
 None. OutboundRule.ps1 does not generate any output
 
 .NOTES
-TODO: Testing needed, also unsure if zenmap need internet access
+TODO: Testing needed, also unsure if zenmap needs internet access
 
 .LINK
 https://nmap.org

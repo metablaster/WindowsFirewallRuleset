@@ -47,6 +47,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Added rules for Motrix, yt-dlp and calibre
   - Removed invalid rules for vcpkg
   - Updated rules for web browsers
+  - Updated rule for smartscreen
+  - Added blocking rule net.exe
 
 - Modules
 

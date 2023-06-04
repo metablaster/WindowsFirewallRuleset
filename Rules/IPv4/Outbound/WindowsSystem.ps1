@@ -666,16 +666,36 @@ Just turn off the ones you don't want. Or you can just turn them all off at once
 $Program = "%SystemRoot%\System32\smartscreen.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
+	$SmartScreenUsers = $UsersGroupSDDL
+	Merge-SDDL ([ref] $SmartScreenUsers) -From $AdminGroupSDDL -Unique
+
 	New-NetFirewallRule -DisplayName "Smartscreen" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $UsersGroupSDDL `
+		-LocalUser $SmartScreenUsers `
 		-InterfaceType $DefaultInterface `
 		-Description "Checks downloaded files, webpages and it analyzes pages and determines if
 they might be suspicious" |
+	Format-RuleOutput
+}
+
+# TODO: See which other ports may be used, by which users etc.
+# Was seen during Avira installation and setup with TCP 443 Admin Internet
+$Program = "%SystemRoot%\System32\net.exe"
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
+{
+	New-NetFirewallRule -DisplayName "net" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser $AdminGroupSDDL `
+		-InterfaceType $DefaultInterface `
+		-Description "" |
 	Format-RuleOutput
 }
 

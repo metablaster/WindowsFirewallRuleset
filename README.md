@@ -576,7 +576,8 @@ function instead which is as fast as it can be.
 
 ## Remote firewall deployment
 
-This section and functionality is currently experimental and not fully complete
+This section and functionality is currently experimental and not fully complete,
+at the moment deployment to single remote computer is supported.
 
 ![Under construction](/docs/Screenshots/UnderConstruction.gif)
 
