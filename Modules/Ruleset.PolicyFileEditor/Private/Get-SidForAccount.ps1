@@ -49,6 +49,7 @@ limitations under the License.
 
 function Get-SidForAccount
 {
+	# TODO: We already have function with same logic in Ruleset.UserInfo
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
 	[CmdletBinding()]
@@ -57,6 +58,8 @@ function Get-SidForAccount
 		[Parameter()]
 		[string] $Account
 	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	$Acc = $Account
 	if ($Acc -notlike "*\*") { $Acc = "$env:COMPUTERNAME\$Acc" }

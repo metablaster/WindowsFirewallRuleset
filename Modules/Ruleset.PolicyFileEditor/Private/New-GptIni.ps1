@@ -61,6 +61,8 @@ function New-GptIni
 		[string[]] $PolicyType
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	if ($PSCmdlet.ShouldProcess($Path, "Create new gpt.ini file"))
 	{
 		$Parent = Split-Path $Path -Parent

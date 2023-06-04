@@ -58,6 +58,8 @@ function Convert-UInt32ToUInt16Pair
 		[uint32] $UInt32
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	# Deliberately avoiding bitwise shift operators here, for PowerShell v2 compatibility.
 
 	$LowPart = $UInt32 -band 0xFFFF

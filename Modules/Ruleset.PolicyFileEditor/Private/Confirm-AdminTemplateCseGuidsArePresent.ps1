@@ -58,6 +58,7 @@ function Confirm-AdminTemplateCseGuidsArePresent
 		[string] $Line
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	# These lines contain pairs of GUIDs in "registry" format (with the curly braces), separated by nothing, with
 	# each pair of GUIDs wrapped in square brackets.  Example:
 

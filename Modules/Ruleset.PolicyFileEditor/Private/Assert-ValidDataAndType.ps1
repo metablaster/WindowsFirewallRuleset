@@ -61,6 +61,8 @@ function Assert-ValidDataAndType
 		[Microsoft.Win32.RegistryValueKind] $Type
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	if (($Type -ne [Microsoft.Win32.RegistryValueKind]::MultiString) -and
 		($Type -ne [Microsoft.Win32.RegistryValueKind]::Binary) -and
 		($Data.Count -gt 1))

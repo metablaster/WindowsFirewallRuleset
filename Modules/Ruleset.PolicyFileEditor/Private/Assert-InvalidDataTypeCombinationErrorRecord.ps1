@@ -58,6 +58,8 @@ function Assert-InvalidDataTypeCombinationErrorRecord
 		[string] $Message
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	$Exception = New-Object System.Exception($Message)
 
 	return New-Object System.Management.Automation.ErrorRecord($Exception, "InvalidDataTypeCombination",

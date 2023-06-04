@@ -106,7 +106,6 @@ $PrivateScripts = @(
 	"Open-PolicyFile"
 	"Save-PolicyFile"
 	"Test-DataIsEqual"
-	"Update-GptIniVersion"
 )
 
 foreach ($Script in $PrivateScripts)

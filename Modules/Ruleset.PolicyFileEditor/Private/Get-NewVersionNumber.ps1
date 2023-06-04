@@ -61,6 +61,8 @@ function Get-NewVersionNumber
 		[string[]] $PolicyType
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	# User version is the high 16 bits, Machine version is the low 16 bits.
 	# Reference:  http://blogs.technet.com/b/grouppolicy/archive/2007/12/14/understanding-the-gpo-version-number.aspx
 

@@ -111,15 +111,94 @@ function Update-GptIniVersion
 		[string[]] $PolicyType
 	)
 
-	if ($PSCmdlet.ShouldProcess("gpt.ini file", "Increment the version counter"))
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
+	if ($PSCmdlet.ShouldProcess($Path, "Increment version counter in the gpt.ini file"))
 	{
-		try
-		{
-			Update-GptIniVersion @PSBoundParameters
-		}
-		catch
-		{
-			$PSCmdlet.ThrowTerminatingError($_)
-		}
+		$FoundVersionLine = $false
+		$Section = ""
+
+		$NewContents = @(
+			foreach ($Line in Get-Content $Path)
+			{
+				# This might not be the most unreadable regex ever, but it's trying hard to be!
+				# It's looking for section lines:  [SectionName]
+				if ($Line -match "^\s*\[([^\]]+)\]\s*$")
+				{
+					if ($Section -eq "General")
+					{
+						if (-not $FoundVersionLine)
+						{
+							$FoundVersionLine = $true
+							$NewVersion = Get-NewVersionNumber -Version 0 -PolicyType $PolicyType
+
+							"Version=$NewVersion"
+						}
+
+						if (-not $FoundMachineExtensionLine)
+						{
+							$FoundMachineExtensionLine = $true
+							"gPCMachineExtensionNames=$script:MachineExtensionGuids"
+						}
+
+						if (-not $FoundUserExtensionLine)
+						{
+							$FoundUserExtensionLine = $true
+							"gPCUserExtensionNames=$script:UserExtensionGuids"
+						}
+					}
+
+					$Section = $matches[1]
+				}
+				elseif (($section -eq "General") -and
+				($line -match "^\s*Version\s*=\s*(\d+)\s*$") -and
+				($null -ne ($Version = $matches[1] -as [uint32])))
+				{
+					$FoundVersionLine = $true
+					$NewVersion = Get-NewVersionNumber -Version $Version -PolicyType $PolicyType
+					$line = "Version=$NewVersion"
+				}
+				elseif ($Section -eq "General" -and $line -match "^\s*gPC(Machine|User)ExtensionNames\s*=")
+				{
+					if ($matches[1] -eq "Machine")
+					{
+						$FoundMachineExtensionLine = $true
+					}
+					else
+					{
+						$FoundUserExtensionLine = $true
+					}
+
+					$line = Confirm-AdminTemplateCseGuidsArePresent $line
+				}
+
+				$line
+			}
+
+			if ($Section -eq "General")
+			{
+				if (-not $FoundVersionLine)
+				{
+					$FoundVersionLine = $true
+					$NewVersion = Get-NewVersionNumber -Version 0 -PolicyType $PolicyType
+
+					"Version=$NewVersion"
+				}
+
+				if (-not $FoundMachineExtensionLine)
+				{
+					$FoundMachineExtensionLine = $true
+					"gPCMachineExtensionNames=$script:MachineExtensionGuids"
+				}
+
+				if (-not $FoundUserExtensionLine)
+				{
+					$FoundUserExtensionLine = $true
+					"gPCUserExtensionNames=$script:UserExtensionGuids"
+				}
+			}
+		) # NewContents =
+
+		Set-Content -Path $Path -Value $NewContents -Encoding Ascii -Confirm:$false -WhatIf:$false
 	}
 }

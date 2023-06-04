@@ -193,7 +193,6 @@ limitations under the License.
 		"Private\README.md"
 		"Private\Save-PolicyFile.ps1"
 		"Private\Test-DataIsEqual.ps1"
-		"Private\Update-GptIniVersion.ps1"
 		"Public\Get-PolicyFileEntry.ps1"
 		"Public\README.md"
 		"Public\Remove-PolicyFileEntry.ps1"

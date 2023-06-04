@@ -58,6 +58,8 @@ function Convert-PolicyEntryToPsObject
 		[TJX.PolFileEditor.PolEntry] $PolicyEntry
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	$Type = Convert-PolicyEntryTypeToRegistryValueKind $PolicyEntry.Type
 	$Data = Get-EntryData -Entry $PolicyEntry -Type $Type
 

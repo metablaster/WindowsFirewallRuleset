@@ -58,6 +58,8 @@ function Open-PolicyFile
 		[string] $Path
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	$PolicyFile = New-Object TJX.PolFileEditor.PolFile
 	$PolicyFile.FileName = $PSCmdlet.GetUnresolvedProviderPathFromPSPath($Path)
 

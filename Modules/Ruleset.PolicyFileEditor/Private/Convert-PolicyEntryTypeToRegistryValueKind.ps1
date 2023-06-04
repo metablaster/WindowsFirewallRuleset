@@ -58,6 +58,8 @@ function Convert-PolicyEntryTypeToRegistryValueKind
 		[TJX.PolFileEditor.PolEntryType] $PolicyEntryType
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	switch ($PolicyEntryType)
 	{
         ([TJX.PolFileEditor.PolEntryType]::REG_NONE)

@@ -61,6 +61,8 @@ function Save-PolicyFile
 		[switch] $UpdateGptIni
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	if ($PSCmdlet.ShouldProcess($PolicyFile.FileName, "Save new settings"))
 	{
 		$ParentPath = Split-Path $PolicyFile.FileName -Parent

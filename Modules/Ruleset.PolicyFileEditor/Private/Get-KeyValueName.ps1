@@ -58,6 +58,8 @@ function Get-KeyValueName
 		[string] $KeyValueName
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	$key = $KeyValueName -replace "^\\+|\\+$"
 	$ValueName = ""
 

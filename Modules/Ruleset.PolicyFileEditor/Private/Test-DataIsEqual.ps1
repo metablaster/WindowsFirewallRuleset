@@ -64,6 +64,8 @@ function Test-DataIsEqual
 		[Microsoft.Win32.RegistryValueKind] $Type
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	if (($Type -eq [Microsoft.Win32.RegistryValueKind]::String) -or
 		($Type -eq [Microsoft.Win32.RegistryValueKind]::ExpandString) -or
 		($Type -eq [Microsoft.Win32.RegistryValueKind]::DWord) -or

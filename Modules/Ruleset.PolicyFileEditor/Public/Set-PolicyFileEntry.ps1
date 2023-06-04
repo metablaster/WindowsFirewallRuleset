@@ -168,6 +168,7 @@ function Set-PolicyFileEntry
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 		$Dirty = $false
 
 		try
