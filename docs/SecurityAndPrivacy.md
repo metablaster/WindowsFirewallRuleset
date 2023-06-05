@@ -196,10 +196,6 @@ Suggested web browsers are subjective and it depends a lot on how much privacy i
 trade for speed, what matters most is to use the one which receives regular updates,
 most mainstream web browsers do.
 
-It's also important to configure your web browser properly, one example of browser configuration is
-the following web site (but sadly it's out of date):\
-[Securing Your Web Browser][secure browser]
-
 [Table of Contents](#table-of-contents)
 
 ### Software updates
@@ -515,7 +511,6 @@ The following web sites are good starting point for additional research regardin
 [ublock]: https://github.com/gorhill/uBlock "Visit uBlock github page"
 [cad]: https://github.com/Cookie-AutoDelete/Cookie-AutoDelete "Visit CAD github page"
 [https]: https://www.eff.org/https-everywhere "Visit external eff.org site"
-[secure browser]: https://www.cisa.gov/uscert/publications/securing-your-web-browser "Visit cisa.gov site"
 [prism break]: https://prism-break.org/en "Visit prism break site"
 [client identification]: https://www.chromium.org/Home/chromium-security/client-identification-mechanisms "Visit chromium site"
 [asr]: https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/overview-attack-surface-reduction "Visit microsoft site"

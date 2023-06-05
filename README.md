@@ -691,7 +691,7 @@ and firewall settings
 [badge vscode]: https://img.shields.io/static/v1?label=Managed%20in&message=VSCode&color=informational&style=plastic&logo=Visual-Studio-Code
 [regression]: https://en.wikipedia.org/wiki/Software_regression "What is software regresssion?"
 [sigcheck]: https://learn.microsoft.com/en-us/sysinternals/downloads/sigcheck "Download sigcheck from Microsoft"
-[multicursor]: https://code.visualstudio.com/Docs/editor/codebasics#_multiple-selections-multicursor: "Visit VSCode documentation"
+[multicursor]: https://code.visualstudio.com/Docs/editor/codebasics#_multiple-selections-multicursor "Visit VSCode documentation"
 [virustotal terms]: https://support.virustotal.com/hc/en-us/articles/115002145529-Terms-of-Service "Visit VirusTotal site"
 [virustotal privacy]: https://support.virustotal.com/hc/en-us/articles/115002168385-Privacy-Policy "Visit VirusTotal site"
 <!-- unused link or image reference false positive-->
