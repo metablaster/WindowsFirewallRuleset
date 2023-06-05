@@ -273,7 +273,7 @@ $OFS = " "
 # 4. Enables some disabled unit tests and disables logging
 # 5. Enables setting preference variables for modules
 # NOTE: If changed to $true, change requires PowerShell restart
-Set-Variable -Name Develop -Scope Global -Value $true
+Set-Variable -Name Develop -Scope Global -Value $false
 
 if ($Develop)
 {
@@ -581,7 +581,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 
 	# Set to false to avoid checking system and environment requirements
 	# This will also disable checking for modules and required services
-	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $false
+	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $true
 
 	# Set to false to avoid checking if modules are up to date
 	# Enabling this make sense only for development or code navigation

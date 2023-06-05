@@ -194,7 +194,7 @@ environment variable.\
 `Windows Firewall Ruleset` will use it to perform hash based online malware analysis on VirusTotal
 for every executable that is not digitally signed before a firewall rule is made for that executable.\
 This is only a recommendation, if there is no `sigcheck64.exe` in `PATH` you're offered to download
-it and if you refuse no malware analysis is made.\
+it and if you decline no malware analysis is made.\
 By using this functionality you're agree to [VirusTotal Terms of Service][virustotal terms],
 [VirusTotal Privacy Policy][virustotal privacy] and [Sysinternals Software License Terms][sysinternals terms]
 
@@ -275,7 +275,7 @@ IPv4 broadcast address. (Otherwise errors may be generated)
 ### Note
 
 - Loading rules into an empty GPO should be very fast, however loading into GPO which already
-contains rules will be significantly slower (depends on number of existing rules)
+contains rules will be significantly slower (depends on number of existing rules in GPO)
 
 - All errors and warnings will be saved to `Logs` directory, you can review these logs later if you
 whish to fix some problem, most warnings and even some errors can be safely ignored, in certain cases
@@ -326,16 +326,13 @@ These steps here assume you have downloaded a zip file from "assets" section und
 2. Extract downloaded archive somewhere, these steps assume you've extracted the zip file
 (repository root directory) into `C:\` root drive directly.
 
-3. For first time user it's recommended to use Windows PowerShell, see [How to open Windows PowerShell](/docs/WindowsPowerShell.md)\
-If you would like to use PowerShell Core instead keep in mind that there is an issue with
-`PowerShell Core` which brings up a blank console window which you may minimize but not terminate.
-
-4. Otherwise the procedure for both PowerShell Core and Windows PowerShell is similar:\
+3. If you would like to use Windows PowerShell, see [How to open Windows PowerShell](WindowsPowerShell.md)
+Otherwise the procedure for both PowerShell Core and Windows PowerShell is similar:\
 Open up extracted folder, right click into an empty space and there is an option to run
 PowerShell Core as Administrator (Assumes you enabled context menu during installment of PowerShell
 Core) if not open it manually.
 
-5. If you don't have PowerShell context menu then move to `C:\` root drive by executing the
+4. If you don't have PowerShell context menu then move to `C:\` root drive by executing the
 following two lines (type or copy/paste the commands and hit enter for each),
 this is where you extracted your downloaded zip file
 
@@ -344,13 +341,13 @@ this is where you extracted your downloaded zip file
     cd \
     ```
 
-6. cd into downloaded folder:
+5. cd into downloaded folder:
 
     ```powershell
     cd WindowsFirewallRuleset*
     ```
 
-7. To see current execution policy type the following command and hit enter:\
+6. To see current execution policy type the following command and hit enter:\
 (**hint:** *you can use `TAB` key to auto complete as you type*)
 
     ```powershell
@@ -360,7 +357,7 @@ this is where you extracted your downloaded zip file
     Remember the output of the above command, note that PowerShell Core defaults to
     `RemoteSigned` while Windows PowerShell defaults to `Restricted` on non server editions.
 
-8. Set execution policy to unrestricted to be able to unblock project files,
+7. Set execution policy to unrestricted to be able to unblock project files,
 (Note that `RemoteSigned` will work only once scripts are unblocked)
 
     ```powershell
@@ -370,7 +367,7 @@ this is where you extracted your downloaded zip file
     You may be prompted to accept execution policy change, if so type `Y` and press enter to accept.\
     For more information see [About Execution Policies][about execution policies]
 
-9. At this point you should "unblock" all repository files first by executing a script called\
+8. At this point you should "unblock" all repository files first by executing a script called\
 `Scripts\Unblock-Project.ps1`, btw. repository files were blocked by Windows to prevent users from
 running untrusted script code downloaded from internet:
 
@@ -381,7 +378,7 @@ running untrusted script code downloaded from internet:
     If asked, make sure your answer is `R` that is `[R] Run once` as many times as needed to unblock
     project. (approx. up to 8 times)
 
-10. Once repository files are unblocked change execution policy to `RemoteSigned`:
+9. Once repository files are unblocked change execution policy to `RemoteSigned`:
 
     ```powershell
     Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
@@ -389,14 +386,14 @@ running untrusted script code downloaded from internet:
 
     You may be again prompted to accept execution policy change, type `Y` and press enter to accept.
 
-11. Rules for programs such as your web browser, games etc. depend on installation variables.\
+10. Rules for programs such as your web browser, games etc. depend on installation variables.\
 Most paths are auto-searched and variables are updated transparently, otherwise you get warning and
 description on how to fix the problem.\
 If needed, you can find these installation variables in individual scripts inside `Rules` directory.\
 It is recommended to close down all `MMC` management consoles such as `gpedit.msc` or `secpol.msc`
 before running master script in the next step.
 
-12. Back to PowerShell console and run one of the two `Deploy-Firewall` commands below:
+11. Back to PowerShell console and run one of the two `Deploy-Firewall` commands below:
 
     To deploy firewall automatically  with as few prompts as possible run:
 
@@ -416,7 +413,7 @@ before running master script in the next step.
     If for what ever reason you want to interrupt and abort deployment (ex. to start a new) press
     `CTRL + C` on your keyboard while PowerShell is in focus and restart PowerShell console.
 
-13. Follow prompt output, (ex. hit enter to accept default action),
+12. Follow prompt output, (ex. hit enter to accept default action),
 it will take some 15 minutes of your attention.
 
     **NOTE:** If Administrator account is using Microsoft account to log in to computer you will be
@@ -429,15 +426,15 @@ it will take some 15 minutes of your attention.
 
     For more information why this is necessary see [FAQ](/docs/FAQ.md#why-do-i-need-to-specify-my-microsoft-account-credentials)
 
-14. If you encounter errors, you can either ignore errors or update script that produced the error
+13. If you encounter errors, you can either ignore errors or update script that produced the error
 then rerun that specific script once again later.
 
-15. When done you might want to adjust some of the rules in Local Group Policy,
+14. When done you might want to adjust some of the rules in Local Group Policy,
 not all rules are enabled by default or you might want to toggle default Allow/Block behavior.\
 Rules may not cover all programs installed on your system, in which case missing rules need to be
 made.
 
-16. Now go ahead and test your internet connection (ex. with a browser or some other program),
+15. Now go ahead and test your internet connection (ex. with a web browser or some other program),
 If you're unable to connect to internet after deploying these rules you have several options:
 
     - Temporarily open outbound firewall in GPO or [Disable Firewall](/docs/DisableFirewall.md)
@@ -445,7 +442,7 @@ If you're unable to connect to internet after deploying these rules you have sev
     - You can [Reset Firewall to previous state](/docs/ResetFirewall.md)
     - Take a look into `docs` directory for more troubleshooting options and documentation
 
-17. As a prerequisite to deploy firewall, some system services have been started and set to
+16. As a prerequisite to deploy firewall, some system services have been started and set to
 automatic start, inside `Logs` directory you'll find `Services_<DATE>.log` to help you restore these
 services to default if desired.\
 For example `Windows Remote Management` service should not run if not needed
@@ -654,7 +651,7 @@ The following features are desired and might be available at some point in the f
 
 1. Remote firewall administration
 
-    - Deploying firewall configuration to one or multiple remote computers on domain or home networks
+    - Deploying firewall configuration to multiple remote computers on domain or home networks
 
 2. Comprehensive firewall rulesets for Windows Server editions and dedicated gateway systems.
 
@@ -671,7 +668,7 @@ and firewall settings
    - Windows 10 & 11 IoT Enterprise
    - Windows 10 & 11 S
 
-5. Full functionality for x86 systems
+5. Functionality for x86 systems
 
 [Table of Contents](#table-of-contents)
 
