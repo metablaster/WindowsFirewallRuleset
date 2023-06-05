@@ -24,7 +24,7 @@ is used.\
 Personal information is any information that can be used to determine your identity such as email,
 credit card or bank details, home address, birthdate, geographical location etc.\
 Personal information may also refer to hardware ID's, IP address, browsing habits etc. which if
-gained access to may uniquely identify your system.
+gained access to may uniquely identify you or your system.
 
 Security, on the other hand, refers to how your personal information is protected.\
 Security generally refers to the prevention of unauthorized access of data,
@@ -36,7 +36,7 @@ An example of security issue would be a firewall rule or portion of source code 
 attacker compromise yours or someones else's system.\
 Security issue may also refer to system misconfiguration or loss of data.\
 A security or privacy issue may also be related to documentation in this repository such as
-outdated information or suggestions concerning security or privacy.
+outdated information or incorrect suggestions concerning security or privacy.
 
 ## Methods to maximize your security and privacy
 

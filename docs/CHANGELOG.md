@@ -67,6 +67,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `Deploy-Firewall.ps1`
     - `Complete-Firewall.ps1`
 
+  - Fixed a bug in `Ruleset.PolicyFileEditor` module causing stack overflow
   - Fixed a bug with `Initialize-Service` which asked to configure service that was already configured
   - Fixed a bug with `Initialize-Service` which configured services which should not be configured\
   **NOTE:** If you used Windows Firewall Ruleset version up to and including v0.14.0 run the
