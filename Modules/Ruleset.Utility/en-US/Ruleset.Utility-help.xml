@@ -1650,14 +1650,14 @@ binary</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Timeout</maml:name>
           <maml:description>
-            <maml:para>The amount of time, in milliseconds, to wait for the associated process to exit. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 10000 (10 seconds).</maml:para>
+            <maml:para>The amount of time, in milliseconds, to wait for the associated process to exit. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 15000 (15 seconds).</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
             <maml:name>System.Int32</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>10000</dev:defaultValue>
+          <dev:defaultValue>15000</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Async</maml:name>
@@ -1769,14 +1769,14 @@ binary</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Timeout</maml:name>
           <maml:description>
-            <maml:para>The amount of time, in milliseconds, to wait for the associated process to exit. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 10000 (10 seconds).</maml:para>
+            <maml:para>The amount of time, in milliseconds, to wait for the associated process to exit. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 15000 (15 seconds).</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
             <maml:name>System.Int32</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>10000</dev:defaultValue>
+          <dev:defaultValue>15000</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Async</maml:name>
@@ -1913,14 +1913,14 @@ binary</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Timeout</maml:name>
         <maml:description>
-          <maml:para>The amount of time, in milliseconds, to wait for the associated process to exit. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 10000 (10 seconds).</maml:para>
+          <maml:para>The amount of time, in milliseconds, to wait for the associated process to exit. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 15000 (15 seconds).</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
         <dev:type>
           <maml:name>System.Int32</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>10000</dev:defaultValue>
+        <dev:defaultValue>15000</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Async</maml:name>

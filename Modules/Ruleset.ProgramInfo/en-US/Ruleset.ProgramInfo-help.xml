@@ -21,12 +21,17 @@
             <maml:para>Predefined program name for which to search</maml:para>
           </maml:description>
           <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">calibre</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ytdlp</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Motrix</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LGHUB</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">nmap</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Brave</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Psiphon</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">MSI</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">EdgeWebView</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">SteamCMD</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Audacity</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">CMake</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">SqlPath</command:parameterValue>
@@ -177,12 +182,17 @@
             <maml:para>Predefined program name for which to search</maml:para>
           </maml:description>
           <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">calibre</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ytdlp</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Motrix</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LGHUB</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">nmap</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Brave</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Psiphon</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">MSI</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">EdgeWebView</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">SteamCMD</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Audacity</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">CMake</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">SqlPath</command:parameterValue>
@@ -2838,12 +2848,17 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:para>Predefined program name</maml:para>
           </maml:description>
           <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">calibre</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ytdlp</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Motrix</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LGHUB</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">nmap</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Brave</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Psiphon</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">MSI</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">EdgeWebView</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">SteamCMD</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Audacity</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">CMake</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">SqlPath</command:parameterValue>
@@ -2982,12 +2997,17 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:para>Predefined program name</maml:para>
           </maml:description>
           <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">calibre</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ytdlp</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Motrix</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LGHUB</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">nmap</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Brave</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Psiphon</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">MSI</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">EdgeWebView</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">SteamCMD</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Audacity</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">CMake</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">SqlPath</command:parameterValue>

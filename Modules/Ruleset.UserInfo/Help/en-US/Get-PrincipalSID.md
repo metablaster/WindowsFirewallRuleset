@@ -114,6 +114,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 TODO: Should return SID value only?
-needs to see how function is used
+need to see how function is used
 
 ## RELATED LINKS

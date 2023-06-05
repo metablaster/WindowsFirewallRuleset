@@ -1253,7 +1253,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: Should return SID value only? needs to see how function is used</maml:para>
+        <maml:para>TODO: Should return SID value only? need to see how function is used</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

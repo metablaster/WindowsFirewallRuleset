@@ -159,7 +159,7 @@ Accept wildcard characters: False
 
 The amount of time, in milliseconds, to wait for the associated process to exit.
 Value 0 means an immediate return, and a value of -1 specifies an infinite wait.
-The default wait time is 10000 (10 seconds).
+The default wait time is 15000 (15 seconds).
 
 ```yaml
 Type: System.Int32
@@ -168,7 +168,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 10000
+Default value: 15000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

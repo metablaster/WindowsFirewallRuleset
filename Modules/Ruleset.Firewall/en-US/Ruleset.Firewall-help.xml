@@ -919,7 +919,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: Export to excel Excel is not friendly to CSV files TODO: In one case no export file was made (with Backup-Firewall.ps1), rerunning again worked. TODO: We should probably handle duplicate rule name entires, ex. replace or error, because if file with duplicates is imported it will cause removal of duplicate rules.</maml:para>
+        <maml:para>TODO: Export to excel Excel is not friendly to CSV files TODO: In one case no export file was made (with Backup-Firewall.ps1), rerunning again worked. TODO: We should probably handle duplicate rule name entires, ex. replace or error, because if file with duplicates is imported it will cause removal of duplicate rules. TODO: Export CP firewall NOTE: Exporting to REG makes no sense because reg file can't be simply imported or executed</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1603,6 +1603,17 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Raw</maml:name>
+          <maml:description>
+            <maml:para>If specified, instead of PSCustomObject a string array of rules is returned exactly as they are stored in the registry. Output format is same as for *.reg files</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -1701,6 +1712,18 @@
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Raw</maml:name>
+        <maml:description>
+          <maml:para>If specified, instead of PSCustomObject a string array of rules is returned exactly as they are stored in the registry. Output format is same as for *.reg files</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>

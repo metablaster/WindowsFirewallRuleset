@@ -1566,9 +1566,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Invoke-WinCommand {
-	param ($name)
-	"Hello $name, how are you?"
-	$PSVersionTable.PSVersion
+  param ($name)
+  "Hello $name, how are you?"
+  $PSVersionTable.PSVersion
 } Jeffrey</dev:code>
         <dev:remarks>
           <maml:para>Hello Jeffrey, how are you? Major  Minor  Build  Revision PSComputerName -----  -----  -----  -------- -------------- 5      1      17134  1        localhost</maml:para>

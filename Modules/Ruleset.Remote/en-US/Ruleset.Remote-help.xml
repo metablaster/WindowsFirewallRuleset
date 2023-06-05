@@ -395,13 +395,13 @@
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
         <dev:code>$ConnectParams = @{
-	SessionOption = $PSSessionOption
-	ErrorAction = "Stop"
-	Domain = "Server01"
-	Protocol = "HTTP"
-	ConfigurationName = $PSSessionConfigurationName
-	ApplicationName = $PSSessionApplicationName
-	CimOptions = New-CimSessionOption -Protocol Wsman -UICulture "en-US" -Culture "en-US"
+  SessionOption = $PSSessionOption
+  ErrorAction = "Stop"
+  Domain = "Server01"
+  Protocol = "HTTP"
+  ConfigurationName = $PSSessionConfigurationName
+  ApplicationName = $PSSessionApplicationName
+  CimOptions = New-CimSessionOption -Protocol Wsman -UICulture "en-US" -Culture "en-US"
 }
 PS&gt; Connect-Computer @ConnectParams</dev:code>
         <dev:remarks>
@@ -3584,7 +3584,7 @@ PS&gt; Test-WinRM HTTP -Quiet -Status $RemoteStatus</dev:code>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
         <dev:code>$Cert = Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object {
-	$_.Thumbprint -eq "d3157992adf6ef8d74861cb40ab9085e37ef2573"
+  $_.Thumbprint -eq "d3157992adf6ef8d74861cb40ab9085e37ef2573"
 }
 PS&gt; Unregister-SslCertificate $Cert.Thumbprint</dev:code>
         <dev:remarks>

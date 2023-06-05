@@ -306,6 +306,8 @@ TODO: In one case no export file was made (with Backup-Firewall.ps1), rerunning 
 TODO: We should probably handle duplicate rule name entires, ex.
 replace or error,
 because if file with duplicates is imported it will cause removal of duplicate rules.
+TODO: Export CP firewall
+NOTE: Exporting to REG makes no sense because reg file can't be simply imported or executed
 
 ## RELATED LINKS
 
