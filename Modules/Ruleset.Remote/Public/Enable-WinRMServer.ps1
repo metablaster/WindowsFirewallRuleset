@@ -166,7 +166,7 @@ function Enable-WinRMServer
 
 	if ($Loopback)
 	{
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Enabling WinRM loopback server  for '$($Protocol)' protocol ..."
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Enabling WinRM loopback server for '$($Protocol)' protocol ..."
 	}
 	else
 	{

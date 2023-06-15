@@ -79,6 +79,18 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Rulese
 
 .LINK
 https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage
+
+.LINK
+https://learn.microsoft.com/en-us/windows/msix/package/packaging-uwp-apps
+
+.LINK
+https://learn.microsoft.com/en-us/uwp/api/windows.applicationmodel.package
+
+.LINK
+https://learn.microsoft.com/en-us/uwp/api/windows.applicationmodel.packagesignaturekind
+
+.LINK
+https://learn.microsoft.com/en-us/windows/application-management/apps-in-windows-10
 #>
 function Get-UserApp
 {
@@ -133,9 +145,17 @@ function Get-UserApp
 
 	if ($Domain -eq [System.Environment]::MachineName)
 	{
-		# TODO: PackageTypeFilter is not clear, why only "Bundle"?
 		# TODO: Show warning instead of error when failed (ex. in non elevated run check is Admin)
-		$Apps = Get-AppxPackage -Name $Name -User $User -PackageTypeFilter Bundle
+		# NOTE: PackageTypeFilter parameter explanation, see .LINK section for reference
+		# Main: A single package that contains your application and its resources, targeted at a single device architecture.
+		# Bundle: An app bundle is a type of package that can contain multiple app packages, each of which is built to support a specific device architecture.
+		# Framework: Indicates whether other packages can declare a dependency on this package
+		# None:
+		# Resource:
+		# Xap:
+		# Optional: Optional packages are dependent on another package that must be installed first.
+		# NOTE: There is supposed to be no Bundle package that is also not Main
+		$Apps = Get-AppxPackage -Name $Name -User $User -PackageTypeFilter Main
 		$DomainPath = $env:SystemDrive
 	}
 	else
@@ -144,7 +164,7 @@ function Get-UserApp
 			# HACK: This will fail in Windows PowerShell with "The system cannot find the file specified"
 			# ISSUE: https://github.com/MicrosoftDocs/windows-powershell-docs/issues/344
 			# See also: https://www.reddit.com/r/sysadmin/comments/lrm3nj/will_getappxpackage_allusers_work_in_remote/
-			Get-AppxPackage -Name $using:Name -User $using:User -PackageTypeFilter Bundle
+			Get-AppxPackage -Name $using:Name -User $using:User -PackageTypeFilter Main
 		}
 
 		# HACK: Hardcoded, a new functioned needed to get remote shares
@@ -165,22 +185,52 @@ function Get-UserApp
 
 	foreach ($App in $Apps)
 	{
-		# NOTE: This path will be missing for default apps on Windows server
-		# It may also be missing in fresh installed OS before connecting to internet
-		$RemotePath = "$DomainPath\Users\$User\AppData\Local\Packages\$($App.PackageFamilyName)\AC"
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing app path '$RemotePath'"
+		#
+		# NOTE: SignatureKind explanation, see .LINK section for reference
+		#
+		# Developer:
+		# The package is signed with a trusted certificate that is not categorized as Enterprise, Store, or System.
+		# For example, an application signed by an ISV for distribution outside of the Microsoft Store.
+		#
+		# Enterprise:
+		# The package is signed using a certificate issued by a root authority that has higher verification requirements than general public authorities.
+		#
+		# None:
+		# The package is not signed. For example, a Visual Studio project that is running from layout.
+		#
+		# Store:
+		# The package is signed by the Windows Store.
+		#
+		# System:
+		# The package is signed by a certificate that's also used to sign the Windows Operating System.
+		# These packages can have additional capabilities not granted to normal apps.
+		# For example, the built-in Settings app.
+		#
+		if ($App.SignatureKind -ne "System")
+		{
+			if ($App.SignatureKind -eq "None")
+			{
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name)' was ignored because not signed"
+				continue
+			}
 
-		# TODO: See if "$_.Status" property can be used to determine if app is valid
-		if (Test-Path -PathType Container -Path $RemotePath)
-		{
-			# There is no Domain property, so add one, PSComputerName property is of no use here
-			Add-Member -MemberType NoteProperty -InputObject $App -Name Domain -Value $Domain -PassThru
-		}
-		else
-		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name)' is not installed by user '$User' or the app is missing"
-			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store, then rerun '$Caller' script"
+			# NOTE: This path will be missing for default apps on Windows server
+			# It may also be missing in fresh installed OS before connecting to internet
+			$RemotePath = "$DomainPath\Users\$User\AppData\Local\Packages\$($App.PackageFamilyName)\AC"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing app path '$RemotePath'"
+
+			# TODO: See if "$_.Status" property can be used to determine if app is valid
+			if (Test-Path -PathType Container -Path $RemotePath)
+			{
+				# There is no Domain property, so add one, PSComputerName property is of no use here
+				Add-Member -MemberType NoteProperty -InputObject $App -Name Domain -Value $Domain -PassThru
+			}
+			else
+			{
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name)' is not installed by user '$User' or the app is missing"
+				Write-Information -Tags $MyInvocation.InvocationName `
+					-MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store, then rerun '$Caller' script"
+			}
 		}
 	}
 }

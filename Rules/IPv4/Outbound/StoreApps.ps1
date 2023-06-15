@@ -514,7 +514,7 @@ if ($DesktopappInstallerApp)
 
 		if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		{
-			New-NetFirewallRule -DisplayName "Windows PackageManager Server" `
+			New-NetFirewallRule -DisplayName "Windows Package Manager Server" `
 				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 				-Service Any -Program $Program -Group $AppSubGroup `
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `

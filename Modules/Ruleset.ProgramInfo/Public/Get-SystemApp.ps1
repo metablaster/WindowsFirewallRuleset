@@ -73,6 +73,24 @@ None. You cannot pipe objects to Get-SystemApp
 TODO: Query multiple computers
 TODO: We should probably return custom object to be able to pipe to functions such as Get-AppSID
 TODO: Format.ps1xml not applied in Windows PowerShell
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SystemApp.md
+
+.LINK
+https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage
+
+.LINK
+https://learn.microsoft.com/en-us/windows/msix/package/packaging-uwp-apps
+
+.LINK
+https://learn.microsoft.com/en-us/uwp/api/windows.applicationmodel.package
+
+.LINK
+https://learn.microsoft.com/en-us/uwp/api/windows.applicationmodel.packagesignaturekind
+
+.LINK
+https://learn.microsoft.com/en-us/windows/application-management/apps-in-windows-10
 #>
 function Get-SystemApp
 {
@@ -159,7 +177,7 @@ function Get-SystemApp
 
 	foreach ($App in $Apps)
 	{
-		if (($App.SignatureKind -eq "System") -and ($App.Name -like "Microsoft*"))
+		if ($App.SignatureKind -eq "System")
 		{
 			# NOTE: This path will be missing for default apps on Windows server
 			# It may also be missing in fresh installed OS before connecting to internet
