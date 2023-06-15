@@ -180,6 +180,19 @@ New-NetFirewallRule -DisplayName "Windows Push Notifications System Service" `
 provider which handles the connection between the device and WNS server." |
 Format-RuleOutput
 
+# TODO: Seen on Windows 11 but unclear for Windows 10
+New-NetFirewallRule -DisplayName "Network List Service" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+	-Service netprofm -Program $ServiceHost -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort 80 `
+	-LocalUser Any `
+	-InterfaceType $DefaultInterface `
+	-Description "Identifies the networks to which the computer has connected, collects and stores
+properties for these networks, and notifies applications when these properties change." |
+Format-RuleOutput
+
 # NOTE: this service's name isn't constant, but it starts with "WpnUserService" (DisplayName: Windows Push Notifications User Service)
 # NOTE: If using "Get-Service -Name "WpnUserService*" | Where-Object" to compare for both Name and DisplayName it would result in error:
 # Service 'McpManagementService (McpManagementService)' cannot be queried due to the following error: [blank]

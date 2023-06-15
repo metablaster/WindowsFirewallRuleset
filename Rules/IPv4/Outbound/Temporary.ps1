@@ -127,18 +127,6 @@ required for ie. downloaded Click-to-Run which does not have persistent location
 Add installer path in script and rerun Temporary.ps1" |
 Format-RuleOutput
 
-New-NetFirewallRule -DisplayName "Installer DNS" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program Any -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress DNS4 `
-	-LocalPort Any -RemotePort 53 `
-	-LocalUser $InstallerAccounts `
-	-InterfaceType $DefaultInterface `
-	-LocalOnlyMapping $false -LooseSourceMapping $true `
-	-Description "Temporary allow DNS for programs" |
-Format-RuleOutput
-
 New-NetFirewallRule -DisplayName "Services" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service "*" -Program $ServiceHost -Group $Group `

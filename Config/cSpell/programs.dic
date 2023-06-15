@@ -69,6 +69,7 @@ MSSQLSERVER
 mstsc
 mtail
 nbtstat
+netprofm
 netsh
 netstat
 netsvcs

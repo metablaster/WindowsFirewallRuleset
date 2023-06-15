@@ -121,13 +121,26 @@ Format-RuleOutput
 # DNS (Domain Name System)
 #
 
+# TODO: This is temporarily because Initialize-Project does not handle detecting remote computer
+[array] $DnsPort = Invoke-Command -Session $SessionInstance -ScriptBlock {
+	# If less than Windows 11, which supports DNS encryption
+	if ([System.Environment]::OSVersion.Version -lt [version]::new(10, 0, 22000))
+	{
+		53
+	}
+	else
+	{
+		@(53, 443)
+	}
+}
+
 # TODO: official rule uses loose source mapping
 New-NetFirewallRule -DisplayName "DNS Client" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Dnscache -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress DNS4 `
-	-LocalPort Any -RemotePort 53 `
+	-LocalPort Any -RemotePort $DnsPort `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $true `
@@ -142,7 +155,7 @@ New-NetFirewallRule -DisplayName "DNS Client" `
 	-Service Dnscache -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress DNS4 `
-	-LocalPort Any -RemotePort 53 `
+	-LocalPort Any -RemotePort $DnsPort `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "Allow DNS (Domain Name System) requests over TCP.
@@ -151,7 +164,7 @@ address.
 This behavior is classified as loose source mapping." |
 Format-RuleOutput
 
-New-NetFirewallRule -DisplayName "Domain Name System" `
+New-NetFirewallRule -DisplayName "DNS to gateway" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
@@ -161,6 +174,24 @@ New-NetFirewallRule -DisplayName "Domain Name System" `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Allow DNS (Domain Name System) requests by System to default gateway." |
+Format-RuleOutput
+
+$DnsAccounts = $UsersGroupSDDL
+Merge-SDDL ([ref] $DnsAccounts) -From $AdminGroupSDDL -Unique
+
+New-NetFirewallRule -DisplayName "DNS by programs" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress DNS4 `
+	-LocalPort Any -RemotePort 53 `
+	-LocalUser $DnsAccounts `
+	-InterfaceType $DefaultInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $true `
+	-Description "Allow DNS (Domain Name System) requests initiated by programs.
+DNS responses based on requests that matched this rule will be permitted regardless of source
+address.
+This behavior is classified as loose source mapping." |
 Format-RuleOutput
 
 #
