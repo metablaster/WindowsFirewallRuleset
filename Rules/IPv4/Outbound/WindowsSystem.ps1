@@ -128,10 +128,10 @@ $ServerTarget = (Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" 
 
 if (!$ServerTarget)
 {
-	# TODO: remote port unknown, protocol assumed
-	# NOTE: does not exist in Windows Server 2019 and 2022
-	# TODO: does not exist in Windows 11, there must be replacement executable
-	# NOTE: user can by any local human user
+	# TODO: Remote port unknown, protocol assumed
+	# NOTE: Does not exist in Windows Server 2019 and 2022
+	# TODO: Does not exist in Windows 11, there must be replacement executable
+	# NOTE: User can by any local human user
 	$Program = "%SystemRoot%\System32\DataUsageLiveTileTask.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
@@ -644,7 +644,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 }
 
 # TODO: Not available in Windows Server 2022
-# TODO: does not exist in Windows 11, there must be replacement executable
+# TODO: Does not exist in Windows 11, there must be replacement executable
 $Program = "%SystemRoot%\System32\SettingSyncHost.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
@@ -658,8 +658,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-InterfaceType $DefaultInterface `
 		-Description "Host process for setting synchronization. Open your PC Settings and go to the
 'Sync your Settings' section.
-There are on/off switches for all the different things you can choose to sync.
-Just turn off the ones you don't want. Or you can just turn them all off at once at the top." |
+There are on/off switches for all the different things you can choose to sync" |
 	Format-RuleOutput
 }
 
@@ -783,8 +782,8 @@ Merge-SDDL ([ref] $USOAccounts) -From $UsersGroupSDDL
 
 if (!$ServerTarget)
 {
-	# NOTE: does not exist in Windows Server 2019 and 2022
-	# TODO: does not exist in Windows 11, there must be replacement executable
+	# NOTE: Does not exist in Windows Server 2019 and 2022
+	# TODO: Does not exist in Windows 11, there must be replacement executable
 	$Program = "%SystemRoot%\System32\usocoreworker.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
@@ -806,8 +805,8 @@ the USO component needs done." |
 	}
 }
 
-# TODO: This one is present since Windows 10 v2004, needs description, not available in Server 2019
-# TODO: does not exist in Windows 11, there must be replacement executable
+# TODO: This one is present since Windows 10 v2004, not available in Server 2019
+# TODO: Does not exist in Windows 11, there must be replacement executable
 $Program = "%SystemRoot%\System32\MoUsoCoreWorker.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
@@ -819,7 +818,8 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalPort Any -RemotePort 443 `
 		-LocalUser $USOAccounts `
 		-InterfaceType $DefaultInterface `
-		-Description "" |
+		-Description "The 'USO' in MoUSOCoreWorker stands for 'Update Session Orchestrator' -
+the component of the update process that coordinates the order in which updates are downloaded and installed" |
 	Format-RuleOutput
 }
 
@@ -1018,6 +1018,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 $WebViewAccounts = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "ALL APPLICATION PACKAGES"
 Merge-SDDL ([ref] $WebViewAccounts) -From $UsersGroupSDDL
 
+# TODO: It seems this executable won't be found on fresh system if MS Edge is not updated?
 $EdgeWebView = "%ProgramFiles(x86)%\Microsoft\EdgeWebView\Application\97.0.1072.76"
 if ((Confirm-Installation "EdgeWebView" ([ref] $EdgeWebView)) -or $ForceLoad)
 {

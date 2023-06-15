@@ -424,9 +424,13 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 }
 
 #
-# A special rule for TerminalAzBridge.exe (Azure Cloud Shell) which is part of Windows Terminal
+# The following are rules for executables withing store app directories which are not handled by store app rules
 # TODO: This is a hackery, a better design or function is needed to detect programs within app folders
 # TODO: Not affected by $ForceLoad
+#
+
+#
+# A special rule for TerminalAzBridge.exe (Azure Cloud Shell) which is part of Windows Terminal
 #
 $TerminalApp = Get-UserApp -User $Principal.User -Name "*WindowsTerminal*" -Session $SessionInstance
 if ($TerminalApp)
@@ -523,6 +527,54 @@ if ($DesktopappInstallerApp)
 				-LocalUser $UsersGroupSDDL `
 				-InterfaceType $DefaultInterface `
 				-Description "WindowsPackageManagerServer.exe is used to download apps" |
+			Format-RuleOutput
+		}
+	}
+}
+
+#
+# TODO: There is auto generated rule for Microsoft Teams app but it doesn't work
+# This code should exist only for msteamsupdate.exe but not for msteams.exe
+#
+$TeamsApp = Get-UserApp -User $Principal.User -Name "Microsoftteams" -Session $SessionInstance
+if ($TeamsApp)
+{
+	$ParentPath = Split-Path -Path $TeamsApp.InstallLocation
+
+	Invoke-Command -Session $SessionInstance -ScriptBlock {
+		# There are multiple paths but only one is correct
+		Get-Item -Path "$using:ParentPath\Microsoftteams*"
+	} |	Select-Object PSPath | Convert-Path | ForEach-Object {
+
+		$Program = Format-Path "$_\msteams.exe"
+
+		if ((Test-ExecutableFile $Program) -or $ForceLoad)
+		{
+			New-NetFirewallRule -DisplayName "Microsoft Teams" `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+				-Service Any -Program $Program -Group $AppSubGroup `
+				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 443 `
+				-LocalUser $UsersGroupSDDL `
+				-InterfaceType $DefaultInterface `
+				-Description "Microsoft Teams app" |
+			Format-RuleOutput
+		}
+
+		$Program = Format-Path "$_\msteamsupdate.exe"
+
+		if ((Test-ExecutableFile $Program) -or $ForceLoad)
+		{
+			New-NetFirewallRule -DisplayName "Microsoft Teams update" `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+				-Service Any -Program $Program -Group $AppSubGroup `
+				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 443 `
+				-LocalUser $UsersGroupSDDL `
+				-InterfaceType $DefaultInterface `
+				-Description "Microsoft Teams app updater" |
 			Format-RuleOutput
 		}
 	}

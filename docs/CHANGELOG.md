@@ -27,6 +27,10 @@ Here is a list of changes for each of the releases.
 
 ## v0.15.1 (develop branch)
 
+- Rules
+
+  - Added workaround rules for `Microsoft Teams` app present in Windows 11
+
 - Modules
 
   - Improved or updated module functions

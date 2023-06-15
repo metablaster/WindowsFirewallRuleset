@@ -270,6 +270,9 @@ Note that `Scripts\Complete-Firewall.ps1` is automatically called by `Scripts\De
 - Some scripts require you (network adapter) to be connected to network, for example to determine
 IPv4 broadcast address. (Otherwise errors may be generated)
 
+- Everything on system should be up to date because otherwise some rules may be skipped or incorrect,
+this includes windows updates, Microsoft store apps and all other software.
+
 [Table of Contents](#table-of-contents)
 
 ### Note

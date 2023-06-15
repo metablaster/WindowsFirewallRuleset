@@ -229,7 +229,7 @@ function Get-UserApp
 			{
 				Write-Warning -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name)' is not installed by user '$User' or the app is missing"
 				Write-Information -Tags $MyInvocation.InvocationName `
-					-MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store, then rerun '$Caller' script"
+					-MessageData "INFO: To fix the problem let this user update all of it's apps in Microsoft store, then rerun '$Caller' script"
 			}
 		}
 	}
