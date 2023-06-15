@@ -52,7 +52,7 @@ or derivative works that you create that run on a Microsoft Windows operating sy
 
 <#PSScriptInfo
 
-.VERSION 0.15.0
+.VERSION 0.15.1
 
 .GUID d2826695-3fc1-47c9-80f1-6b7f80a2f26c
 
