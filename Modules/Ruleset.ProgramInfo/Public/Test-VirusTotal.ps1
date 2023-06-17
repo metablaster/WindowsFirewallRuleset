@@ -203,6 +203,11 @@ function Test-VirusTotal
 					$_.Name -notmatch "a.exe$"
 				}
 
+				if ([System.Environment]::Is64BitOperatingSystem)
+				{
+					$SigcheckExecutable = $SigcheckExecutable -replace "\*", "64"
+				}
+
 				# Can be, not found or there are multiple matches
 				if (($Command | Measure-Object).Count -ne 0)
 				{
@@ -225,7 +230,6 @@ function Test-VirusTotal
 					if ([System.Environment]::Is64BitOperatingSystem)
 					{
 						$SigCheckFile = "$SigcheckPath\Sigcheck64.exe"
-						$SigcheckExecutable = $SigcheckExecutable -replace "\*", "64"
 					}
 					else
 					{

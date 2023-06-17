@@ -144,11 +144,18 @@ function Get-SystemSoftware
 					# NOTE: Avoid spamming
 					$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
 
+					# regex to remove: executable name followed by comma and icon index at the end
+					# This was the case with qBittorrent in Windows 11
+					# TODO: If this hits then other two regexes below are redundant
+					$InstallLocation = $InstallLocation -Replace '\\(?:.(?!\\))+"?,\d+$', ""
+
 					# regex to remove: \whatever.exe at the end
 					$InstallLocation = $InstallLocation -Replace "\\(?:.(?!\\))+exe$", ""
+
 					# regex to remove \iconname.ico
 					# This was the case with nmap program
 					$InstallLocation = $InstallLocation -Replace "\\(?:.(?!\\))+ico$", ""
+
 					# once exe is removed, remove uninstall folder too if needed
 					#$InstallLocation = $InstallLocation -Replace "\\uninstall$", ""
 

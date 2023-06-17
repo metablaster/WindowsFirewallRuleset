@@ -39,6 +39,7 @@ Here is a list of changes for each of the releases.
 
     - `Get-SystemApp` Removed restriction to include only apps beginning with "Microsoft"
     - `Get-UserApp` Was handling only bundle apps which is incorrect
+    - `Get-SystemSoftware` Improved program search
 
 ## v0.15.0  (current release)
 
