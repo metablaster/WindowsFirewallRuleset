@@ -651,53 +651,17 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 			Set-Variable -Name ConnectionIPv4 -Scope Global -Option ReadOnly -Force -Value $true
 		}
 
-		try
-		{
-			# User account name for which to search executables in user profile and non standard paths by default
-			# Also used for other defaults where standard user account is expected, ex. development as standard user
-			# NOTE: If there are multiple users and to affect them all set this value to non existent user
-			# TODO: Needs testing info messages for this value
-			# TODO: We are only assuming about accounts here as a workaround due to often need to modify variable
-			# TODO: This should be used for -LocalUser rule parameter too
-			# TODO: This should also be all users from default group because some rules use it
-			Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value (
-				Split-Path -Path (Get-LocalGroupMember -Group $DefaultGroup[0] | Where-Object {
-						($_.ObjectClass -EQ "User") -and
-						(($_.PrincipalSource -eq "Local") -or ($_.PrincipalSource -eq "MicrosoftAccount"))
-					} | Select-Object -ExpandProperty Name -Last 1) -Leaf)
-		}
-		catch
-		{
-			Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value "UnknownUser"
-			Write-Warning -Message "[$SettingsScript] No users exists in $($DefaultGroup[0]) group"
-		}
+		# Non existent dummy user account which should be set to known user only for development purposes
+		# in all other cases the code should determine the actual user that is needed
+		Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value "UnknownUser"
 
-		# Administrative user account name which will perform unit testing
-		if ($PolicyStore -ne [System.Environment]::MachineName)
-		{
-			Set-Variable -Name TestAdmin -Scope Global -Option ReadOnly -Force -Value "Admin"
-		}
-		else
-		{
-			# TODO: This may select inactive admin account, ex Administrator
-			Set-Variable -Name TestAdmin -Scope Global -Option ReadOnly -Force -Value (
-				Split-Path -Path (Get-LocalGroupMember -Group Administrators | Where-Object {
-						($_.ObjectClass -EQ "User") -and
-						(($_.PrincipalSource -eq "Local") -or ($_.PrincipalSource -eq "MicrosoftAccount"))
-					} | Select-Object -ExpandProperty Name -Last 1) -Leaf)
-		}
+		# Administrative user account name used for unit testing
+		Set-Variable -Name TestAdmin -Scope Global -Option ReadOnly -Force -Value "Admin"
 
-		# Standard user account name which will perform unit testing
-		if ($PolicyStore -ne [System.Environment]::MachineName)
-		{
-			Set-Variable -Name TestUser -Scope Global -Option ReadOnly -Force -Value "User"
-		}
-		else
-		{
-			Set-Variable -Name TestUser -Scope Global -Option ReadOnly -Force -Value $DefaultUser
-		}
+		# Standard user account name used for unit testing
+		Set-Variable -Name TestUser -Scope Global -Option ReadOnly -Force -Value "User"
 
-		# Remote test computer which will perform unit testing
+		# Remote test computer used for unit testing
 		Set-Variable -Name TestDomain -Scope Global -Option ReadOnly -Force -Value "VM-PRO"
 	}
 }

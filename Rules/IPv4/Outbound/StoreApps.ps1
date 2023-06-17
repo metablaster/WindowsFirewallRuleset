@@ -343,8 +343,7 @@ foreach ($Principal in $Users)
 
 # Accounts needed for store app web authentication
 $AppAccounts = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection"
-$DefaultGroupSDDL = Get-SDDL -Group $DefaultGroup -Merge
-Merge-SDDL ([ref] $AppAccounts) -From $DefaultGroupSDDL
+Merge-SDDL ([ref] $AppAccounts) -From $UsersGroupSDDL
 
 $Program = "%SystemRoot%\System32\RuntimeBroker.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
@@ -355,7 +354,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 443 `
-		-LocalUser $DefaultGroupSDDL `
+		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
 		-Description "The Runtime Broker is responsible for checking if a store app is declaring all of
 its permissions and informing the user whether or not its being allowed" |
@@ -418,7 +417,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 443 `
-		-LocalUser $DefaultGroupSDDL `
+		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
 		-Description "App host registration verifier tool tests the configuration of store app and website" |
 	Format-RuleOutput
@@ -495,7 +494,7 @@ if ($WinDbgApp)
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 				-LocalAddress Any -RemoteAddress Internet4 `
 				-LocalPort Any -RemotePort 80, 443 `
-				-LocalUser $DefaultGroupSDDL `
+				-LocalUser $UsersGroupSDDL `
 				-InterfaceType $DefaultInterface `
 				-Description "EngHost.exe is the process responsible for attaching or launching the process being debugged.
 Because WinDbg UWP app has limited system access this process is used via the IPC mechanism" |
@@ -527,7 +526,7 @@ if ($DesktopappInstallerApp)
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 				-LocalAddress Any -RemoteAddress Internet4 `
 				-LocalPort Any -RemotePort 443 `
-				-LocalUser $DefaultGroupSDDL `
+				-LocalUser $UsersGroupSDDL `
 				-InterfaceType $DefaultInterface `
 				-Description "WindowsPackageManagerServer.exe is used to download apps" |
 			Format-RuleOutput
@@ -560,7 +559,7 @@ if ($TeamsApp)
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 				-LocalAddress Any -RemoteAddress Internet4 `
 				-LocalPort Any -RemotePort 443 `
-				-LocalUser $DefaultGroupSDDL `
+				-LocalUser $UsersGroupSDDL `
 				-InterfaceType $DefaultInterface `
 				-Description "Microsoft Teams app" |
 			Format-RuleOutput
@@ -576,7 +575,7 @@ if ($TeamsApp)
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 				-LocalAddress Any -RemoteAddress Internet4 `
 				-LocalPort Any -RemotePort 443 `
-				-LocalUser $DefaultGroupSDDL `
+				-LocalUser $UsersGroupSDDL `
 				-InterfaceType $DefaultInterface `
 				-Description "Microsoft Teams app updater" |
 			Format-RuleOutput

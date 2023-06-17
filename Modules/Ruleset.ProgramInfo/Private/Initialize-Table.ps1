@@ -73,7 +73,8 @@ function Initialize-Table
 	$ColumnID = New-Object -TypeName System.Data.DataColumn ID, ([int32])
 	$ColumnDomain = New-Object -TypeName System.Data.DataColumn Domain, ([string])
 
-	# NOTE: User, Group, Principal, SID are used only for programs installed per user
+	# NOTE: User, Group, Principal, SID make sense only for programs installed per user
+	# Setting them for system wide programs makes no purpose because user groups are manually set per rule
 	$ColumnUser = New-Object -TypeName System.Data.DataColumn User, ([string])
 	$ColumnGroup = New-Object -TypeName System.Data.DataColumn Group, ([string])
 	$ColumnPrincipal = New-Object -TypeName System.Data.DataColumn Principal, ([string])

@@ -246,8 +246,10 @@ function Search-Installation
 		}
 		"Psiphon"
 		{
-			# TODO: We're not handling multiple directories
-			Edit-Table "%SystemDrive%\Users\$DefaultUser\AppData\Local\Temp"
+			foreach ($Principal in @(Get-GroupPrincipal -Group $DefaultGroup -Unique -CimSession $CimSession))
+			{
+				Edit-Table "%SystemDrive%\Users\$($Principal.User)\AppData\Local\Temp"
+			}
 			break
 		}
 		"WindowsKits"
@@ -703,8 +705,10 @@ function Search-Installation
 		}
 		"BingWallpaper"
 		{
-			# TODO: We're not handling multiple directories
-			Edit-Table "%SystemDrive%\Users\$DefaultUser\AppData\Local\Microsoft\BingWallpaperApp"
+			foreach ($Principal in @(Get-GroupPrincipal -Group $DefaultGroup -Unique -CimSession $CimSession))
+			{
+				Edit-Table "%SystemDrive%\Users\$($Principal.User)\AppData\Local\Microsoft\BingWallpaperApp"
+			}
 			break
 		}
 		"Motrix"

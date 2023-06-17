@@ -148,7 +148,7 @@ Set-Variable -Name UpdateGPO -Scope Global -Value $false
 
 # Set -Confirm parameter
 $GrantLogsParams = @{
-	User = $DefaultUser
+	User = $TestUser
 	Force = $Force
 }
 $SetShortCutParams = @{

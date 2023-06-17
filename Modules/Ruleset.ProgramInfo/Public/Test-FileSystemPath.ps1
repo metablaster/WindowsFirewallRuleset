@@ -266,7 +266,7 @@ function Test-FileSystemPath
 				{
 					if ($RegexVariable.Value -notin $WhiteList)
 					{
-						& $WriteConditional "Specified environment variable was not whitelisted for firewall"
+						& $WriteConditional "The specified environment variable was not whitelisted for firewall"
 						return $false
 					}
 
