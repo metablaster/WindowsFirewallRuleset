@@ -806,8 +806,21 @@ the USO component needs done." |
 }
 
 # TODO: This one is present since Windows 10 v2004, not available in Server 2019
-# TODO: Does not exist in Windows 11, there must be replacement executable
-$Program = "%SystemRoot%\System32\MoUsoCoreWorker.exe"
+# If less than Windows 11
+if ([System.Environment]::OSVersion.Version -lt [version]::new(10, 0, 22000))
+{
+	# TODO: Does not exist in Windows Server 2019 and 2022
+	$Program = "%SystemRoot%\System32\MoUsoCoreWorker.exe"
+}
+elseif ([System.Environment]::Is64BitOperatingSystem)
+{
+	$Program = "%SystemRoot%\uus\AMD64\MoUsoCoreWorker.exe"
+}
+else
+{
+	$Program = "%SystemRoot%\uus\x86\MoUsoCoreWorker.exe"
+}
+
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Mo Update Session Orchestrator" `
