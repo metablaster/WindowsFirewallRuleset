@@ -148,7 +148,7 @@ function Edit-Table
 		# will not work if a path is inconsistent with back or forward slashes
 		if ($Domain -eq [System.Environment]::MachineName)
 		{
-			$UserInfo = Get-GroupPrincipal $DefaultGroup[0] | Where-Object {
+			$UserInfo = Get-GroupPrincipal $DefaultGroup -Unique | Where-Object {
 				# LiteralPath might contain environment variables, which would make match fail
 				[System.Environment]::ExpandEnvironmentVariables($LiteralPath) -match "^$SystemDrive\\+Users\\+$($_.User)\\+"
 			}
@@ -156,7 +156,7 @@ function Edit-Table
 		else
 		{
 			$UserInfo = Invoke-Command @SessionParams -ScriptBlock {
-				Get-GroupPrincipal $using:DefaultGroup[0] | Where-Object {
+				Get-GroupPrincipal $using:DefaultGroup -Unique | Where-Object {
 					[System.Environment]::ExpandEnvironmentVariables($using:LiteralPath) -match "^$using:SystemDrive\\+Users\\+$($_.User)\\+"
 				}
 			}
@@ -190,20 +190,23 @@ function Edit-Table
 		$LiteralPath = Format-Path $LiteralPath
 
 		# Not user profile path, so it applies to all users
-		$UserInfo = Get-UserGroup @CimParams | Where-Object -Property Group -EQ $DefaultGroup[0]
+		$GroupEntry = Get-UserGroup @CimParams | Where-Object -Property Group -EQ $DefaultGroup[0]
+
+		# TODO: foreach ($GroupEntry in $UserGroups) not used because groups for rule are manually set per rule
+		# $UserGroups = Get-UserGroup @CimParams | Where-Object -Property Group -In $DefaultGroup
 
 		# Create a row
 		$Row = $InstallTable.NewRow()
 
 		# Enter data into row
 		$Row.ID = ++$RowIndex
-		$Row.Domain = $UserInfo.Domain
-		$Row.Group = $UserInfo.Group
-		$Row.Principal = $UserInfo.Principal
-		$Row.SID = $UserInfo.SID
+		$Row.Domain = $GroupEntry.Domain
+		$Row.Group = $GroupEntry.Group
+		$Row.Principal = $GroupEntry.Principal
+		$Row.SID = $GroupEntry.SID
 		$Row.InstallLocation = $LiteralPath
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table for $($UserInfo.Principal) with $LiteralPath"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table for $($GroupEntry.Principal) with $LiteralPath"
 
 		# Add the row to the table
 		$InstallTable.Rows.Add($Row)

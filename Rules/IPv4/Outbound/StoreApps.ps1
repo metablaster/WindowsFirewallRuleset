@@ -165,7 +165,7 @@ Administrators should have limited or no connectivity at all for maximum securit
 }
 
 #
-# Create rules for all network apps for each standard user
+# Create rules for all network apps for each user
 #
 $Users = Get-GroupPrincipal $DefaultGroup -Unique
 
@@ -335,11 +335,16 @@ foreach ($Principal in $Users)
 			Update-Log
 		}
 	}
-}
+} # foreach
 
 #
 # The following are executables and service rules needed by apps for web authentication
 #
+
+# Accounts needed for store app web authentication
+$AppAccounts = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection"
+$DefaultGroupSDDL = Get-SDDL -Group $DefaultGroup -Merge
+Merge-SDDL ([ref] $AppAccounts) -From $DefaultGroupSDDL
 
 $Program = "%SystemRoot%\System32\RuntimeBroker.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
@@ -350,16 +355,12 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 443 `
-		-LocalUser $UsersGroupSDDL `
+		-LocalUser $DefaultGroupSDDL `
 		-InterfaceType $DefaultInterface `
 		-Description "The Runtime Broker is responsible for checking if a store app is declaring all of
 its permissions and informing the user whether or not its being allowed" |
 	Format-RuleOutput
 }
-
-# Accounts needed for store app web authentication
-$AppAccounts = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection"
-Merge-SDDL ([ref] $AppAccounts) -From $UsersGroupSDDL
 
 $Program = "%SystemRoot%\System32\AuthHost.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
@@ -417,20 +418,22 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 443 `
-		-LocalUser $UsersGroupSDDL `
+		-LocalUser $DefaultGroupSDDL `
 		-InterfaceType $DefaultInterface `
 		-Description "App host registration verifier tool tests the configuration of store app and website" |
 	Format-RuleOutput
 }
 
 #
-# The following are rules for executables withing store app directories which are not handled by store app rules
+# The following are special rules for executables within store app directories which are either not
+# handled auto generated store app rules or because the auto genrated rule doesn't work
 # TODO: This is a hackery, a better design or function is needed to detect programs within app folders
 # TODO: Not affected by $ForceLoad
 #
 
 #
 # A special rule for TerminalAzBridge.exe (Azure Cloud Shell) which is part of Windows Terminal
+# which is distinct from autogenrated rule
 #
 $TerminalApp = Get-UserApp -User $Principal.User -Name "*WindowsTerminal*" -Session $SessionInstance
 if ($TerminalApp)
@@ -447,7 +450,7 @@ if ($TerminalApp)
 		if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		{
 			$AzureShellUsers = Get-SDDL -Group $DefaultGroup -Merge
-			Merge-SDDL -SDDL ([ref] $AzureShellUsers) -From $AdminGroupSDDL
+			Merge-SDDL -SDDL ([ref] $AzureShellUsers) -From $AdminGroupSDDL -Unique
 
 			New-NetFirewallRule -DisplayName "Azure Cloud Shell" `
 				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -464,7 +467,7 @@ if ($TerminalApp)
 }
 
 #
-# Same as with Azure Cloud Shell above here this is a case with EngHost.exe
+# A special rule for EngHost.exe because rule for WinDbg is distinct from this one
 #
 $WinDbgApp = Get-UserApp -User $Principal.User -Name "*WinDbg*" -Session $SessionInstance
 if ($WinDbgApp)
@@ -492,7 +495,7 @@ if ($WinDbgApp)
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 				-LocalAddress Any -RemoteAddress Internet4 `
 				-LocalPort Any -RemotePort 80, 443 `
-				-LocalUser $UsersGroupSDDL `
+				-LocalUser $DefaultGroupSDDL `
 				-InterfaceType $DefaultInterface `
 				-Description "EngHost.exe is the process responsible for attaching or launching the process being debugged.
 Because WinDbg UWP app has limited system access this process is used via the IPC mechanism" |
@@ -502,7 +505,7 @@ Because WinDbg UWP app has limited system access this process is used via the IP
 }
 
 #
-# Same as with Azure Cloud Shell above here this is a case with Microsoft.Desktopappinstaller app
+# A special rule for Microsoft.Desktopappinstaller app
 #
 $DesktopappInstallerApp = Get-UserApp -User $Principal.User -Name "Microsoft.Desktopappinstaller" -Session $SessionInstance
 if ($DesktopappInstallerApp)
@@ -524,7 +527,7 @@ if ($DesktopappInstallerApp)
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 				-LocalAddress Any -RemoteAddress Internet4 `
 				-LocalPort Any -RemotePort 443 `
-				-LocalUser $UsersGroupSDDL `
+				-LocalUser $DefaultGroupSDDL `
 				-InterfaceType $DefaultInterface `
 				-Description "WindowsPackageManagerServer.exe is used to download apps" |
 			Format-RuleOutput
@@ -534,7 +537,8 @@ if ($DesktopappInstallerApp)
 
 #
 # TODO: There is auto generated rule for Microsoft Teams app but it doesn't work
-# This code should exist only for msteamsupdate.exe but not for msteams.exe
+# This code should probably exist only for msteamsupdate.exe, auto generated rule is supposed to
+# work for msteams.exe
 #
 $TeamsApp = Get-UserApp -User $Principal.User -Name "Microsoftteams" -Session $SessionInstance
 if ($TeamsApp)
@@ -556,7 +560,7 @@ if ($TeamsApp)
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 				-LocalAddress Any -RemoteAddress Internet4 `
 				-LocalPort Any -RemotePort 443 `
-				-LocalUser $UsersGroupSDDL `
+				-LocalUser $DefaultGroupSDDL `
 				-InterfaceType $DefaultInterface `
 				-Description "Microsoft Teams app" |
 			Format-RuleOutput
@@ -572,7 +576,7 @@ if ($TeamsApp)
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 				-LocalAddress Any -RemoteAddress Internet4 `
 				-LocalPort Any -RemotePort 443 `
-				-LocalUser $UsersGroupSDDL `
+				-LocalUser $DefaultGroupSDDL `
 				-InterfaceType $DefaultInterface `
 				-Description "Microsoft Teams app updater" |
 			Format-RuleOutput

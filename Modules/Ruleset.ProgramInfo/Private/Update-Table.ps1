@@ -174,15 +174,11 @@ function Update-Table
 			$script:AllUserPrograms = Get-AllUserProgram -Domain $Domain
 		}
 
-		# To reduce typing and make code clear
-		$UserGroups = Get-UserGroup @CimParams
-
 		# TODO: Learn username from installation path, probably a new function for this
-		# TODO: UserInfo data from the table is not used, we currently use only InstallLocation,
-		# For programs not in userprofile we assign default group, installation table can then
+		# TODO: Table is not used, we currently use only InstallLocation,
+		# For programs not in userprofile we assign default groups, installation table can then
 		# be then used to create a firewall rule for group.
-		# TODO: DefaultGroup may contain multiple groups, need to handle them all.
-		$UserInfo = $UserGroups | Where-Object -Property Group -EQ $DefaultGroup[0]
+		$UserGroups = Get-UserGroup @CimParams | Where-Object -Property Group -In $DefaultGroup
 
 		if (![string]::IsNullOrEmpty($Executable))
 		{
@@ -195,21 +191,24 @@ function Update-Table
 
 			if ($InstallLocation)
 			{
-				# Create a row
-				$Row = $InstallTable.NewRow()
+				foreach ($GroupEntry in $UserGroups)
+				{
+					# Create a row
+					$Row = $InstallTable.NewRow()
 
-				# Enter data into row
-				$Row.ID = ++$RowIndex
-				$Row.Domain = $UserInfo.Domain
-				$Row.Group = $UserInfo.Group
-				$Row.Principal = $UserInfo.Principal
-				$Row.SID = $UserInfo.SID
-				$Row.InstallLocation = $InstallLocation
+					# Enter data into row
+					$Row.ID = ++$RowIndex
+					$Row.Domain = $GroupEntry.Domain
+					$Row.Group = $GroupEntry.Group
+					$Row.Principal = $GroupEntry.Principal
+					$Row.SID = $GroupEntry.SID
+					$Row.InstallLocation = $InstallLocation
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($UserInfo.Principal) with $InstallLocation"
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($GroupEntry.Principal) with $InstallLocation"
 
-				# Add row to the table
-				$InstallTable.Rows.Add($Row)
+					# Add row to the table
+					$InstallTable.Rows.Add($Row)
+				}
 
 				# TODO: If the path is known there is no need to continue?
 				return
@@ -236,23 +235,26 @@ function Update-Table
 
 			foreach ($Program in $TargetPrograms)
 			{
-				# Create a row
-				$Row = $InstallTable.NewRow()
+				foreach ($GroupEntry in $UserGroups)
+				{
+					# Create a row
+					$Row = $InstallTable.NewRow()
 
-				$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
+					$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
 
-				# Enter data into row
-				$Row.ID = ++$RowIndex
-				$Row.Domain = $UserInfo.Domain
-				$Row.Group = $UserInfo.Group
-				$Row.Principal = $UserInfo.Principal
-				$Row.SID = $UserInfo.SID
-				$Row.InstallLocation = $InstallLocation
+					# Enter data into row
+					$Row.ID = ++$RowIndex
+					$Row.Domain = $GroupEntry.Domain
+					$Row.Group = $GroupEntry.Group
+					$Row.Principal = $GroupEntry.Principal
+					$Row.SID = $GroupEntry.SID
+					$Row.InstallLocation = $InstallLocation
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($UserInfo.Principal) with $InstallLocation"
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($GroupEntry.Principal) with $InstallLocation"
 
-				# Add row to the table
-				$InstallTable.Rows.Add($Row)
+					# Add row to the table
+					$InstallTable.Rows.Add($Row)
+				}
 			}
 		}
 		# Program not found on system, attempt alternative search
@@ -263,26 +265,29 @@ function Update-Table
 
 			foreach ($Program in $TargetPrograms)
 			{
-				# TODO: $Program.SIDKey is probably SID of the user to which user specific information
-				# applies in regard to program, need to investigate if this user specific information
-				# can be used here to create multiple installtable entries for $UserInfo, currently using default group
+				foreach ($GroupEntry in $UserGroups)
+				{
+					# TODO: $Program.SIDKey is probably SID of the user to which user specific information
+					# applies in regard to program, need to investigate if this user specific information
+					# can be used here to create multiple installtable entries for $GroupEntry, currently using default group
 
-				# Create a row
-				$Row = $InstallTable.NewRow()
-				$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
+					# Create a row
+					$Row = $InstallTable.NewRow()
+					$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
 
-				# Enter data into row
-				$Row.ID = ++$RowIndex
-				$Row.Domain = $UserInfo.Domain
-				$Row.Group = $UserInfo.Group
-				$Row.Principal = $UserInfo.Principal
-				$Row.SID = $UserInfo.SID
-				$Row.InstallLocation = $InstallLocation
+					# Enter data into row
+					$Row.ID = ++$RowIndex
+					$Row.Domain = $GroupEntry.Domain
+					$Row.Group = $GroupEntry.Group
+					$Row.Principal = $GroupEntry.Principal
+					$Row.SID = $GroupEntry.SID
+					$Row.InstallLocation = $InstallLocation
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($UserInfo.Caption) with $InstallLocation"
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($GroupEntry.Caption) with $InstallLocation"
 
-				# Add row to the table
-				$InstallTable.Rows.Add($Row)
+					# Add row to the table
+					$InstallTable.Rows.Add($Row)
+				}
 			}
 		}
 
@@ -290,7 +295,7 @@ function Update-Table
 		# NOTE: User profile should be searched even if there is an installation system wide
 		if ($UserProfile)
 		{
-			$Principals = Get-GroupPrincipal $DefaultGroup[0] @CimParams
+			$Principals = Get-GroupPrincipal -Group $DefaultGroup -Unique @CimParams
 
 			foreach ($UserInfo in $Principals)
 			{

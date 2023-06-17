@@ -610,7 +610,8 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 	# If there are no standard users you should set this to "Administrators" or some other group
 	# which represents non administrative users on target computer.
 	# The default value is "Users"
-	# TODO: A good portion of code handles only first group mentioned
+	# TODO: A good portion of code handles only first group mentioned, and in some places Users and
+	# Administrators are hardcoded while DefaultGroup should be used
 	Set-Variable -Name DefaultGroup -Scope Global -Option ReadOnly -Force -Value @(
 		# Add or remove groups as needed
 		"Users"
@@ -662,7 +663,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 			Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value (
 				Split-Path -Path (Get-LocalGroupMember -Group $DefaultGroup[0] | Where-Object {
 						($_.ObjectClass -EQ "User") -and
-					(($_.PrincipalSource -eq "Local") -or ($_.PrincipalSource -eq "MicrosoftAccount"))
+						(($_.PrincipalSource -eq "Local") -or ($_.PrincipalSource -eq "MicrosoftAccount"))
 					} | Select-Object -ExpandProperty Name -Last 1) -Leaf)
 		}
 		catch

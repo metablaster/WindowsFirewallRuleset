@@ -216,10 +216,10 @@ function Confirm-Installation
 			}
 			else
 			{
-				if (!$Quiet)
-				{
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] Found multiple candidate installation directories for $Application, ignoring"
-				}
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Found multiple candidate installation directories for $Application, ignoring"
+				# TODO: Test Get-PSCallStack is correct
+				Write-Information -Tags $MyInvocation.InvocationName -InformationAction "Continue" `
+					-MessageData "INFO: For potential fixes run '$((Get-PSCallStack)[1].Command)' with -Interactive switch"
 
 				return $false
 			}
