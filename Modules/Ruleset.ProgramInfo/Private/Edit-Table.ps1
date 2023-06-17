@@ -189,24 +189,13 @@ function Edit-Table
 	{
 		$LiteralPath = Format-Path $LiteralPath
 
-		# Not user profile path, so it applies to all users
-		$GroupEntry = Get-UserGroup @CimParams | Where-Object -Property Group -EQ $DefaultGroup[0]
-
-		# TODO: foreach ($GroupEntry in $UserGroups) not used because groups for rule are manually set per rule
-		# $UserGroups = Get-UserGroup @CimParams | Where-Object -Property Group -In $DefaultGroup
-
 		# Create a row
 		$Row = $InstallTable.NewRow()
 
 		# Enter data into row
 		$Row.ID = ++$RowIndex
-		$Row.Domain = $GroupEntry.Domain
-		$Row.Group = $GroupEntry.Group
-		$Row.Principal = $GroupEntry.Principal
-		$Row.SID = $GroupEntry.SID
+		$Row.Domain = $Domain
 		$Row.InstallLocation = $LiteralPath
-
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table for $($GroupEntry.Principal) with $LiteralPath"
 
 		# Add the row to the table
 		$InstallTable.Rows.Add($Row)

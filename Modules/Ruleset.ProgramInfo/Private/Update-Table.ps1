@@ -174,11 +174,7 @@ function Update-Table
 			$script:AllUserPrograms = Get-AllUserProgram -Domain $Domain
 		}
 
-		# TODO: Learn username from installation path, probably a new function for this
-		# TODO: Table is not used, we currently use only InstallLocation,
-		# For programs not in userprofile we assign default groups, installation table can then
-		# be then used to create a firewall rule for group.
-		$UserGroups = Get-UserGroup @CimParams | Where-Object -Property Group -In $DefaultGroup
+		# TODO: Table is not used, we currently use only InstallLocation
 
 		if (![string]::IsNullOrEmpty($Executable))
 		{
@@ -191,24 +187,16 @@ function Update-Table
 
 			if ($InstallLocation)
 			{
-				foreach ($GroupEntry in $UserGroups)
-				{
-					# Create a row
-					$Row = $InstallTable.NewRow()
+				# Create a row
+				$Row = $InstallTable.NewRow()
 
-					# Enter data into row
-					$Row.ID = ++$RowIndex
-					$Row.Domain = $GroupEntry.Domain
-					$Row.Group = $GroupEntry.Group
-					$Row.Principal = $GroupEntry.Principal
-					$Row.SID = $GroupEntry.SID
-					$Row.InstallLocation = $InstallLocation
+				# Enter data into row
+				$Row.ID = ++$RowIndex
+				$Row.Domain = $Domain
+				$Row.InstallLocation = $InstallLocation
 
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($GroupEntry.Principal) with $InstallLocation"
-
-					# Add row to the table
-					$InstallTable.Rows.Add($Row)
-				}
+				# Add row to the table
+				$InstallTable.Rows.Add($Row)
 
 				# TODO: If the path is known there is no need to continue?
 				return
@@ -235,26 +223,18 @@ function Update-Table
 
 			foreach ($Program in $TargetPrograms)
 			{
-				foreach ($GroupEntry in $UserGroups)
-				{
-					# Create a row
-					$Row = $InstallTable.NewRow()
+				# Create a row
+				$Row = $InstallTable.NewRow()
 
-					$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
+				$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
 
-					# Enter data into row
-					$Row.ID = ++$RowIndex
-					$Row.Domain = $GroupEntry.Domain
-					$Row.Group = $GroupEntry.Group
-					$Row.Principal = $GroupEntry.Principal
-					$Row.SID = $GroupEntry.SID
-					$Row.InstallLocation = $InstallLocation
+				# Enter data into row
+				$Row.ID = ++$RowIndex
+				$Row.Domain = $Domain
+				$Row.InstallLocation = $InstallLocation
 
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($GroupEntry.Principal) with $InstallLocation"
-
-					# Add row to the table
-					$InstallTable.Rows.Add($Row)
-				}
+				# Add row to the table
+				$InstallTable.Rows.Add($Row)
 			}
 		}
 		# Program not found on system, attempt alternative search
@@ -265,29 +245,17 @@ function Update-Table
 
 			foreach ($Program in $TargetPrograms)
 			{
-				foreach ($GroupEntry in $UserGroups)
-				{
-					# TODO: $Program.SIDKey is probably SID of the user to which user specific information
-					# applies in regard to program, need to investigate if this user specific information
-					# can be used here to create multiple installtable entries for $GroupEntry, currently using default group
+				# Create a row
+				$Row = $InstallTable.NewRow()
+				$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
 
-					# Create a row
-					$Row = $InstallTable.NewRow()
-					$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
+				# Enter data into row
+				$Row.ID = ++$RowIndex
+				$Row.Domain = $Domain
+				$Row.InstallLocation = $InstallLocation
 
-					# Enter data into row
-					$Row.ID = ++$RowIndex
-					$Row.Domain = $GroupEntry.Domain
-					$Row.Group = $GroupEntry.Group
-					$Row.Principal = $GroupEntry.Principal
-					$Row.SID = $GroupEntry.SID
-					$Row.InstallLocation = $InstallLocation
-
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($GroupEntry.Caption) with $InstallLocation"
-
-					# Add row to the table
-					$InstallTable.Rows.Add($Row)
-				}
+				# Add row to the table
+				$InstallTable.Rows.Add($Row)
 			}
 		}
 

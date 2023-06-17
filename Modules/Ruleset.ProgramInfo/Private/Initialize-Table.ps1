@@ -72,10 +72,13 @@ function Initialize-Table
 	# Define Columns
 	$ColumnID = New-Object -TypeName System.Data.DataColumn ID, ([int32])
 	$ColumnDomain = New-Object -TypeName System.Data.DataColumn Domain, ([string])
+
+	# NOTE: User, Group, Principal, SID are used only for programs installed per user
 	$ColumnUser = New-Object -TypeName System.Data.DataColumn User, ([string])
 	$ColumnGroup = New-Object -TypeName System.Data.DataColumn Group, ([string])
 	$ColumnPrincipal = New-Object -TypeName System.Data.DataColumn Principal, ([string])
 	$ColumnSID = New-Object -TypeName System.Data.DataColumn SID, ([string])
+
 	$ColumnInstallLocation = New-Object -TypeName System.Data.DataColumn InstallLocation, ([string])
 
 	# Add the Columns
