@@ -44,13 +44,13 @@ EXAMPLES
 	Get-SystemApp
 	Get store apps installed system wide
 
-	Get-SystemSoftware
+	Get-SystemProgram
 	Search installed programs for all users, system wide
 
 	Get-UserApp
 	Get store apps for specific user
 
-	Get-UserSoftware
+	Get-UserProgram
 	Get a list of programs installed by specific user
 
 	Get-WindowsDefender

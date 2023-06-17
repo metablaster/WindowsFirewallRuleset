@@ -37,13 +37,13 @@ Get a list of software installed system wide, for all users.
 Computer name which to check
 
 .EXAMPLE
-PS> Get-SystemSoftware
+PS> Get-SystemProgram
 
 .EXAMPLE
-PS> Get-SystemSoftware "Server01"
+PS> Get-SystemProgram "Server01"
 
 .INPUTS
-None. You cannot pipe objects to Get-SystemSoftware
+None. You cannot pipe objects to Get-SystemProgram
 
 .OUTPUTS
 [PSCustomObject] list of programs installed for all users
@@ -52,10 +52,10 @@ None. You cannot pipe objects to Get-SystemSoftware
 We should return empty PSCustomObject if test computer fails
 TODO: Parameter for x64 vs x86 software, then update Search-Installation switch as needed
 #>
-function Get-SystemSoftware
+function Get-SystemProgram
 {
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SystemSoftware.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SystemProgram.md")]
 	[OutputType("Ruleset.ProgramInfo", [void])]
 	param (
 		[Parameter()]

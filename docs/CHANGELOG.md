@@ -39,7 +39,17 @@ Here is a list of changes for each of the releases.
 
     - `Get-SystemApp` Removed restriction to include only apps beginning with "Microsoft"
     - `Get-UserApp` Was handling only bundle apps which is incorrect
-    - `Get-SystemSoftware` Improved program search
+    - `Get-SystemSoftware` renamed to `Get-SystemProgram`
+    - `Get-UserSoftware` renamed to `Get-UserProgram`
+    - `Get-SystemProgram` Improved program search
+
+- Scripts
+
+  - Fixed an issue with `DefaultGroup` variable in `Config\ProjectSettings.ps1`, if multiple groups
+  were specified only the first one would be considered, now all groups specified are handled.
+  - Redefined the meaning of `DefaultUser` variable in `Config\ProjectSettings.ps1` which is now
+  used as a dummy user and must be set to non existent user name, representing one or more user
+  accounts, the actual users are determined automatically.
 
 ## v0.15.0  (current release)
 

@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-SystemSoftware
+Unit test for Get-SystemProgram
 
 .DESCRIPTION
-Test correctness of Get-SystemSoftware function
+Test correctness of Get-SystemProgram function
 
 .PARAMETER Domain
 If specified, only remoting tests against specified computer name are performed
@@ -40,13 +40,13 @@ If specified, only remoting tests against specified computer name are performed
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\Get-SystemSoftware.ps1
+PS> .\Get-SystemProgram.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-SystemSoftware.ps1
+None. You cannot pipe objects to Get-SystemProgram.ps1
 
 .OUTPUTS
-None. Get-SystemSoftware.ps1 does not generate any output
+None. Get-SystemProgram.ps1 does not generate any output
 
 .NOTES
 None.
@@ -72,16 +72,16 @@ Initialize-Project
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test "Get-SystemSoftware"
+Enter-Test "Get-SystemProgram"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
 	Start-Test "Remote default"
-	Get-SystemSoftware -Domain $Domain
+	Get-SystemProgram -Domain $Domain
 }
 else
 {
-	$SystemPrograms = Get-SystemSoftware
+	$SystemPrograms = Get-SystemProgram
 	$SystemPrograms
 
 	Start-Test "Name"
@@ -93,7 +93,7 @@ else
 	Start-Test "| Select *"
 	$SystemPrograms | Sort-Object -Property Name | Select-Object *
 
-	Test-Output $SystemPrograms -Command Get-SystemSoftware -Force
+	Test-Output $SystemPrograms -Command Get-SystemProgram -Force
 }
 
 Update-Log

@@ -707,10 +707,10 @@
 			}
 		},
 		{
-			"name": "ProgramInfo\\Get-SystemSoftware",
+			"name": "ProgramInfo\\Get-SystemProgram",
 			"type": "PowerShell",
 			"request": "launch",
-			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Get-SystemSoftware.ps1",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Get-SystemProgram.ps1",
 			"cwd": "${workspaceFolder}",
 			"presentation": {
 				"group": "Ruleset.ProgramInfo",
@@ -729,10 +729,10 @@
 			}
 		},
 		{
-			"name": "ProgramInfo\\Get-UserSoftware",
+			"name": "ProgramInfo\\Get-UserProgram",
 			"type": "PowerShell",
 			"request": "launch",
-			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Get-UserSoftware.ps1",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Get-UserProgram.ps1",
 			"cwd": "${workspaceFolder}",
 			"presentation": {
 				"group": "Ruleset.ProgramInfo",

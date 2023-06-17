@@ -170,7 +170,7 @@ function Update-Table
 			# If domain changed, need to update script cache
 			$script:LastPolicyStore = $Domain
 			$script:ExecutablePaths = Get-ExecutablePath -Domain $Domain
-			$script:SystemPrograms = Get-SystemSoftware -Domain $Domain
+			$script:SystemPrograms = Get-SystemProgram -Domain $Domain
 			$script:AllUserPrograms = Get-AllUserProgram -Domain $Domain
 		}
 
@@ -280,7 +280,7 @@ function Update-Table
 				{
 					# NOTE: the story is different here, each user might have multiple matches for search string
 					# letting one match to have same principal would be mistake.
-					$UserPrograms = Get-UserSoftware $UserInfo.User @CimParams @SessionParams |
+					$UserPrograms = Get-UserProgram $UserInfo.User @CimParams @SessionParams |
 					Where-Object -Property Name -Like $SearchString
 				}
 

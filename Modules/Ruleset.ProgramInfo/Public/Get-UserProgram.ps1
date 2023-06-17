@@ -49,13 +49,13 @@ Specifies the CIM session to use
 Specifies the PS session to use
 
 .EXAMPLE
-PS> Get-UserSoftware "User"
+PS> Get-UserProgram "User"
 
 .EXAMPLE
-PS> Get-UserSoftware "User" -Domain "Server01"
+PS> Get-UserProgram "User" -Domain "Server01"
 
 .INPUTS
-None. You cannot pipe objects to Get-UserSoftware
+None. You cannot pipe objects to Get-UserProgram
 
 .OUTPUTS
 [PSCustomObject] list of programs for specified user on a target computer
@@ -63,10 +63,10 @@ None. You cannot pipe objects to Get-UserSoftware
 .NOTES
 TODO: We should make a query for an array of users, will help to save into variable
 #>
-function Get-UserSoftware
+function Get-UserProgram
 {
 	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserSoftware.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserProgram.md")]
 	[OutputType("Ruleset.ProgramInfo", [void])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]

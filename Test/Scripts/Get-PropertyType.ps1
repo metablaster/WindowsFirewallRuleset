@@ -67,8 +67,8 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Get-PropertyType"
 
-Start-Test "sample data" -Command "Get-SystemSoftware"
-$SystemSoftware = Get-SystemSoftware
+Start-Test "sample data" -Command "Get-SystemProgram"
+$SystemSoftware = Get-SystemProgram
 
 Start-Test "SystemSoftware"
 $Result = Get-PropertyType.ps1 $SystemSoftware

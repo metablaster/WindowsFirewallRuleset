@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-UserSoftware
+Unit test for Get-UserProgram
 
 .DESCRIPTION
-Test correctness of Get-UserSoftware function
+Test correctness of Get-UserProgram function
 
 .PARAMETER Domain
 If specified, only remoting tests against specified computer name are performed
@@ -40,13 +40,13 @@ If specified, only remoting tests against specified computer name are performed
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\Get-UserSoftware.ps1
+PS> .\Get-UserProgram.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-UserSoftware.ps1
+None. You cannot pipe objects to Get-UserProgram.ps1
 
 .OUTPUTS
-None. Get-UserSoftware.ps1 does not generate any output
+None. Get-UserProgram.ps1 does not generate any output
 
 .NOTES
 None.
@@ -73,7 +73,7 @@ Import-Module -Name Ruleset.UserInfo
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test "Get-UserSoftware"
+Enter-Test "Get-UserProgram"
 if ($Domain -ne [System.Environment]::MachineName)
 {
 	Start-Test "Get remote user" -Command Get-GroupPrincipal
@@ -81,7 +81,7 @@ if ($Domain -ne [System.Environment]::MachineName)
 	$Users
 
 	Start-Test "Remote default $($Users[0].User)"
-	Get-UserSoftware -User $Users[0].User -CimSession $CimServer -Session $SessionInstance
+	Get-UserProgram -User $Users[0].User -CimSession $CimServer -Session $SessionInstance
 }
 else
 {
@@ -96,12 +96,12 @@ else
 	foreach ($Principal in $Principals)
 	{
 		Start-Test "$($Principal.User)"
-		$Result = Get-UserSoftware $Principal.User
+		$Result = Get-UserProgram $Principal.User
 		$Result
 	}
 
 	# NOTE: Test won't work unless there are programs installed in user profile
-	Test-Output $Result -Command Get-UserSoftware -Force
+	Test-Output $Result -Command Get-UserProgram -Force
 }
 
 Update-Log

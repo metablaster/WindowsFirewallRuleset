@@ -62,8 +62,8 @@ None. You cannot pipe objects to Get-OneDrive
 
 .NOTES
 TODO: We should make a query for an array of users, will help to save into variable,
-this is duplicate comment of Get-UserSoftware
-TODO: The logic of this function should probably be part of Get-UserSoftware, it is unknown
+this is duplicate comment of Get-UserProgram
+TODO: The logic of this function should probably be part of Get-UserProgram, it is unknown
 if OneDrive can be installed for all users too.
 #>
 function Get-OneDrive

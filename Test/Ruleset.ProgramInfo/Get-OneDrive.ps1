@@ -93,7 +93,7 @@ else
 
 	Start-Test "$UserGroup" -Command "Get-GroupPrincipal"
 	$Principals = Get-GroupPrincipal $UserGroup
-	# TODO: see also @Get-UserSoftware,
+	# TODO: see also @Get-UserProgram,
 	# This Format-Table won't be needed once we have consistent outputs, formats and better pipelines
 	$Principals | Format-Table
 
