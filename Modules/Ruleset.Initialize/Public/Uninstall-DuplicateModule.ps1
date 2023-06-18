@@ -207,9 +207,10 @@ function Uninstall-DuplicateModule
 					}
 					catch
 					{
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Please close down all other PowerShell sessions including VSCode, then try again"
+
 						Write-Error -Category ResourceBusy -TargetObject $LoadedModule `
 							-Message "Module '$ModuleName' could not be removed from current PS session which is required for uninstallation because: $($_.Exception.Message)"
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] Please close down all other PowerShell sessions including VSCode, then try again"
 						continue
 					}
 				}
@@ -237,14 +238,17 @@ function Uninstall-DuplicateModule
 						}
 						catch
 						{
-							Write-Error -Category OperationStopped -TargetObject $ModuleRoot `
-								-Message "Module directory '$ModuleRoot' could not be recursively removed because: $($_.Exception.Message)"
-
 							if ($ModuleRoot -like "$($pwd.Path)*")
 							{
-								Write-Information -Tags $MyInvocation.InvocationName `
-									-MessageData "INFO: This session's prompt is inside module path, the prompt must leave module path $($pwd.Path)"
+								Write-Warning -Message "[$($MyInvocation.InvocationName)] This session's prompt is inside module path, the prompt must leave module path $($pwd.Path)"
 							}
+							else
+							{
+								Write-Warning -Message "[$($MyInvocation.InvocationName)] please close down all other PowerShell sessions including VSCode, then try again"
+							}
+
+							Write-Error -Category OperationStopped -TargetObject $ModuleRoot `
+								-Message "Module directory '$ModuleRoot' could not be recursively removed because: $($_.Exception.Message)"
 							continue
 						}
 
