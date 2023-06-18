@@ -43,6 +43,8 @@ Here is a list of changes for each of the releases.
     - `Get-SystemSoftware` renamed to `Get-SystemProgram`
     - `Get-UserSoftware` renamed to `Get-UserProgram`
     - `Get-SystemProgram` Improved program search
+    - `Uninstall-DuplicateModule` Improved to show reason for failure and how to fix
+    - `Initialize-Provider` Was failing in Windows PS on Windows 11, fixed
 
 - Scripts
 

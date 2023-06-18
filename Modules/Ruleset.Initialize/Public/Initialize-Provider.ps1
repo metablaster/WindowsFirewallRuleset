@@ -409,7 +409,11 @@ function Initialize-Provider
 		# It may also be the case if a user denied registering a package source.
 		if (!$FoundPackageSource -or ($FoundPackageSource.ProviderName -notin (Get-PackageSource).ProviderName))
 		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Not using '$($FoundPackageSource.ProviderName)' provider to install package, package source not registered"
+			# Else warning was diplayed by Get-PackageSource
+			if ($FoundPackageSource)
+			{
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Not using '$($FoundPackageSource.ProviderName)' provider to install package, package source not registered"
+			}
 
 			# TODO: This scenario needs testing, it currently works for NuGet in Windows PowerShell
 			return $null -ne (Get-PackageProvider -Name $ProviderName)

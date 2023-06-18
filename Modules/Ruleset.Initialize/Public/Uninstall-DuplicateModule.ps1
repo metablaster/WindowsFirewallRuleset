@@ -207,7 +207,7 @@ function Uninstall-DuplicateModule
 					}
 					catch
 					{
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] Please close down all other PowerShell sessions including VSCode, then try again"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Please close down all PowerShell sessions including VSCode, then try again in fresh console"
 
 						Write-Error -Category ResourceBusy -TargetObject $LoadedModule `
 							-Message "Module '$ModuleName' could not be removed from current PS session which is required for uninstallation because: $($_.Exception.Message)"
@@ -244,7 +244,7 @@ function Uninstall-DuplicateModule
 							}
 							else
 							{
-								Write-Warning -Message "[$($MyInvocation.InvocationName)] please close down all other PowerShell sessions including VSCode, then try again"
+								Write-Warning -Message "[$($MyInvocation.InvocationName)] please close down other PowerShell sessions including VSCode, then try again in fresh console"
 							}
 
 							Write-Error -Category OperationStopped -TargetObject $ModuleRoot `
