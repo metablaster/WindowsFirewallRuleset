@@ -198,8 +198,25 @@ function Initialize-Provider
 	# NOTE: If Nuget is not installed Windows PowerShell will ask to install it here and if accepted
 	# $AllProviders will be initialized to downloaded and installed provider
 	# TODO: Bootstraping should be handled manually
-	[Microsoft.PackageManagement.Packaging.SoftwareIdentity[]] $AllProviders = Find-PackageProvider -Name $ProviderName `
-		-RequiredVersion $RequiredVersion -IncludeDependencies -ErrorAction SilentlyContinue
+	try
+	{
+		[Microsoft.PackageManagement.Packaging.SoftwareIdentity[]] $AllProviders = Find-PackageProvider -Name $ProviderName `
+			-RequiredVersion $RequiredVersion -IncludeDependencies -ErrorAction Stop
+	}
+	catch
+	{
+		$InstalledPackage = Get-PackageProvider -Name $ProviderName -ErrorAction SilentlyContinue
+		$InstalledPackageVersion = $InstalledPackage | Select-Object -ExpandProperty Version
+
+		# Grater than because we do not specify revision in $RequiredVersion which is initialized to -1
+		if ($InstalledPackageVersion -and ($InstalledPackageVersion -gt $RequiredVersion))
+		{
+			# NOTE: On Windows 11 system if user chooses to accept downloading the package with
+			# Find-PackageProvider above it won't initialize $AllProviders but the package may be installed
+			# This was the case with NuGet on fresh system with out of date NuGet provider
+			$AllProviders = $InstalledPackage
+		}
+	}
 
 	# If provider was found with Find-PackageProvider it should be installed with Install-PackageProvider
 	$UseInstallPackageProvider = $true
@@ -390,7 +407,7 @@ function Initialize-Provider
 		# If package source for "FoundProvider" is not registered do nothing, this will be the cause with
 		# "Bootstrap" provider, which means NuGet was already installed during "Find-PackageProvider" above!
 		# It may also be the case if a user denied registering a package source.
-		if ($FoundPackageSource.ProviderName -notin (Get-PackageSource).ProviderName)
+		if (!$FoundPackageSource -or ($FoundPackageSource.ProviderName -notin (Get-PackageSource).ProviderName))
 		{
 			Write-Warning -Message "[$($MyInvocation.InvocationName)] Not using '$($FoundPackageSource.ProviderName)' provider to install package, package source not registered"
 
@@ -552,7 +569,6 @@ function Initialize-Provider
 
 				return $false
 			}
-
 
 			return $true
 		}
