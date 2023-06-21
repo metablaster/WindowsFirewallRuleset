@@ -583,6 +583,39 @@ if ($TeamsApp)
 	}
 }
 
+#
+# A special rule for Widgets.exe which is part of MicrosoftWindows.Client.WebExperience (Widgets) app
+# Widgets.exe is invoked when adding new widgets by clicking "+" button
+# TODO: Even though rule is made "add widget" dialog doesn't display contents as if no connection is made
+#
+$WidgetsApp = Get-UserApp -User $Principal.User -Name "MicrosoftWindows.Client.WebExperience" -Session $SessionInstance
+if ($WidgetsApp)
+{
+	$ParentPath = Split-Path -Path $WidgetsApp.InstallLocation
+
+	Invoke-Command -Session $SessionInstance -ScriptBlock {
+		# There are 2 paths but only one is correct
+		Get-Item -Path "$using:ParentPath\MicrosoftWindows.Client.WebExperience*" -Exclude "*neutral*"
+	} |	Select-Object PSPath | Convert-Path | ForEach-Object {
+
+		$Program = Format-Path "$_\Dashboard\Widgets.exe"
+
+		if ((Test-ExecutableFile $Program) -or $ForceLoad)
+		{
+			New-NetFirewallRule -DisplayName "Widgets" `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+				-Service Any -Program $Program -Group $AppSubGroup `
+				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 443 `
+				-LocalUser $UsersGroupSDDL `
+				-InterfaceType $DefaultInterface `
+				-Description "Used when adding new widgets" |
+			Format-RuleOutput
+		}
+	}
+}
+
 if ($UpdateGPO)
 {
 	Invoke-Process gpupdate.exe
