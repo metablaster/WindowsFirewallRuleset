@@ -380,8 +380,6 @@ to google privacy policy.
 
 If you're willing to trade speed for privacy consider privacy conscious search engine.
 
-Which one is the best for privacy is subjective but you can start exploring with ex. [Startpage][startpage]
-
 [Table of Contents](#table-of-contents)
 
 ### Common privacy mistakes
@@ -527,7 +525,6 @@ The following web sites are good starting point for additional research regardin
 [tor browser]: https://www.torproject.org/download "Visit Tor Project"
 [privilege escalation]: https://en.wikipedia.org/wiki/Privilege_escalation "Visit wikipedia site"
 [nmap]: https://nmap.org "Visit nmap site"
-[startpage]: https://www.startpage.com "Visit Startpage search engine"
 [psiphon repo]: https://github.com/Psiphon-Inc/psiphon-windows "Visit GitHub page"
 [uac blog]: https://learn.microsoft.com/en-us/archive/blogs/e7/user-account-control "Visit Microsoft archive"
 [uac blog update]: https://learn.microsoft.com/en-us/archive/blogs/e7/user-account-control-uac-quick-update "Visit Microsoft archive"
