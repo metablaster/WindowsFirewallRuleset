@@ -737,7 +737,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 
 		# Recommended minimum PowerShell Core
 		# NOTE: 6.1.0 will not work, but 7.0.3 works, verify with PSUseCompatibleCmdlets
-		New-Variable -Name RequirePSVersion -Scope Global -Option Constant -Value ([version]::new(7, 3, 3))
+		New-Variable -Name RequirePSVersion -Scope Global -Option Constant -Value ([version]::new(7, 3, 9))
 	}
 	else
 	{
@@ -779,7 +779,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 		# Recommended minimum Pester version for code testing
 		# NOTE: PScriptAnalyzer 1.19.1 requires pester v5
 		# TODO: we need pester v4 for tests, but why does analyzer require pester?
-		New-Variable -Name RequirePesterVersion -Scope Global -Option Constant -Value ([version]::new(5, 4, 1))
+		New-Variable -Name RequirePesterVersion -Scope Global -Option Constant -Value ([version]::new(5, 5, 0))
 
 		# Required minimum PackageManagement version prior to installing other modules, do not decrement!
 		New-Variable -Name RequirePackageManagementVersion -Scope Global -Option Constant -Value ([version]::new(1, 4, 7))
@@ -793,14 +793,14 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 
 		# Recommended minimum PSReadline version for command line editing experience of PowerShell
 		# Needs the 1.6.0 or a higher version of PowerShellGet to install the latest prerelease version of PSReadLine
-		New-Variable -Name RequirePSReadlineVersion -Scope Global -Option Constant -Value ([version]::new(2, 2, 6))
+		New-Variable -Name RequirePSReadlineVersion -Scope Global -Option Constant -Value ([version]::new(2, 3, 4))
 	}
 
 	if ($Develop -or ($ProjectCheck -and $ModulesCheck))
 	{
 		# Recommended minimum Git version needed for contributing and required by posh-git
 		# https://github.com/dahlbyk/posh-git#prerequisites
-		New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 40, 1))
+		New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 42, 1))
 	}
 
 	if ($Develop)
@@ -817,7 +817,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 		New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 5, 0))
 
 		# Recommended minimum VSCode version, do not decrement!
-		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 79, 2))
+		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 84, 1))
 
 		# Firewall logs folder
 		# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting

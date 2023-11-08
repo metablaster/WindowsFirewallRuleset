@@ -108,6 +108,7 @@ $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSigna
 # Google installation directories
 #
 $GoogleDriveRoot = "%ProgramFiles%\Google\Drive"
+$GooglePlayRoot = "%ProgramFiles%\Google\Play Games"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
@@ -132,6 +133,76 @@ if ((Confirm-Installation "GoogleDrive" ([ref] $GoogleDriveRoot)) -or $ForceLoad
 			-InterfaceType $DefaultInterface `
 			-Description "Google drive synchronization service" | Format-RuleOutput
 	}
+}
+
+#
+# Google play emulator
+#
+if ((Confirm-Installation "GooglePlay" ([ref] $GooglePlayRoot)) -or $ForceLoad)
+{
+	$Program = "$GooglePlayRoot\current\service\Service.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "Google Play - service" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "" | Format-RuleOutput
+	}
+
+	$Program = "$GooglePlayRoot\current\client\client.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "Google Play - client" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "" | Format-RuleOutput
+	}
+
+	New-NetFirewallRule -DisplayName "Google Play - client" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser $UsersGroupSDDL `
+		-LocalOnlyMapping $false -LooseSourceMapping $false `
+		-InterfaceType $DefaultInterface `
+		-Description "" | Format-RuleOutput
+
+	$Program = "$GooglePlayRoot\current\emulator\crosvm.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "Google Play - crosvm" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80, 443, 853, 5228 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "" | Format-RuleOutput
+	}
+
+	New-NetFirewallRule -DisplayName "Google Play - crosvm" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 123, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-LocalOnlyMapping $false -LooseSourceMapping $false `
+		-InterfaceType $DefaultInterface `
+		-Description "" | Format-RuleOutput
 }
 
 if ($UpdateGPO)

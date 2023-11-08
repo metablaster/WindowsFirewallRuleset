@@ -154,6 +154,13 @@ function Search-Installation
 
 	switch ($Application)
 	{
+		"GooglePlay"
+		{
+			# TODO: This was not tested
+			Update-Table -Search "GooglePlay"
+			#Edit-Table "%ProgramFiles%\Google\Play Games"
+			break
+		}
 		"dotnet"
 		{
 			# TODO: No algorithm to find this path
