@@ -154,6 +154,20 @@ function Search-Installation
 
 	switch ($Application)
 	{
+		"BlueStacks"
+		{
+			Update-Table -Search "BlueStacks"
+			break
+		}
+		"BlueStacksServices"
+		{
+			foreach ($Principal in @(Get-GroupPrincipal -Group $DefaultGroup -Unique -CimSession $CimSession))
+			{
+				# TODO: Unclear why it's located in standard user if BlueStacks is run as Admin
+				Edit-Table "%SystemDrive%\Users\$($Principal.User)\AppData\Local\Programs\bluestacks-services"
+			}
+			break
+		}
 		"GooglePlay"
 		{
 			# TODO: This was not tested
