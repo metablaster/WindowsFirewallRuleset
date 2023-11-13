@@ -33,6 +33,7 @@ Here is a list of changes for each of the releases.
   - Added rule for Network List Service
   - Updated DNS rule to include port for encrypted DNS on Windows 11
   - Updated rule related to Windows 11 updates
+  - Added rules for GooglePlay and Bluestacks
 
 - Modules
 

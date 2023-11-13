@@ -123,7 +123,21 @@ if ((Confirm-Installation "BlueStacks" ([ref] $BlueStacksRoot)) -or $ForceLoad)
 	$Program = "$BlueStacksRoot\HD-Player.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "BlueStacks HD player" `
+		New-NetFirewallRule -DisplayName "BlueStacks HD Player" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "" | Format-RuleOutput
+	}
+
+	$Program = "$BlueStacksRoot\BlueStacksHelper.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "BlueStacks Helper" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
