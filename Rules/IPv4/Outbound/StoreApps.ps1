@@ -616,6 +616,37 @@ if ($WidgetsApp)
 	}
 }
 
+#
+# A special rule for Microsoft Phone Link app to handle PhoneExperienceHost.exe
+#
+$PhoneLinkApp = Get-UserApp -User $Principal.User -Name "Microsoft.YourPhone" -Session $SessionInstance
+if ($PhoneLinkApp)
+{
+	$ParentPath = Split-Path -Path $PhoneLinkApp.InstallLocation
+
+	Invoke-Command -Session $SessionInstance -ScriptBlock {
+		# There are multiple paths but only one is correct
+		Get-Item -Path "$using:ParentPath\Microsoft.YourPhone*" -Exclude "*neutral*"
+	} |	Select-Object PSPath | Convert-Path | ForEach-Object {
+
+		$Program = Format-Path "$_\PhoneExperienceHost.exe"
+
+		if ((Test-ExecutableFile $Program) -or $ForceLoad)
+		{
+			New-NetFirewallRule -DisplayName "Microsoft Phone Link" `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+				-Service Any -Program $Program -Group $AppSubGroup `
+				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 443 `
+				-LocalUser $UsersGroupSDDL `
+				-InterfaceType $DefaultInterface `
+				-Description "PhoneExperienceHost.exe is used to pair with your phone" |
+			Format-RuleOutput
+		}
+	}
+}
+
 if ($UpdateGPO)
 {
 	Invoke-Process gpupdate.exe

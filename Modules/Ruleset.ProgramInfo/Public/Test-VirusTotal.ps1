@@ -364,6 +364,7 @@ function Test-VirusTotal
 							Write-Debug -Message "[$InvocationName] Processing $SigCheckFile output '$StreamLine'"
 
 							# NOTE: Only one of these can be success per line, therefore do not error for failure
+							# TODO: This is likely why we see "InvalidOperation: You cannot call a method on a null-valued expression" soon after if($...)
 							$VTDetection = [regex]::Match($StreamLine, "(?<VTdetection>VT detection:\s+)(?<status>.*)")
 							$VTLink = [regex]::Match($StreamLine, "(?<VTlink>VT link:\s+)(?<link>.*)")
 							$RawPublisher = [regex]::Match($StreamLine, "(?<VTdetection>Description:\s+)(?<publisher>.*)")
