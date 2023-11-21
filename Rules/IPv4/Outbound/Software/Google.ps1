@@ -137,6 +137,8 @@ if ((Confirm-Installation "GoogleDrive" ([ref] $GoogleDriveRoot)) -or $ForceLoad
 
 #
 # Google play emulator
+# TODO: Chrome also uses executable with same name?, directory might be same for chrome
+# %ProgramFiles% (x86)\Google\Update\GoogleUpdate.exe
 #
 if ((Confirm-Installation "GooglePlay" ([ref] $GooglePlayRoot)) -or $ForceLoad)
 {

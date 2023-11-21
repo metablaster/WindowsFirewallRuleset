@@ -34,6 +34,7 @@ Here is a list of changes for each of the releases.
   - Updated DNS rule to include port for encrypted DNS on Windows 11
   - Updated rule related to Windows 11 updates
   - Added rules for GooglePlay and Bluestacks
+  - Updated rules for Microsoft phone app now known as Microsoft Phone Link
 
 - Modules
 
@@ -54,6 +55,7 @@ Here is a list of changes for each of the releases.
   - Redefined the meaning of `DefaultUser` variable in `Config\ProjectSettings.ps1` which is now
   used as a dummy user and must be set to non existent user name, representing one or more user
   accounts, the actual users are determined automatically.
+  - Added `Remove-ASR.ps1` script to remove one or more ASR rules
 
 ## v0.15.0  (current release)
 

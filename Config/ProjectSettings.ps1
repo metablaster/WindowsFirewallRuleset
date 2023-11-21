@@ -800,7 +800,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 	{
 		# Recommended minimum Git version needed for contributing and required by posh-git
 		# https://github.com/dahlbyk/posh-git#prerequisites
-		New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 42, 1))
+		New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 43, 0))
 	}
 
 	if ($Develop)

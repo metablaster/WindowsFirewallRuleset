@@ -170,69 +170,80 @@ Write-Information -MessageData ""
 $MpPreference = Get-MpPreference -CimSession $CimServer |
 Select-Object AttackSurfaceReductionRules_Ids, AttackSurfaceReductionRules_Actions
 
-foreach ($Entry in $MpPreference)
+$RuleCount = (Get-MpPreference -CimSession $CimServer |
+	Select-Object AttackSurfaceReductionRules_Ids -ExpandProperty AttackSurfaceReductionRules_Ids |
+	Measure-Object).Count
+
+if ($RuleCount -eq 0)
 {
-	for ($Index = 0; $Index -lt $Entry.AttackSurfaceReductionRules_Ids.Length; ++$Index)
+	Write-Information -MessageData "INFO: No ASR rules exist on '$Domain' computer"
+}
+else
+{
+	foreach ($Entry in $MpPreference)
 	{
-		$RuleInfo = & $Convert $Entry.AttackSurfaceReductionRules_Ids[$Index]
-
-		switch ($Entry.AttackSurfaceReductionRules_Actions[$Index])
+		for ($Index = 0; $Index -lt $Entry.AttackSurfaceReductionRules_Ids.Length; ++$Index)
 		{
-			0
+			$RuleInfo = & $Convert $Entry.AttackSurfaceReductionRules_Ids[$Index]
+
+			switch ($Entry.AttackSurfaceReductionRules_Actions[$Index])
 			{
-				if ($Disabled)
+				0
 				{
-					Write-Information -MessageData "INFO: $RuleInfo"
-					continue
-				}
+					if ($Disabled)
+					{
+						Write-Information -MessageData "INFO: $RuleInfo"
+						continue
+					}
 
-				$Status = "Disabled"
+					$Status = "Disabled"
+				}
+				1
+				{
+					if ($Enabled)
+					{
+						Write-Information -MessageData "INFO: $RuleInfo"
+						continue
+					}
+
+					$Status = "Enabled"
+				}
+				2
+				{
+					if ($Audit)
+					{
+						Write-Information -MessageData "INFO: $RuleInfo"
+						continue
+					}
+
+					$Status = "Audit"
+				}
+				5
+				{
+					if ($NotConfigured)
+					{
+						Write-Information -MessageData "INFO: $RuleInfo"
+						continue
+					}
+
+					$Status = "Not Configured"
+				}
+				6
+				{
+					if ($Warn)
+					{
+						Write-Information -MessageData "INFO: $RuleInfo"
+						continue
+					}
+
+					$Status = "Warn"
+				}
 			}
-			1
+
+			if (!($Enabled -or $Disabled -or $Audit -or $NotConfigured -or $Warn))
 			{
-				if ($Enabled)
-				{
-					Write-Information -MessageData "INFO: $RuleInfo"
-					continue
-				}
-
-				$Status = "Enabled"
+				Write-Information -MessageData "INFO: $Status -> $RuleInfo"
 			}
-			2
-			{
-				if ($Audit)
-				{
-					Write-Information -MessageData "INFO: $RuleInfo"
-					continue
-				}
-
-				$Status = "Audit"
-			}
-			5
-			{
-				if ($NotConfigured)
-				{
-					Write-Information -MessageData "INFO: $RuleInfo"
-					continue
-				}
-
-				$Status = "Not Configured"
-			}
-			6
-			{
-				if ($Warn)
-				{
-					Write-Information -MessageData "INFO: $RuleInfo"
-					continue
-				}
-
-				$Status = "Warn"
-			}
-		}
-
-		if (!($Enabled -or $Disabled -or $Audit -or $NotConfigured -or $Warn))
-		{
-			Write-Information -MessageData "INFO: $Status -> $RuleInfo"
 		}
 	}
 }
