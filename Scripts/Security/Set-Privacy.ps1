@@ -128,17 +128,22 @@ if ($PSCmdlet.ShouldProcess("Operating system", "Configure Windows privacy"))
 	# GPO: Computer Configuration\Administrative Templates\Windows Components\Data Collection and Preview Builds
 	#
 
-	Write-Information -MessageData "INFO: Allow Telemetry"
-	# TODO: Check system edition and set to 0 if enterprise
-	# Security: decimal: 0 (Enterprise editions only)
-	# Required: decimal: 1
-	# Enhanced: decimal: 2
-	# Optional: decimal: 3
-	$RegistryPath = "Software\Policies\Microsoft\Windows\DataCollection"
-	$ValueName = "AllowTelemetry"
-	$Value = 1
-	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
-	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+	# This setting is not present in Windows 11
+	[version] $TargetOSVersion = [System.Environment]::OSVersion.Version
+	if ($TargetOSVersion.Build -lt 22000)
+	{
+		Write-Information -MessageData "INFO: Allow Telemetry"
+		# TODO: Check system edition and set to 0 if enterprise
+		# Security: decimal: 0 (Enterprise editions only)
+		# Required: decimal: 1
+		# Enhanced: decimal: 2
+		# Optional: decimal: 3
+		$RegistryPath = "Software\Policies\Microsoft\Windows\DataCollection"
+		$ValueName = "AllowTelemetry"
+		$Value = 1
+		$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
+		Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+	}
 
 	Write-Information -MessageData "INFO: Allow device name to be sent in Windows diagnostic data"
 	# Enabled Value: decimal: 1
@@ -170,14 +175,19 @@ if ($PSCmdlet.ShouldProcess("Operating system", "Configure Windows privacy"))
 	# GPO: Computer Configuration\Administrative Templates\Windows Components\Search
 	#
 
-	Write-Information -MessageData "INFO: Allow Cortana"
-	# Enabled Value: decimal: 1
-	# Disabled Value: decimal: 0
-	$RegistryPath = "Software\Policies\Microsoft\Windows\Windows Search"
-	$ValueName = "allowcortana"
-	$Value = 0
-	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
-	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+	# Microsoft has shut down its Cortana app for Windows 11
+	[version] $TargetOSVersion = [System.Environment]::OSVersion.Version
+	if ($TargetOSVersion.Build -lt 22000)
+	{
+		Write-Information -MessageData "INFO: Allow Cortana"
+		# Enabled Value: decimal: 1
+		# Disabled Value: decimal: 0
+		$RegistryPath = "Software\Policies\Microsoft\Windows\Windows Search"
+		$ValueName = "allowcortana"
+		$Value = 0
+		$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
+		Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+	}
 
 	#
 	# GPO: Computer Configuration\Administrative Templates\System\User Profiles

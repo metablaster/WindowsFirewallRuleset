@@ -56,6 +56,8 @@ Here is a list of changes for each of the releases.
   used as a dummy user and must be set to non existent user name, representing one or more user
   accounts, the actual users are determined automatically.
   - Added `Remove-ASR.ps1` script to remove one or more ASR rules
+  - Updated `Set-ATP.ps1` to adjust CPU throttling type to affect custom scans in addition to scheduled
+  - Updated `Set-Privacy.ps1` to not configure settings not available in Windows 11
 
 ## v0.15.0  (current release)
 

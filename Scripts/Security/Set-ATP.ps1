@@ -293,6 +293,17 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
 	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
 
+	Write-Information -MessageData "INFO: CPU Throttling type"
+	# CPU Throttling type (Optional)
+	# Enabled Value: decimal: 1
+	# Disabled Value: decimal: 0
+	# If you disable this setting, CPU throttling will apply to scheduled and custom scans
+	$RegistryPath = "Software\Policies\Microsoft\Windows Defender\Scan"
+	$ValueName = "ThrottleForScheduledScanOnly"
+	$Value = 0
+	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
+	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+
 	Write-Information -MessageData "INFO: Turn on heuristics"
 	# Turn on heuristics (Optional)
 	# Enabled Value: decimal: 0
