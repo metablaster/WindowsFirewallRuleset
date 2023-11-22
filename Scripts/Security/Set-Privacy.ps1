@@ -63,6 +63,7 @@ None. Set-Privacy.ps1 does not generate any output
 
 .NOTES
 TODO: More Windows privacy options can be set in GPO
+TODO: A script is needed to reset privacy modification to factory defaults
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md

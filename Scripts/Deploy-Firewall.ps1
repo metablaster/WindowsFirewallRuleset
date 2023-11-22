@@ -485,6 +485,7 @@ if (Approve-Execute @ExecuteParams)
 		# Rules for 3rd party programs
 		$AllScriptParams["Force"] = $AllCurrent
 		& "$Destination\Software\Adobe.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\BlueStacks.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\Calibre.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\CPUID.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\DnsCrypt.ps1" @ScriptParams @AllScriptParams

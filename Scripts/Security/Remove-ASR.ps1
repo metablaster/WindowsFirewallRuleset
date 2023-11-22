@@ -76,6 +76,9 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README
 
 .LINK
 https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/attack-surface-reduction-rules-reference
+
+.LINK
+https://learn.microsoft.com/en-us/powershell/module/defender
 #>
 
 #Requires -Version 5.1
