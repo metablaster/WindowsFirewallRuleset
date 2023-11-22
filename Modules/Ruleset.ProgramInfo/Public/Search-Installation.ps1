@@ -702,14 +702,17 @@ function Search-Installation
 		}
 		"UnrealEngine"
 		{
-			# NOTE: game engine does not have installer, it is managed by launcher, and if it's
+			# NOTE: Game engine does not have an installer, it is managed by launcher, and if it's
 			# built from source user must enter path to engine manually
 			$ExpandedPath = Invoke-Command @SessionParams -ArgumentList "%ProgramFiles%\Epic Games" -ScriptBlock {
 				param ($Path)
 				[System.Environment]::ExpandEnvironmentVariables($Path)
 			}
 
-			if (Invoke-Command @SessionParams -ArgumentList $ExpandedPath -ScriptBlock { Test-Path $ExpandedPath })
+			if (Invoke-Command @SessionParams -ArgumentList $ExpandedPath -ScriptBlock {
+					param ($ExpandedPath)
+					Test-Path $ExpandedPath }
+			)
 			{
 				$VersionFolders = Invoke-Command @SessionParams -ArgumentList $ExpandedPath -ScriptBlock {
 					param ($ExpandedPath)
