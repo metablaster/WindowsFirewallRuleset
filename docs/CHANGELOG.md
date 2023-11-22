@@ -35,6 +35,7 @@ Here is a list of changes for each of the releases.
   - Updated rule related to Windows 11 updates
   - Added rules for GooglePlay and Bluestacks
   - Updated rules for Microsoft phone app now known as Microsoft Phone Link
+  - Added rule for OneDriveFile Co-Authoring Executable
 
 - Modules
 

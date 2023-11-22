@@ -197,6 +197,20 @@ if ((Confirm-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $ForceLoad)
 				-InterfaceType $DefaultInterface `
 				-Description "" | Format-RuleOutput
 		}
+
+		$Program = "$OneDriveRoot\$VersionFolder\FileCoAuth.exe"
+		if ((Test-ExecutableFile $Program) -or $ForceLoad)
+		{
+			New-NetFirewallRule -DisplayName "OneDrive Co-Authoring Executable" `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+				-Service Any -Program $Program -Group $Group `
+				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 443 `
+				-LocalUser $UsersGroupSDDL `
+				-InterfaceType $DefaultInterface `
+				-Description "Microsoft OneDriveFile Co-Authoring Executable" | Format-RuleOutput
+		}
 	}
 }
 

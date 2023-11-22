@@ -75,6 +75,8 @@ None. Set-ATP.ps1 does not generate any output
 TODO: There are some exotic options for Set-MpPreference which we don't use
 TODO: A script is needed to reset ATP modification to factory defaults
 TODO: More options can be configured such as script scanning
+TODO: Comments for each GPO setting should indicate what is the default
+TODO: Need to exclude settings which don't apply to target computer
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
