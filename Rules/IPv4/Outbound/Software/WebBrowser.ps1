@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound firewall rules for WebBrowser
+Outbound firewall rules for web browsers
 
 .DESCRIPTION
-Outbound firewall rules for 3rd party web browsers
+Outbound firewall rules for web browsers that are not from Microsoft of Google
 
 .PARAMETER Domain
 Computer name onto which to deploy rules
@@ -98,10 +98,6 @@ $Accept = "Outbound rules for 3rd party web browsers will be loaded, recommended
 $Deny = "Skip operation, outbound rules for web browsers will not be loaded into firewall"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 
-# Chromecast IP
-# Adjust to Chromecast IP in your local network
-[IPAddress] $CHROMECAST_IP = "192.168.8.50"
-
 $PSDefaultParameterValues["Confirm-Installation:Quiet"] = $Quiet
 $PSDefaultParameterValues["Confirm-Installation:Interactive"] = $Interactive
 $PSDefaultParameterValues["Test-ExecutableFile:Quiet"] = $Quiet
@@ -116,7 +112,6 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # TODO: Update path for all users?
 # TODO: Returned path will miss browser updaters
 #
-$ChromeRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Google"
 $FirefoxRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Mozilla Firefox"
 $YandexRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Yandex"
 $TorRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Tor Browser"
@@ -130,160 +125,6 @@ $BraveTorRoot = "C:\Users\$DefaultUser\AppData\Local\BraveSoftware\Brave-Browser
 #
 # Web browser rules
 #
-
-#
-# Google Chrome
-#
-
-# Test if installation exists on system
-if ((Confirm-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
-{
-	$Program = "$ChromeRoot\Chrome\Application\chrome.exe"
-	if ((Test-ExecutableFile $Program) -or $ForceLoad)
-	{
-		New-NetFirewallRule -DisplayName "Chrome HTTP\S" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 80, 443 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "Hyper text transfer protocol." | Format-RuleOutput
-
-		New-NetFirewallRule -DisplayName "Chrome FTP" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 21 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "File transfer protocol." | Format-RuleOutput
-
-		New-NetFirewallRule -DisplayName "Chrome GCM" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 5228 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "Google cloud messaging, google services use 5228, hangouts, google play,
-GCP.. etc use 5228." | Format-RuleOutput
-
-		# TODO: removed port 80, probably not used
-		New-NetFirewallRule -DisplayName "Chrome QUIC" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "Quick UDP Internet Connections,
-Experimental transport layer network protocol developed by Google and implemented in 2013." | Format-RuleOutput
-
-		New-NetFirewallRule -DisplayName "Chrome XMPP" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Block -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 5222 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "Extensible Messaging and Presence Protocol.
-Google Drive (Talk), Cloud printing, Chrome Remote Desktop, Chrome Sync
-(with fallback to 443 if 5222 is blocked)." | Format-RuleOutput
-
-		New-NetFirewallRule -DisplayName "Chrome mDNS IPv4" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Block -Direction $Direction -Protocol UDP `
-			-LocalAddress Any -RemoteAddress 224.0.0.251 `
-			-LocalPort 5353 -RemotePort 5353 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "The multicast Domain Name System (mDNS) resolves host names to IP addresses
-within small networks that do not include a local name server." | Format-RuleOutput
-
-		New-NetFirewallRule -DisplayName "Chrome mDNS IPv6" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Block -Direction $Direction -Protocol UDP `
-			-LocalAddress Any -RemoteAddress ff02::fb `
-			-LocalPort 5353 -RemotePort 5353 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "The multicast Domain Name System (mDNS) resolves host names to IP addresses
-within small networks that do not include a local name server." | Format-RuleOutput
-
-		New-NetFirewallRule -DisplayName "Chrome Chromecast SSDP" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-			-LocalAddress Any -RemoteAddress 239.255.255.250 `
-			-LocalPort Any -RemotePort 1900 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "Network Discovery to allow use of the Simple Service Discovery Protocol." |
-		Format-RuleOutput
-
-		New-NetFirewallRule -DisplayName "Chrome Chromecast" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Block -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress $CHROMECAST_IP.IPAddressToString `
-			-LocalPort Any -RemotePort 8008, 8009 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "Allow Chromecast outbound TCP data" | Format-RuleOutput
-
-		New-NetFirewallRule -DisplayName "Chrome Chromecast" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Block -Direction $Direction -Protocol UDP `
-			-LocalAddress Any -RemoteAddress $CHROMECAST_IP.IPAddressToString `
-			-LocalPort 32768-61000 -RemotePort 32768-61000 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "Allow Chromecast outbound UDP data" | Format-RuleOutput
-
-		#
-		# IRC: 8605
-		# Pokerist: 3103-3110
-		# speedtest: 5060, 8080
-		#
-		New-NetFirewallRule -DisplayName "Chrome special sites" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 3103-3110, 5060, 8080, 8605 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "Ports needed for IRC, pokerist.com and speedtest.net" | Format-RuleOutput
-	}
-
-	$Program = "$ChromeRoot\Update\GoogleUpdate.exe"
-	if ((Test-ExecutableFile $Program) -or $ForceLoad)
-	{
-		New-NetFirewallRule -DisplayName "Chrome Update" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 80, 443 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "Update google products" | Format-RuleOutput
-	}
-}
 
 #
 # Mozilla Firefox

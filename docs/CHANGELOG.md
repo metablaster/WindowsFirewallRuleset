@@ -36,6 +36,7 @@ Here is a list of changes for each of the releases.
   - Added rules for GooglePlay and Bluestacks
   - Updated rules for Microsoft phone app now known as Microsoft Phone Link
   - Added rule for OneDriveFile Co-Authoring Executable
+  - Updated rules for google software
 
 - Modules
 
@@ -48,6 +49,7 @@ Here is a list of changes for each of the releases.
     - `Get-SystemProgram` Improved program search
     - `Uninstall-DuplicateModule` Improved to show reason for failure and how to fix
     - `Initialize-Provider` Was failing in Windows PS on Windows 11, fixed
+    - `Invoke-Process` Fixed Write-* streams to show caller name
 
 - Scripts
 

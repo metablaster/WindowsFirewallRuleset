@@ -168,11 +168,28 @@ function Search-Installation
 			}
 			break
 		}
+		"GoogleUpdate"
+		{
+			# TODO: This is for system wide installation, if program such Chrome is installed
+			# the path will be in user profile which is currently handled by Google.ps1 script
+			Edit-Table "%ProgramFiles% (x86)\Google\Update"
+			break
+		}
 		"GooglePlay"
 		{
 			# TODO: This was not tested
 			Update-Table -Search "GooglePlay"
 			#Edit-Table "%ProgramFiles%\Google\Play Games"
+			break
+		}
+		"Chrome"
+		{
+			Update-Table -Search "Google Chrome" -UserProfile
+			break
+		}
+		"GoogleDrive"
+		{
+			Update-Table -Search "Google Drive"
 			break
 		}
 		"dotnet"
@@ -317,11 +334,6 @@ function Search-Installation
 		"ArenaChess"
 		{
 			Update-Table -Search "Arena Chess"
-			break
-		}
-		"GoogleDrive"
-		{
-			Update-Table -Search "Google Drive"
 			break
 		}
 		"ColorMania"
@@ -589,11 +601,6 @@ function Search-Installation
 		"SteamCMD"
 		{
 			# NOTE: ask user for standalone installation directory of SteamCMD
-			break
-		}
-		"Chrome"
-		{
-			Update-Table -Search "Google Chrome" -UserProfile
 			break
 		}
 		"Firefox"

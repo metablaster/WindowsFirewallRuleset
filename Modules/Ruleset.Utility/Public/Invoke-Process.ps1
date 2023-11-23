@@ -188,6 +188,7 @@ function Invoke-Process
 		}
 	}
 
+	$InvocationName = $MyInvocation.InvocationName
 	[ScriptBlock] $Code = {
 		param (
 			$Path,
@@ -199,7 +200,8 @@ function Invoke-Process
 			[PSCredential] $RunAsCredential,
 			$ArgumentList,
 			$Async,
-			$Domain
+			$Domain,
+			[string] $InvocationName = $InvocationName
 		)
 
 		$CommandName = Split-Path -Path $Path -Leaf
@@ -272,10 +274,8 @@ function Invoke-Process
 		{
 			# A collection of command-line arguments to use when starting the application
 			$Process.StartInfo.Arguments = $ArgumentList
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] $CommandName argument list is '$ArgumentList'"
+			Write-Verbose -Message "[$InvocationName & Code] $CommandName argument list is '$ArgumentList'"
 		}
-
-		$InvocationName = $MyInvocation.InvocationName
 
 		$Raw = $Raw
 		$Async = $Async
@@ -283,7 +283,7 @@ function Invoke-Process
 
 		if ($Async)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Hooking up event handlers for asynchronous operations"
+			Write-Verbose -Message "[$InvocationName & Code] Hooking up event handlers for asynchronous operations"
 
 			if ($Raw)
 			{
@@ -322,7 +322,7 @@ function Invoke-Process
 					{
 						# NOTE: Explicit -Debug or INFA is needed inside event
 						Write-Debug -Message "[$InvocationName & OutputDataReceived] OutputDataReceived: $($OutLine.Data)"
-						Write-Information -Tags $InvocationName -MessageData "INFO: $($OutLine.Data)" -INFA "Continue"
+						Write-Information -Tags "[$InvocationName & OutputDataReceived]" -MessageData "INFO: $($OutLine.Data)" -INFA "Continue"
 					}
 				}
 
@@ -401,7 +401,7 @@ function Invoke-Process
 
 		try
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting process '$CommandName'"
+			Write-Verbose -Message "[$InvocationName & Code] Starting process '$CommandName'"
 
 			# true if a process resource is started; false if no new process resource is started
 			if (!$Process.Start())
@@ -435,7 +435,7 @@ function Invoke-Process
 		{
 			if (!$Raw)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting asynchronous read"
+				Write-Verbose -Message "[$InvocationName & Code] Starting asynchronous read"
 			}
 
 			try
@@ -451,7 +451,7 @@ function Invoke-Process
 				Write-Error -Category InvalidOperation -TargetObject $Process -Message $_.Exception.Message
 
 				$Async = $false
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Fallback to synchronous mode"
+				Write-Warning -Message "[$InvocationName & Code] Fallback to synchronous mode"
 			}
 
 			# Define the cancellation token
@@ -470,7 +470,7 @@ function Invoke-Process
 		{
 			if ($Timeout -ge 0)
 			{
-				Write-Information -Tags $MyInvocation.InvocationName `
+				Write-Information -Tags "[$InvocationName & Code]" `
 					-MessageData "INFO: Waiting up to $($Timeout / 1000) seconds for process '$CommandName' to finish on '$Domain' computer..."
 
 				if ($Async)
@@ -486,13 +486,13 @@ function Invoke-Process
 
 				if (!$StatusWait)
 				{
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] Process '$CommandName' is taking too long, aborting..."
+					Write-Warning -Message "[$InvocationName & Code] Process '$CommandName' is taking too long, aborting..."
 				}
 			}
 			else
 			{
 				$StatusWait = $true
-				Write-Information -Tags $MyInvocation.InvocationName `
+				Write-Information -Tags "[$InvocationName & Code]" `
 					-MessageData "INFO: Waiting infinitely for process '$CommandName' to finish on '$Domain' computer..."
 
 				if ($Async)
@@ -511,7 +511,7 @@ function Invoke-Process
 
 			if ($Async -and $CancelSource.IsCancellationRequested)
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] The task has been canceled"
+				Write-Warning -Message "[$InvocationName & Code] The task has been canceled"
 			}
 			else
 			{
@@ -554,7 +554,7 @@ function Invoke-Process
 
 			if ($Raw)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting raw asynchronous read"
+				Write-Verbose -Message "[$InvocationName & Code] Starting raw asynchronous read"
 
 				$StandardOutput = $OutputBuilder.ToString()
 				if (![string]::IsNullOrEmpty($StandardOutput))
@@ -571,7 +571,7 @@ function Invoke-Process
 		}
 		elseif ($Raw)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting raw synchronous read"
+			Write-Verbose -Message "[$InvocationName & Code] Starting raw synchronous read"
 
 			# Reads all characters from the current position to the end of the stream (returns [string])
 			$StandardOutput = $Process.StandardOutput.ReadToEnd()
@@ -588,7 +588,7 @@ function Invoke-Process
 		}
 		else
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting synchronous read"
+			Write-Verbose -Message "[$InvocationName & Code] Starting synchronous read"
 
 			# true if the current stream position is at the end of the stream
 			while (!$Process.StandardOutput.EndOfStream)
@@ -600,10 +600,10 @@ function Invoke-Process
 
 				if (![string]::IsNullOrEmpty($StreamLine))
 				{
-					Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $StreamLine"
+					Write-Information -Tags "[$InvocationName & Code]" -MessageData "INFO: $StreamLine"
 				}
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Sleeping..."
+				Write-Debug -Message "[$InvocationName & Code] Sleeping..."
 				Start-Sleep -Milliseconds 300
 			}
 
@@ -616,7 +616,7 @@ function Invoke-Process
 					Write-Error -Category FromStdErr -TargetObject $Process -Message $StreamLine
 				}
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Sleeping..."
+				Write-Debug -Message "[$InvocationName & Code] Sleeping..."
 				Start-Sleep -Milliseconds 300
 			}
 		}
@@ -625,9 +625,9 @@ function Invoke-Process
 		# closes the process handle, and clears process-specific properties.
 		# NOTE: Close does not close the standard output, input, and error readers and writers in
 		# case they are being referenced externally
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Closing process '$CommandName'"
+		Write-Debug -Message "[$InvocationName & Code] Closing process '$CommandName'"
 		$Process.Close()
-	}
+	} # [ScriptBlock] $Code
 
 	Invoke-Command @SessionParams -ArgumentList $Path, $NoNewWindow, $WorkingDirectory,
 	$LoadUserProfile, $Timeout, $Raw, $RunAsCredential, $ArgumentList, $Async, $Domain -ScriptBlock $Code
