@@ -50,6 +50,7 @@ Here is a list of changes for each of the releases.
     - `Uninstall-DuplicateModule` Improved to show reason for failure and how to fix
     - `Initialize-Provider` Was failing in Windows PS on Windows 11, fixed
     - `Invoke-Process` Fixed Write-* streams to show caller name
+    - `Search-Installation` Fixed a bug while searching for Epic games installation
 
 - Scripts
 
@@ -62,6 +63,7 @@ Here is a list of changes for each of the releases.
   - Updated `Set-ATP.ps1` to adjust CPU throttling type to affect custom scans in addition to scheduled
   - Updated `Set-ATP.ps1` to optionally exclude or include optional and default settings
   - Updated `Set-Privacy.ps1` to not configure settings not available in Windows 11
+  - Fixed an issue in `Grant-Logs` which failed if log location was not configured in GPO
 
 ## v0.15.0  (current release)
 

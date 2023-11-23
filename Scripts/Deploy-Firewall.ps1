@@ -164,7 +164,8 @@ if ($PSBoundParameters.ContainsKey("Confirm"))
 
 # Prompt to set screen buffer to recommended value
 # TODO: It will ask again in same session, seems like set size is not set or Set-ScreenBuffer doesn't work
-Set-ScreenBuffer 3000 @SetScreenBufferParams
+# HACK: No longer works and exits console
+# Set-ScreenBuffer 3000 @SetScreenBufferParams
 
 # Check all rules which apply to windows services and test digital signature of involved services
 Write-ServiceList $ProjectRoot\Rules -Log | ForEach-Object {

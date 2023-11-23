@@ -178,7 +178,11 @@ catch
 # If there is at least one change in logs location reboot is required
 foreach ($Location in $PreviousLocation)
 {
-	if (!(Compare-Path -Path $Location -ReferencePath $DestinationFolder))
+	# NOTE: On a non configured GPO firewall log locations are empty strings,
+	# so Compare-Path -Path $Location will fail, reboot is required because the actual location
+	# is set in control panel firewall to default location
+	if ([string]::IsNullOrEmpty($Location) -or
+		!(Compare-Path -Path $Location -ReferencePath $DestinationFolder))
 	{
 		Write-Warning -Message "[$ThisScript] System reboot is required for firewall logging path changes"
 		return
