@@ -636,5 +636,5 @@ All other scripts do not support remoting by design
 [winrm polymorphism]: https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-wsmv/474f8cfd-ad24-4b04-a946-d02eae8a4a2c "Visit Microsoft docs"
 [troubleshooting]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_remote_troubleshooting "Visit Microsoft docs"
 [remote registry]: https://support.delphix.com/Delphix_Virtualization_Engine/MSSQL_Server/Troubleshooting_Remote_Registry_Read_Problems_During_Environment_Discoveries_And_Refreshes_(KBA1552) "Visit Microsoft docs"
-[RegistryKey]: https://docs.microsoft.com/en-us/dotnet/api/microsoft.win32.registrykey "Visit Microsoft docs"
+[RegistryKey]: https://learn.microsoft.com/en-us/dotnet/api/microsoft.win32.registrykey "Visit Microsoft docs"
 [WMI plugin]: https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management#wmi-plug-in-configuration-notes "Visit Microsoft docs"

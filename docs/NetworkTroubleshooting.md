@@ -494,7 +494,7 @@ To get good support in forums make sure you provide as much details as you can, 
 [speedtest]: https://www.speedtest.net "Visit external site"
 [netio]: https://sourceforge.net/projects/netiogui "Visit external site"
 [device manager]: https://support.microsoft.com/en-us/help/4026149/windows-open-device-manager "Visit Microsoft site"
-[adapter wifi settings]: https://www.intel.com/content/www/us/en/support/articles/000005585/network-and-i-o/wireless.html "Visit external site"
+[adapter wifi settings]: https://www.intel.com/content/www/us/en/support/articles/000005585/wireless/legacy-intel-wireless-products.html "Visit Intel site"
 [adapter eth settings]: http://techgenix.com/advanced-network-adapter-driver-settings "Visit external site"
 [adapter eee issues]: https://www.dell.com/support/kbdoc/en-us/000134483/resolving-issues-with-energy-efficient-ethernet-eee-or-green-ethernet?lwp=rt "Visit external site"
 [adapter realtek settings]: https://superuser.com/questions/853500/optimal-setting-for-advanced-parameters-for-realtek-pci-e-gbe-family-network-car "Visit superuser site"
