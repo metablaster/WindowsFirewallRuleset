@@ -155,6 +155,7 @@ The following table lists operating systems on which `Windows Firewall Ruleset` 
 | Windows 10          | Education     | 20H2 - 22H2 | x64          |
 | Windows 11          | Pro Education | 21H2        | x64          |
 | Windows 11          | Pro           | 22H2        | x64          |
+| Windows 11          | Pro           | 23H2        | x64          |
 | Windows 11          | Enterprise    | 22H2        | x64          |
 | Windows Server 2019 | Essentials    | 1809        | x64          |
 | Windows Server 2019 | Standard      | 1809        | x64          |

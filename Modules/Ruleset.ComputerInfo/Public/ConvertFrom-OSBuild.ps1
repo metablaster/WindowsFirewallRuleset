@@ -129,6 +129,7 @@ Windows Server 2016 (version 1607)	Long-Term Servicing Channel (LTSC)	Datacenter
 Windows 11
 
 Version	Servicing option	            Availability date Latest revision date Latest build End of servicing: Home, Pro, Pro Education and Pro for Workstations	End of servicing: Enterprise, Education and IoT Enterprise
+23H2    General Availability Channel    2023-10-31        2023-11-14           22631.2715   2025-11-11 2026-11-10
 22H2	General Availability Channel	2022-09-20	      2022-11-08	       22621.819    2024-10-08 2025-10-14
 21H2	General Availability Channel	2021-10-04	      2022-11-08           22000.1219   2023-10-10 2024-10-08
 #>
@@ -140,6 +141,10 @@ Set-Variable -Name OSBuildInfo -Scope Script -Option Constant -Value ([PSCustomO
 			Build = 20348
 		}
 		# Windows 11
+		[hashtable]@{
+			Version = "23H2"
+			Build = 22631
+		}
 		[hashtable]@{
 			Version = "22H2"
 			Build = 22621
