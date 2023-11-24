@@ -18,7 +18,8 @@ Connect to remote computer
 ```powershell
 Connect-Computer [[-Domain] <String>] [-Credential <PSCredential>] [-Protocol <String>] [-Port <Int32>]
  [-Authentication <String>] [-SessionOption <PSSessionOption>] [-ConfigurationName <String>]
- [-ApplicationName <String>] [-CimOptions <CimSessionOptions>] [<CommonParameters>]
+ [-ApplicationName <String>] [-CimOptions <CimSessionOptions>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Thumbprint
@@ -26,7 +27,8 @@ Connect-Computer [[-Domain] <String>] [-Credential <PSCredential>] [-Protocol <S
 ```powershell
 Connect-Computer [[-Domain] <String>] [-Credential <PSCredential>] [-Port <Int32>] [-CertThumbprint <String>]
  [-Authentication <String>] [-SessionOption <PSSessionOption>] [-ConfigurationName <String>]
- [-ApplicationName <String>] [-CimOptions <CimSessionOptions>] [<CommonParameters>]
+ [-ApplicationName <String>] [-CimOptions <CimSessionOptions>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -237,6 +239,22 @@ By default new CIM options object is made and set to use SSL if protocol is HTTP
 Type: Microsoft.Management.Infrastructure.Options.CimSessionOptions
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

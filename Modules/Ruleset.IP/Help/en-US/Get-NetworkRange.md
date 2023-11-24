@@ -17,13 +17,13 @@ Get a list of IP addresses within the specified network
 
 ```powershell
 Get-NetworkRange [-IPAddress] <String> [[-SubnetMask] <String>] [-IncludeNetworkAndBroadcast]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### FromStartAndEnd
 
 ```powershell
-Get-NetworkRange -Start <IPAddress> -End <IPAddress> [<CommonParameters>]
+Get-NetworkRange -Start <IPAddress> -End <IPAddress> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -126,6 +126,22 @@ Parameter Sets: FromStartAndEnd
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

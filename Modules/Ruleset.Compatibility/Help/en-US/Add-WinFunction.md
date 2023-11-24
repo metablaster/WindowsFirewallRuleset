@@ -15,7 +15,7 @@ This command defines a global function that always runs in the compatibility ses
 
 ```powershell
 Add-WinFunction [-Name] <String> [-ScriptBlock] <ScriptBlock> [-Domain <String>] [-ConfigurationName <String>]
- [-Credential <PSCredential>] [<CommonParameters>]
+ [-Credential <PSCredential>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -119,6 +119,22 @@ The credential to use when creating the compatibility session using the target m
 Type: System.Management.Automation.PSCredential
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

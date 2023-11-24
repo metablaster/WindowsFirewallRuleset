@@ -19,7 +19,7 @@ Test links in markdown files
 Test-MarkdownLink [-Path] <String[]> [-Recurse] [-TimeoutSec <Int32>] [-MaximumRetryCount <Int32>]
  [-RetryIntervalSec <Int32>] [-MaximumRedirection <Int32>] [-SslProtocol <String>] [-NoProxy]
  [-Include <String>] [-Exclude <String>] [-LinkType <String>] [-Unique] [-Depth <UInt32>] [-Log]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Literal
@@ -28,7 +28,7 @@ Test-MarkdownLink [-Path] <String[]> [-Recurse] [-TimeoutSec <Int32>] [-MaximumR
 Test-MarkdownLink -LiteralPath <String[]> [-Recurse] [-TimeoutSec <Int32>] [-MaximumRetryCount <Int32>]
  [-RetryIntervalSec <Int32>] [-MaximumRedirection <Int32>] [-SslProtocol <String>] [-NoProxy]
  [-Include <String>] [-Exclude <String>] [-LinkType <String>] [-Unique] [-Depth <UInt32>] [-Log]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -327,6 +327,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

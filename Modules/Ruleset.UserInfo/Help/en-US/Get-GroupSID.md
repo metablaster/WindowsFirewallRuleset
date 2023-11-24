@@ -16,13 +16,14 @@ Get SID of user groups on local or remote computers
 ### Domain (Default)
 
 ```powershell
-Get-GroupSID [-Group] <String[]> [-Domain <String>] [<CommonParameters>]
+Get-GroupSID [-Group] <String[]> [-Domain <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### CimSession
 
 ```powershell
-Get-GroupSID [-Group] <String[]> [-CimSession <CimSession>] [<CommonParameters>]
+Get-GroupSID [-Group] <String[]> [-CimSession <CimSession>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -91,6 +92,22 @@ Specifies the CIM session to use
 Type: Microsoft.Management.Infrastructure.CimSession
 Parameter Sets: CimSession
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

@@ -17,14 +17,15 @@ Gets firewall rules directly from registry
 
 ```powershell
 Get-RegistryRule [-Domain <String>] [-Local] [-GroupPolicy] [-DisplayGroup <String>] [-Direction <String>]
- [-Action <String>] [-Enabled <String>] [-Raw] [<CommonParameters>]
+ [-Action <String>] [-Enabled <String>] [-Raw] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### NotAllowingEmptyString
 
 ```powershell
 Get-RegistryRule [-Domain <String>] [-Local] [-GroupPolicy] -DisplayName <String> [-DisplayGroup <String>]
- [-Direction <String>] [-Action <String>] [-Enabled <String>] [-Raw] [<CommonParameters>]
+ [-Direction <String>] [-Action <String>] [-Enabled <String>] [-Raw] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -204,6 +205,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
@@ -236,4 +253,3 @@ TODO: Parameter to ignore case sensitive DisplayName and DisplayGroup, then also
 [https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-gpfas/2efe0b76-7b4a-41ff-9050-1023f8196d16](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-gpfas/2efe0b76-7b4a-41ff-9050-1023f8196d16)
 
 [https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-fasp/8c008258-166d-46d4-9090-f2ffaa01be4b](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-fasp/8c008258-166d-46d4-9090-f2ffaa01be4b)
-

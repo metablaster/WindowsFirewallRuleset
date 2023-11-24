@@ -15,7 +15,8 @@ Invoke a ScriptBlock that runs in the compatibility runspace
 
 ```powershell
 Invoke-WinCommand [-ScriptBlock] <ScriptBlock> [-Domain <String>] [-ConfigurationName <String>]
- [-Credential <PSCredential>] [-ArgumentList <Object[]>] [<CommonParameters>]
+ [-Credential <PSCredential>] [-ArgumentList <Object[]>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -132,6 +133,22 @@ Arguments to pass to the scriptblock
 Type: System.Object[]
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

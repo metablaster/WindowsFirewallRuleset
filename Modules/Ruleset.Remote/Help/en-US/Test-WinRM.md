@@ -19,7 +19,7 @@ Test WinRM service configuration
 Test-WinRM [[-Domain] <String>] [-Credential <PSCredential>] [-Protocol <String>] [-Port <Int32>]
  [-Authentication <String>] [-UICulture <CultureInfo>] [-Culture <CultureInfo>] [-ApplicationName <String>]
  [-SessionOption <PSSessionOption>] [-ConfigurationName <String>] [-CimOptions <CimSessionOptions>]
- [-Status <PSReference>] [-Quiet] [<CommonParameters>]
+ [-Status <PSReference>] [-Quiet] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Cert
@@ -28,7 +28,7 @@ Test-WinRM [[-Domain] <String>] [-Credential <PSCredential>] [-Protocol <String>
 Test-WinRM [[-Domain] <String>] [-Protocol <String>] [-Port <Int32>] [-Authentication <String>]
  [-CertThumbprint <String>] [-UICulture <CultureInfo>] [-Culture <CultureInfo>] [-ApplicationName <String>]
  [-SessionOption <PSSessionOption>] [-ConfigurationName <String>] [-CimOptions <CimSessionOptions>]
- [-Status <PSReference>] [-Quiet] [<CommonParameters>]
+ [-Status <PSReference>] [-Quiet] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -304,6 +304,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

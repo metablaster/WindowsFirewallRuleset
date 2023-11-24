@@ -16,21 +16,22 @@ Get all firewall rules without or with specified LocalUser value
 ### None (Default)
 
 ```powershell
-Find-RulePrincipal -Path <DirectoryInfo> [-FileName <String>] [-Direction <String>] [<CommonParameters>]
+Find-RulePrincipal -Path <DirectoryInfo> [-FileName <String>] [-Direction <String>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Group
 
 ```powershell
 Find-RulePrincipal -Path <DirectoryInfo> [-FileName <String>] [-User <String>] -Group <String>
- [-Direction <String>] [<CommonParameters>]
+ [-Direction <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### User
 
 ```powershell
 Find-RulePrincipal -Path <DirectoryInfo> [-FileName <String>] -User <String> [-Direction <String>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -145,6 +146,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: *
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

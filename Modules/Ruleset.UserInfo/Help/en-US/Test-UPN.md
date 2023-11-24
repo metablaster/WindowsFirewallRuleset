@@ -16,19 +16,19 @@ Validate Universal Principal Name syntax
 ### None (Default)
 
 ```powershell
-Test-UPN [-Name] <String[]> [-Quiet] [<CommonParameters>]
+Test-UPN [-Name] <String[]> [-Quiet] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Prefix
 
 ```powershell
-Test-UPN [-Name] <String[]> [-Prefix] [-Quiet] [<CommonParameters>]
+Test-UPN [-Name] <String[]> [-Prefix] [-Quiet] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Suffix
 
 ```powershell
-Test-UPN [-Name] <String[]> [-Suffix] [-Quiet] [<CommonParameters>]
+Test-UPN [-Name] <String[]> [-Suffix] [-Quiet] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -139,6 +139,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -16,13 +16,14 @@ Get a list of subnets of a given size within a defined supernet
 ### FromSupernet (Default)
 
 ```powershell
-Get-Subnet [-IPAddress] <String> [[-SubnetMask] <String>] -NewSubnetMask <String> [<CommonParameters>]
+Get-Subnet [-IPAddress] <String> [[-SubnetMask] <String>] -NewSubnetMask <String>
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### FromStartAndEnd
 
 ```powershell
-Get-Subnet -Start <IPAddress> -End <IPAddress> [<CommonParameters>]
+Get-Subnet -Start <IPAddress> -End <IPAddress> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -127,6 +128,22 @@ Parameter Sets: FromStartAndEnd
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

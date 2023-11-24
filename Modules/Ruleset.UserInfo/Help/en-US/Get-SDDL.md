@@ -16,13 +16,15 @@ Get SDDL string of a user, group or from path
 ### Domain (Default)
 
 ```powershell
-Get-SDDL [-User <String[]>] [-Group <String[]>] [-Domain <String>] [-Merge] [<CommonParameters>]
+Get-SDDL [-User <String[]>] [-Group <String[]>] [-Domain <String>] [-Merge]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### CimSession
 
 ```powershell
-Get-SDDL [-User <String[]>] [-Group <String[]>] [-CimSession <CimSession>] [-Merge] [<CommonParameters>]
+Get-SDDL [-User <String[]>] [-Group <String[]>] [-CimSession <CimSession>] [-Merge]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -128,6 +130,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

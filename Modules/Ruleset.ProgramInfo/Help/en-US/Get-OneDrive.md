@@ -16,13 +16,15 @@ Get One Drive information for specific user
 ### Domain (Default)
 
 ```powershell
-Get-OneDrive [-User] <String> [-Domain <String>] [-Credential <PSCredential>] [<CommonParameters>]
+Get-OneDrive [-User] <String> [-Domain <String>] [-Credential <PSCredential>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Session
 
 ```powershell
-Get-OneDrive [-User] <String> [-CimSession <CimSession>] [-Session <PSSession>] [<CommonParameters>]
+Get-OneDrive [-User] <String> [-CimSession <CimSession>] [-Session <PSSession>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -125,6 +127,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
@@ -140,8 +158,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 TODO: We should make a query for an array of users, will help to save into variable,
-this is duplicate comment of Get-UserSoftware
-TODO: The logic of this function should probably be part of Get-UserSoftware, it is unknown
+this is duplicate comment of Get-UserProgram
+TODO: The logic of this function should probably be part of Get-UserProgram, it is unknown
 if OneDrive can be installed for all users too.
 
 ## RELATED LINKS

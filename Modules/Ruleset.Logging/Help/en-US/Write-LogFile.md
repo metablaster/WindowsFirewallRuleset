@@ -17,13 +17,14 @@ Write a message or hash table to log file
 
 ```powershell
 Write-LogFile -Message <String[]> [-Path <DirectoryInfo>] [-Tags <String[]>] [-LogName <String>] [-Raw]
- [-Overwrite] [<CommonParameters>]
+ [-Overwrite] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Hash
 
 ```powershell
-Write-LogFile -Hash <Object> [-Path <DirectoryInfo>] [-LogName <String>] [-Overwrite] [<CommonParameters>]
+Write-LogFile -Hash <Object> [-Path <DirectoryInfo>] [-LogName <String>] [-Overwrite]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -196,6 +197,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

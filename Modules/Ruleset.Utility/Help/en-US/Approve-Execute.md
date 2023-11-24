@@ -17,7 +17,8 @@ Customized user prompt to continue
 
 ```powershell
 Approve-Execute [-Title <String>] [-Context <String>] [-ContextLeaf <String>] [-Question <String>]
- [-Accept <String>] [-Deny <String>] [-Unsafe] [-Force] [<CommonParameters>]
+ [-Accept <String>] [-Deny <String>] [-Unsafe] [-Force] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### ToAll
@@ -25,7 +26,7 @@ Approve-Execute [-Title <String>] [-Context <String>] [-ContextLeaf <String>] [-
 ```powershell
 Approve-Execute [-Title <String>] [-Context <String>] [-ContextLeaf <String>] [-Question <String>]
  [-Accept <String>] [-Deny <String>] -YesToAll <PSReference> -NoToAll <PSReference> [-YesAllHelp <String>]
- [-NoAllHelp <String>] [-Unsafe] [-Force] [<CommonParameters>]
+ [-NoAllHelp <String>] [-Unsafe] [-Force] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -248,6 +249,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

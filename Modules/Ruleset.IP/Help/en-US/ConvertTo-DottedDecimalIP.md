@@ -14,7 +14,7 @@ Converts either an unsigned 32-bit integer or a dotted binary string to an IP Ad
 ## SYNTAX
 
 ```powershell
-ConvertTo-DottedDecimalIP [-IPAddress] <String> [<CommonParameters>]
+ConvertTo-DottedDecimalIP [-IPAddress] <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -54,6 +54,22 @@ Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

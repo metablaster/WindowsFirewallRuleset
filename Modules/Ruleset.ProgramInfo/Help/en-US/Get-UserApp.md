@@ -17,13 +17,14 @@ Get store apps for specific user
 
 ```powershell
 Get-UserApp [[-Name] <String>] -User <String> [-Domain <String>] [-Credential <PSCredential>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Session
 
 ```powershell
-Get-UserApp [[-Name] <String>] -User <String> [-Session <PSSession>] [<CommonParameters>]
+Get-UserApp [[-Name] <String>] -User <String> [-Session <PSSession>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -133,6 +134,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
@@ -160,3 +177,11 @@ TODO: Format.ps1xml not applied in Windows PowerShell
 [https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApp.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApp.md)
 
 [https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage](https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage)
+
+[https://learn.microsoft.com/en-us/windows/msix/package/packaging-uwp-apps](https://learn.microsoft.com/en-us/windows/msix/package/packaging-uwp-apps)
+
+[https://learn.microsoft.com/en-us/uwp/api/windows.applicationmodel.package](https://learn.microsoft.com/en-us/uwp/api/windows.applicationmodel.package)
+
+[https://learn.microsoft.com/en-us/uwp/api/windows.applicationmodel.packagesignaturekind](https://learn.microsoft.com/en-us/uwp/api/windows.applicationmodel.packagesignaturekind)
+
+[https://learn.microsoft.com/en-us/windows/application-management/apps-in-windows-10](https://learn.microsoft.com/en-us/windows/application-management/apps-in-windows-10)

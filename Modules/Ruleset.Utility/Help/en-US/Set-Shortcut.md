@@ -18,14 +18,15 @@ Set desktop or online shortcut
 ```powershell
 Set-Shortcut [-Name] <String> -Path <String> -TargetPath <FileInfo> [-IconLocation <FileInfo>]
  [-IconIndex <Int32>] [-Description <String>] [-Hotkey <String>] [-WindowStyle <String>]
- [-WorkingDirectory <DirectoryInfo>] [-Arguments <String>] [-Admin] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-WorkingDirectory <DirectoryInfo>] [-Arguments <String>] [-Admin] [-ProgressAction <ActionPreference>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Online
 
 ```powershell
 Set-Shortcut [-Name] <String> -Path <String> -URL <Uri> [-IconLocation <FileInfo>] [-IconIndex <Int32>]
- [-Hotkey <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-Hotkey <String>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -286,6 +287,22 @@ Prompts you for confirmation before running the cmdlet.
 Type: System.Management.Automation.SwitchParameter
 Parameter Sets: (All)
 Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

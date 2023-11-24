@@ -17,13 +17,15 @@ Test target computer (policy store) on which to deploy firewall
 
 ```powershell
 Test-Computer [-Domain] <String> [-Protocol <String>] [-Port <Int32>] [-Credential <PSCredential>]
- [-Authentication <String>] [-CertThumbprint <String>] [<CommonParameters>]
+ [-Authentication <String>] [-CertThumbprint <String>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Ping
 
 ```powershell
-Test-Computer [-Domain] <String> [-Protocol <String>] [-Retry <Int16>] [-Timeout <Int16>] [<CommonParameters>]
+Test-Computer [-Domain] <String> [-Protocol <String>] [-Retry <Int16>] [-Timeout <Int16>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -198,6 +200,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

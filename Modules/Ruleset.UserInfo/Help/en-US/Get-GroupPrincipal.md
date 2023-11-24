@@ -17,14 +17,14 @@ Get principals of specified groups on target computers
 
 ```powershell
 Get-GroupPrincipal [-Group] <String[]> [-Domain <String>] [-Include <String>] [-Exclude <String>] [-Disabled]
- [-Unique] [<CommonParameters>]
+ [-Unique] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### CimSession
 
 ```powershell
 Get-GroupPrincipal [-Group] <String[]> -CimSession <CimSession> [-Include <String>] [-Exclude <String>]
- [-Disabled] [-Unique] [<CommonParameters>]
+ [-Disabled] [-Unique] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -173,6 +173,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

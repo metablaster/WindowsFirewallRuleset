@@ -16,13 +16,13 @@ Get user groups on target computers
 ### Domain (Default)
 
 ```powershell
-Get-UserGroup [-Domain <String[]>] [<CommonParameters>]
+Get-UserGroup [-Domain <String[]>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### CimSession
 
 ```powershell
-Get-UserGroup [-CimSession <CimSession>] [<CommonParameters>]
+Get-UserGroup [-CimSession <CimSession>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -75,6 +75,22 @@ Specifies the CIM session to use
 Type: Microsoft.Management.Infrastructure.CimSession
 Parameter Sets: CimSession
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

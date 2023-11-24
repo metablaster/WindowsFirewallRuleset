@@ -15,7 +15,7 @@ Compare the set of modules against those in the compatibility session
 
 ```powershell
 Compare-WinModule [[-Name] <String[]>] [-Domain <String>] [-ConfigurationName <String>]
- [-Credential <PSCredential>] [<CommonParameters>]
+ [-Credential <PSCredential>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -103,6 +103,22 @@ If needed, use this parameter to specify credentials for the compatibility sessi
 Type: System.Management.Automation.PSCredential
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

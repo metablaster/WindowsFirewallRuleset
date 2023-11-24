@@ -14,7 +14,7 @@ Convert a dotted decimal IP address into a hexadecimal string
 ## SYNTAX
 
 ```powershell
-ConvertTo-HexIP [-IPAddress] <IPAddress> [<CommonParameters>]
+ConvertTo-HexIP [-IPAddress] <IPAddress> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -46,6 +46,22 @@ Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

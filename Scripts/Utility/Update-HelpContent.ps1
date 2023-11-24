@@ -84,6 +84,7 @@ produce errors or unexpected behavior while generating online help and how to av
 Help version is automatically updated according to $ProjectVersion variable.
 For best results run first time with -Force switch and second time without -Force switch.
 Recommended to generate help files with Core edition because of file encoding.
+The script must be run in Develop mode
 If using -Module parameter specify correct name casing of a module.
 
 TODO: Some markdown files will end up with additional blank line at the end of document for each

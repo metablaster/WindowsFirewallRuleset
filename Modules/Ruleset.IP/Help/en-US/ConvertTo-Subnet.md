@@ -16,13 +16,14 @@ Convert a start and end IP address to the closest matching subnet
 ### FromIPAndMask (Default)
 
 ```powershell
-ConvertTo-Subnet [-IPAddress] <String> [[-SubnetMask] <String>] [<CommonParameters>]
+ConvertTo-Subnet [-IPAddress] <String> [[-SubnetMask] <String>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### FromStartAndEnd
 
 ```powershell
-ConvertTo-Subnet -Start <IPAddress> -End <IPAddress> [<CommonParameters>]
+ConvertTo-Subnet -Start <IPAddress> -End <IPAddress> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -115,6 +116,22 @@ Parameter Sets: FromStartAndEnd
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

@@ -14,7 +14,7 @@ Format file system path and fix syntax errors
 ## SYNTAX
 
 ```powershell
-Format-Path [[-LiteralPath] <String[]>] [<CommonParameters>]
+Format-Path [[-LiteralPath] <String[]>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -81,6 +81,22 @@ Required: False
 Position: 1
 Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

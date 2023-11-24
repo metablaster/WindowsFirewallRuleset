@@ -17,14 +17,15 @@ Analyze file trough VirusTotal API
 
 ```powershell
 Test-VirusTotal -LiteralPath <String> [-Domain <String>] [-Credential <PSCredential>]
- [-SigcheckLocation <String>] [-TimeOut <Int32>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-SigcheckLocation <String>] [-TimeOut <Int32>] [-Force] [-ProgressAction <ActionPreference>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ### Session
 
 ```powershell
 Test-VirusTotal -LiteralPath <String> [-Session <PSSession>] [-SigcheckLocation <String>] [-TimeOut <Int32>]
- [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-Force] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -185,6 +186,22 @@ Prompts you for confirmation before running the cmdlet.
 Type: System.Management.Automation.SwitchParameter
 Parameter Sets: (All)
 Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

@@ -17,7 +17,8 @@ Run process, format and redirect captured process output
 
 ```powershell
 Invoke-Process [-Path] <String> [[-ArgumentList] <String>] [-NoNewWindow] [-Timeout <Int32>] [-Async] [-Raw]
- [-RunAsCredential <PSCredential>] [-LoadUserProfile] [-WorkingDirectory <String>] [<CommonParameters>]
+ [-RunAsCredential <PSCredential>] [-LoadUserProfile] [-WorkingDirectory <String>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Domain
@@ -25,7 +26,7 @@ Invoke-Process [-Path] <String> [[-ArgumentList] <String>] [-NoNewWindow] [-Time
 ```powershell
 Invoke-Process [-Path] <String> [[-ArgumentList] <String>] [-Domain <String>] [-Credential <PSCredential>]
  [-NoNewWindow] [-Timeout <Int32>] [-Async] [-Raw] [-RunAsCredential <PSCredential>] [-LoadUserProfile]
- [-WorkingDirectory <String>] [<CommonParameters>]
+ [-WorkingDirectory <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Session
@@ -33,7 +34,7 @@ Invoke-Process [-Path] <String> [[-ArgumentList] <String>] [-Domain <String>] [-
 ```powershell
 Invoke-Process [-Path] <String> [[-ArgumentList] <String>] [-Session <PSSession>] [-NoNewWindow]
  [-Timeout <Int32>] [-Async] [-Raw] [-RunAsCredential <PSCredential>] [-LoadUserProfile]
- [-WorkingDirectory <String>] [<CommonParameters>]
+ [-WorkingDirectory <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -251,6 +252,22 @@ The WorkingDirectory property must be set if Credential (UserName and Password) 
 Type: System.String
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

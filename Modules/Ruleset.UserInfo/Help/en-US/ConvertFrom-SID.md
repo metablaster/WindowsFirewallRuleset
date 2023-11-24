@@ -16,13 +16,15 @@ Convert SID to principal, user and domain name
 ### Domain (Default)
 
 ```powershell
-ConvertFrom-SID [-SID] <String[]> [-Domain <String>] [-Credential <PSCredential>] [<CommonParameters>]
+ConvertFrom-SID [-SID] <String[]> [-Domain <String>] [-Credential <PSCredential>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Session
 
 ```powershell
-ConvertFrom-SID [-SID] <String[]> -CimSession <CimSession> -Session <PSSession> [<CommonParameters>]
+ConvertFrom-SID [-SID] <String[]> -CimSession <CimSession> -Session <PSSession>
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -121,6 +123,22 @@ Parameter Sets: Session
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

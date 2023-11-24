@@ -15,7 +15,7 @@ Format output of the Net-NewFirewallRule commandlet
 
 ```powershell
 Format-RuleOutput [-Rule] <CimInstance[]> [-Label <String>] [-ForegroundColor <ConsoleColor>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -88,6 +88,22 @@ Accepted values: Black, DarkBlue, DarkGreen, DarkCyan, DarkRed, DarkMagenta, Dar
 Required: False
 Position: Named
 Default value: Cyan
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

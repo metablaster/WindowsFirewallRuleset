@@ -14,7 +14,8 @@ Finds duplicate modules
 ## SYNTAX
 
 ```powershell
-Find-DuplicateModule [[-Name] <String[]>] [[-Scope] <String[]>] [<CommonParameters>]
+Find-DuplicateModule [[-Name] <String[]>] [[-Scope] <String[]>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -86,6 +87,22 @@ Aliases:
 
 Required: False
 Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

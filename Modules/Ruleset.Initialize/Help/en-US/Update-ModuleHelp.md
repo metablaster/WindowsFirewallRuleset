@@ -16,14 +16,15 @@ Update PowerShell module help files
 ### Name (Default)
 
 ```powershell
-Update-ModuleHelp [[-Name] <String[]>] [-UICulture <CultureInfo[]>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Update-ModuleHelp [[-Name] <String[]>] [-UICulture <CultureInfo[]>] [-ProgressAction <ActionPreference>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Full
 
 ```powershell
-Update-ModuleHelp [[-FullyQualifiedName] <ModuleSpecification[]>] [-UICulture <CultureInfo[]>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Update-ModuleHelp [[-FullyQualifiedName] <ModuleSpecification[]>] [-UICulture <CultureInfo[]>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -139,6 +140,22 @@ Prompts you for confirmation before running the cmdlet.
 Type: System.Management.Automation.SwitchParameter
 Parameter Sets: (All)
 Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

@@ -14,7 +14,8 @@ Validate NETBIOS name syntax
 ## SYNTAX
 
 ```powershell
-Test-NetBiosName [-Name] <String[]> [-Operation <String>] [-Strict] [-Quiet] [-Force] [<CommonParameters>]
+Test-NetBiosName [-Name] <String[]> [-Operation <String>] [-Strict] [-Quiet] [-Force]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -140,6 +141,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

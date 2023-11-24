@@ -14,7 +14,7 @@ Export WinRM configuration to file
 ## SYNTAX
 
 ```powershell
-Export-WinRM [<CommonParameters>]
+Export-WinRM [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,6 +31,22 @@ Export-WinRM
 ```
 
 ## PARAMETERS
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### CommonParameters
 

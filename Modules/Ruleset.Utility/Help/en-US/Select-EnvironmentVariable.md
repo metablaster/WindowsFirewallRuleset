@@ -17,21 +17,24 @@ Select a group of system environment variables
 
 ```powershell
 Select-EnvironmentVariable [-Domain <String>] [-Credential <PSCredential>] [-Session <PSSession>]
- [-From <String>] [-Property <String>] [-Exact] [-IncludeFile] [-Force] [<CommonParameters>]
+ [-From <String>] [-Property <String>] [-Exact] [-IncludeFile] [-Force] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Name
 
 ```powershell
 Select-EnvironmentVariable [-Domain <String>] [-Credential <PSCredential>] [-Session <PSSession>]
- [-From <String>] -Name <String> [-Property <String>] [-IncludeFile] [-Force] [<CommonParameters>]
+ [-From <String>] -Name <String> [-Property <String>] [-IncludeFile] [-Force]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Value
 
 ```powershell
 Select-EnvironmentVariable [-Domain <String>] [-Credential <PSCredential>] [-Session <PSSession>]
- [-From <String>] -Value <String> [-Property <String>] [-Exact] [-IncludeFile] [-Force] [<CommonParameters>]
+ [-From <String>] -Value <String> [-Property <String>] [-Exact] [-IncludeFile] [-Force]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -292,6 +295,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

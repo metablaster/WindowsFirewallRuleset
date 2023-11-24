@@ -17,14 +17,14 @@ Convert wildcard pattern to regex
 
 ```powershell
 ConvertFrom-Wildcard [-Pattern] <String> [-AsRegex] [-Options <RegexOptions>] [-TimeSpan <TimeSpan>]
- [-SkipAnchor] [<CommonParameters>]
+ [-SkipAnchor] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Wildcard
 
 ```powershell
 ConvertFrom-Wildcard -Wildcard <WildcardPattern> [-AsRegex] [-Options <RegexOptions>] [-TimeSpan <TimeSpan>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -165,6 +165,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

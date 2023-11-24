@@ -15,7 +15,7 @@ Get a list of the available modules from the compatibility session
 
 ```powershell
 Get-WinModule [[-Name] <String[]>] [-Domain <String>] [-ConfigurationName <String>]
- [-Credential <PSCredential>] [-Full] [<CommonParameters>]
+ [-Credential <PSCredential>] [-Full] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -121,6 +121,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

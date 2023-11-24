@@ -1,11 +1,11 @@
 ---
 external help file: Ruleset.ProgramInfo-help.xml
 Module Name: Ruleset.ProgramInfo
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserSoftware.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserProgram.md
 schema: 2.0.0
 ---
 
-# Get-UserSoftware
+# Get-UserProgram
 
 ## SYNOPSIS
 
@@ -16,13 +16,15 @@ Get a list of programs installed by specific user
 ### Domain (Default)
 
 ```powershell
-Get-UserSoftware [-User] <String> [-Domain <String>] [-Credential <PSCredential>] [<CommonParameters>]
+Get-UserProgram [-User] <String> [-Domain <String>] [-Credential <PSCredential>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Session
 
 ```powershell
-Get-UserSoftware [-User] <String> [-CimSession <CimSession>] [-Session <PSSession>] [<CommonParameters>]
+Get-UserProgram [-User] <String> [-CimSession <CimSession>] [-Session <PSSession>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -34,13 +36,13 @@ Search installed programs in userprofile for specific user account
 ### EXAMPLE 1
 
 ```powershell
-Get-UserSoftware "User"
+Get-UserProgram "User"
 ```
 
 ### EXAMPLE 2
 
 ```powershell
-Get-UserSoftware "User" -Domain "Server01"
+Get-UserProgram "User" -Domain "Server01"
 ```
 
 ## PARAMETERS
@@ -125,13 +127,29 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None. You cannot pipe objects to Get-UserSoftware
+### None. You cannot pipe objects to Get-UserProgram
 
 ## OUTPUTS
 

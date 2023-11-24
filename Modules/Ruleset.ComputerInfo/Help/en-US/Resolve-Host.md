@@ -16,25 +16,29 @@ Resolve host to IP or IP to host
 ### Physical (Default)
 
 ```powershell
-Resolve-Host [-AddressFamily <String>] [-Physical] [-Connected] [-WhatIf] [-Confirm] [<CommonParameters>]
+Resolve-Host [-AddressFamily <String>] [-Physical] [-Connected] [-ProgressAction <ActionPreference>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ### Host
 
 ```powershell
-Resolve-Host -Domain <String[]> [-FlushDNS] [-AddressFamily <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Resolve-Host -Domain <String[]> [-FlushDNS] [-AddressFamily <String>] [-ProgressAction <ActionPreference>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### IP
 
 ```powershell
-Resolve-Host -IPAddress <IPAddress[]> [-FlushDNS] [-WhatIf] [-Confirm] [<CommonParameters>]
+Resolve-Host -IPAddress <IPAddress[]> [-FlushDNS] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### Virtual
 
 ```powershell
-Resolve-Host [-AddressFamily <String>] [-Virtual] [-Connected] [-WhatIf] [-Confirm] [<CommonParameters>]
+Resolve-Host [-AddressFamily <String>] [-Virtual] [-Connected] [-ProgressAction <ActionPreference>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -202,6 +206,22 @@ Prompts you for confirmation before running the cmdlet.
 Type: System.Management.Automation.SwitchParameter
 Parameter Sets: (All)
 Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

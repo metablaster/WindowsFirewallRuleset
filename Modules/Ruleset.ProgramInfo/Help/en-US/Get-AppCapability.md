@@ -18,14 +18,15 @@ Get Windows store app capabilities
 ```powershell
 Get-AppCapability [[-Name] <String>] [-PackageTypeFilter <String>] [-Domain <String>]
  [-Credential <PSCredential>] [-Session <PSSession>] -User <String> [-IncludeAuthority] [-Networking]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### InputObject
 
 ```powershell
 Get-AppCapability -InputObject <Object[]> [-Domain <String>] [-Credential <PSCredential>]
- [-Session <PSSession>] -User <String> [-IncludeAuthority] [-Networking] [<CommonParameters>]
+ [-Session <PSSession>] -User <String> [-IncludeAuthority] [-Networking] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -210,6 +211,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -15,7 +15,7 @@ Tests an IP address to determine if it falls within IP address range
 
 ```powershell
 Test-SubnetMember [-SubjectIPAddress] <String> [-ObjectIPAddress] <String> [-SubjectSubnetMask <String>]
- [-ObjectSubnetMask <String>] [<CommonParameters>]
+ [-ObjectSubnetMask <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -120,6 +120,22 @@ A subnet mask as an IP address.
 Type: System.String
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

@@ -17,14 +17,15 @@ Check if system service exists and is trusted
 
 ```powershell
 Test-Service [-Name] <String> [-Domain <String>] [-Credential <PSCredential>]
- [-SigcheckLocation <DirectoryInfo>] [-TimeOut <Int32>] [-Quiet] [-Force] [<CommonParameters>]
+ [-SigcheckLocation <DirectoryInfo>] [-TimeOut <Int32>] [-Quiet] [-Force] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Session
 
 ```powershell
 Test-Service [-Name] <String> [-Session <PSSession>] [-SigcheckLocation <DirectoryInfo>] [-TimeOut <Int32>]
- [-Quiet] [-Force] [<CommonParameters>]
+ [-Quiet] [-Force] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -186,6 +187,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -16,20 +16,22 @@ Get interface broadcast address
 ### None (Default)
 
 ```powershell
-Get-InterfaceBroadcast [-Physical] [-Virtual] [-Visible] [-Hidden] [<CommonParameters>]
+Get-InterfaceBroadcast [-Physical] [-Virtual] [-Visible] [-Hidden] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Domain
 
 ```powershell
 Get-InterfaceBroadcast [-Domain <String>] [-Credential <PSCredential>] [-Physical] [-Virtual] [-Visible]
- [-Hidden] [<CommonParameters>]
+ [-Hidden] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Session
 
 ```powershell
-Get-InterfaceBroadcast [-Session <PSSession>] [-Physical] [-Virtual] [-Visible] [-Hidden] [<CommonParameters>]
+Get-InterfaceBroadcast [-Session <PSSession>] [-Physical] [-Virtual] [-Visible] [-Hidden]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -162,6 +164,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

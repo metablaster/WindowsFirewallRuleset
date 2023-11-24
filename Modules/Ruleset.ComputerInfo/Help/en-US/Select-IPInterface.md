@@ -17,14 +17,15 @@ Select IP configuration for specified network adapters
 
 ```powershell
 Select-IPInterface [-AddressFamily <String>] [-Domain <String>] [-Credential <PSCredential>] [-Physical]
- [-Virtual] [-Visible] [-Hidden] [-Connected] [-CompartmentId <Int32>] [-Detailed] [<CommonParameters>]
+ [-Virtual] [-Visible] [-Hidden] [-Connected] [-CompartmentId <Int32>] [-Detailed]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Session
 
 ```powershell
 Select-IPInterface [-AddressFamily <String>] [-Session <PSSession>] [-Physical] [-Virtual] [-Visible] [-Hidden]
- [-Connected] [-CompartmentId <Int32>] [-Detailed] [<CommonParameters>]
+ [-Connected] [-CompartmentId <Int32>] [-Detailed] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -223,6 +224,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

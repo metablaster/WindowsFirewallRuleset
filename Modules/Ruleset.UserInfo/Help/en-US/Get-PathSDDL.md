@@ -16,13 +16,15 @@ Get SDDL string for a path
 ### Domain (Default)
 
 ```powershell
-Get-PathSDDL [-Path] <String> [-Domain <String>] [-Credential <PSCredential>] [-Merge] [<CommonParameters>]
+Get-PathSDDL [-Path] <String> [-Domain <String>] [-Credential <PSCredential>] [-Merge]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Session
 
 ```powershell
-Get-PathSDDL [-Path] <String> [-Session <PSSession>] [-Merge] [<CommonParameters>]
+Get-PathSDDL [-Path] <String> [-Session <PSSession>] [-Merge] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -128,6 +130,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

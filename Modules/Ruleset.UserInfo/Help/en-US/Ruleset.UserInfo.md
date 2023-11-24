@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.UserInfo
 Module Guid: 136254f4-4730-4ed1-b9e9-1ccecfe09ee9
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.15.0
-Help Version: 0.15.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.16.0
+Help Version: 0.16.0
 Locale: en-US
 ---
 

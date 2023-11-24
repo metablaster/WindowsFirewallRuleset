@@ -17,13 +17,14 @@ Convert SDDL string to Principal
 
 ```powershell
 ConvertFrom-SDDL [-SDDL] <String[]> [-Domain <String>] [-Credential <PSCredential>] [-Force]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Session
 
 ```powershell
-ConvertFrom-SDDL [-SDDL] <String[]> [-Session <PSSession>] [-Force] [<CommonParameters>]
+ConvertFrom-SDDL [-SDDL] <String[]> [-Session <PSSession>] [-Force] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -131,6 +132,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -17,14 +17,14 @@ Verify or set program installation directory
 
 ```powershell
 Confirm-Installation [-Application] <TargetProgram> [-Directory] <PSReference> [-Domain <String>]
- [-Credential <PSCredential>] [-Interactive] [-Quiet] [<CommonParameters>]
+ [-Credential <PSCredential>] [-Interactive] [-Quiet] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Session
 
 ```powershell
 Confirm-Installation [-Application] <TargetProgram> [-Directory] <PSReference> -Session <PSSession>
- -CimSession <CimSession> [-Interactive] [-Quiet] [<CommonParameters>]
+ -CimSession <CimSession> [-Interactive] [-Quiet] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -52,7 +52,7 @@ Predefined program name for which to search
 Type: TargetProgram
 Parameter Sets: (All)
 Aliases:
-Accepted values: calibre, ytdlp, Motrix, LGHUB, nmap, Brave, Psiphon, MSI, EdgeWebView, SteamCMD, Audacity, dotnet, CMake, SqlPath, SqlServer, SqlManagementStudio, WindowsDefender, NuGet, NETFramework, vcpkg, SysInternals, WindowsKits, WebPlatform, OpenSpace, XTU, Chocolatey, ArenaChess, GoogleDrive, RivaTuner, Incredibuild, ColorMania, MetaTrader, RealWorld, AzureDataStudio, qBittorrent, OpenTTD, EveOnline, DemiseOfNations, CounterStrikeGO, PinballArcade, JavaUpdate, JavaRuntime, AdobeARM, AdobeReader, AdobeAcrobat, LoLGame, FileZilla, PathOfExile, HWMonitor, CPUZ, MSIAfterburner, GPG, OBSStudio, PasswordSafe, Greenshot, DnsCrypt, OpenSSH, PowerShellCore64, PowerShell64, PowerShell86, OneDrive, HelpViewer, VSCode, MicrosoftOffice, TeamViewer, EdgeChromium, Chrome, Firefox, Yandex, Tor, uTorrent, Thuderbird, Steam, Nvidia64, Nvidia86, GeForceExperience, WarThunder, PokerStars, VisualStudio, VisualStudioInstaller, MSYS2, Git, GitHubDesktop, EpicGames, UnrealEngine, BingWallpaper
+Accepted values: GoogleUpdate, BlueStacks, BlueStacksServices, GooglePlay, calibre, ytdlp, Motrix, LGHUB, nmap, Brave, Psiphon, MSI, EdgeWebView, SteamCMD, Audacity, dotnet, CMake, SqlPath, SqlServer, SqlManagementStudio, WindowsDefender, NuGet, NETFramework, vcpkg, SysInternals, WindowsKits, WebPlatform, OpenSpace, XTU, Chocolatey, ArenaChess, GoogleDrive, RivaTuner, Incredibuild, ColorMania, MetaTrader, RealWorld, AzureDataStudio, qBittorrent, OpenTTD, EveOnline, DemiseOfNations, CounterStrikeGO, PinballArcade, JavaUpdate, JavaRuntime, AdobeARM, AdobeReader, AdobeAcrobat, LoLGame, FileZilla, PathOfExile, HWMonitor, CPUZ, MSIAfterburner, GPG, OBSStudio, PasswordSafe, Greenshot, DnsCrypt, OpenSSH, PowerShellCore64, PowerShell64, PowerShell86, OneDrive, HelpViewer, VSCode, MicrosoftOffice, TeamViewer, EdgeChromium, Chrome, Firefox, Yandex, Tor, uTorrent, Thuderbird, Steam, Nvidia64, Nvidia86, GeForceExperience, WarThunder, PokerStars, VisualStudio, VisualStudioInstaller, MSYS2, Git, GitHubDesktop, EpicGames, UnrealEngine, BingWallpaper
 
 Required: True
 Position: 1
@@ -172,6 +172,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

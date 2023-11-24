@@ -14,7 +14,8 @@ Set vertical screen buffer to recommended value
 ## SYNTAX
 
 ```powershell
-Set-ScreenBuffer [[-Height] <UInt32>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-ScreenBuffer [[-Height] <UInt32>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -80,6 +81,22 @@ Prompts you for confirmation before running the cmdlet.
 Type: System.Management.Automation.SwitchParameter
 Parameter Sets: (All)
 Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

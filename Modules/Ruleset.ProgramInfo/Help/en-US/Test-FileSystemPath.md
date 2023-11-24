@@ -17,14 +17,15 @@ Test existence of a file system path and validate path syntax
 
 ```powershell
 Test-FileSystemPath [-LiteralPath] <String> [-Domain <String>] [-Credential <PSCredential>]
- [-PathType <String>] [-Firewall] [-UserProfile] [-Quiet] [<CommonParameters>]
+ [-PathType <String>] [-Firewall] [-UserProfile] [-Quiet] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Session
 
 ```powershell
 Test-FileSystemPath [-LiteralPath] <String> [-Session <PSSession>] [-PathType <String>] [-Firewall]
- [-UserProfile] [-Quiet] [<CommonParameters>]
+ [-UserProfile] [-Quiet] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -211,6 +212,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

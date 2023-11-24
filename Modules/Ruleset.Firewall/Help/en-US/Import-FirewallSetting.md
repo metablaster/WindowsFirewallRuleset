@@ -14,7 +14,8 @@ Import firewall settings and profile setup to file
 ## SYNTAX
 
 ```powershell
-Import-FirewallSetting [[-Domain] <String>] [-Path] <DirectoryInfo> [[-FileName] <String>] [<CommonParameters>]
+Import-FirewallSetting [[-Domain] <String>] [-Path] <DirectoryInfo> [[-FileName] <String>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -83,6 +84,22 @@ Aliases:
 Required: False
 Position: 3
 Default value: FirewallSettings
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -16,13 +16,14 @@ Retrieves the current setting(s) from a .pol file.
 ### ByKeyAndValue (Default)
 
 ```powershell
-Get-PolicyFileEntry [-Path] <String> [-Key] <String> [-ValueName] <String> [<CommonParameters>]
+Get-PolicyFileEntry [-Path] <String> [-Key] <String> [-ValueName] <String> [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### All
 
 ```powershell
-Get-PolicyFileEntry [-Path] <String> [-All] [<CommonParameters>]
+Get-PolicyFileEntry [-Path] <String> [-All] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -114,6 +115,22 @@ Aliases:
 Required: True
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

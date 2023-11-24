@@ -16,7 +16,7 @@ Import a compatibility module
 ```powershell
 Import-WinModule [[-Name] <String[]>] [-Exclude <String[]>] [-Domain <String>] [-ConfigurationName <String>]
  [-Prefix <String>] [-DisableNameChecking] [-NoClobber] [-Force] [-Credential <PSCredential>] [-PassThru]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -229,6 +229,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

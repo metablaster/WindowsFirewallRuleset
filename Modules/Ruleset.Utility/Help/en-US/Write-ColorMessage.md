@@ -15,7 +15,7 @@ Write a colored output
 
 ```powershell
 Write-ColorMessage [[-Message] <String>] [[-ForegroundColor] <ConsoleColor>] [-BackgroundColor <ConsoleColor>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -85,6 +85,22 @@ Type: System.ConsoleColor
 Parameter Sets: (All)
 Aliases:
 Accepted values: Black, DarkBlue, DarkGreen, DarkCyan, DarkRed, DarkMagenta, DarkYellow, Gray, DarkGray, Blue, Green, Cyan, Red, Magenta, Yellow, White
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

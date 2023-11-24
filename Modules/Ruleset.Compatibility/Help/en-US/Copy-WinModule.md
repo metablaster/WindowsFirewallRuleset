@@ -15,7 +15,7 @@ Copy modules from the compatibility session that are directly usable in PowerShe
 
 ```powershell
 Copy-WinModule [[-Name] <String[]>] [-Domain <String>] [-ConfigurationName <String>]
- [-Credential <PSCredential>] [-Destination <String>] [<CommonParameters>]
+ [-Credential <PSCredential>] [-Destination <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -125,6 +125,22 @@ The location where compatible modules should be copied to
 Type: System.String
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

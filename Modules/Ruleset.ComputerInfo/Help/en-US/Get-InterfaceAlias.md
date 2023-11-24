@@ -18,14 +18,15 @@ Get interface aliases of specified network adapters
 ```powershell
 Get-InterfaceAlias [-AddressFamily <String>] [-Domain <String>] [-Credential <PSCredential>]
  [-WildCardOption <WildcardOptions>] [-Physical] [-Virtual] [-Visible] [-Hidden] [-Connected]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Session
 
 ```powershell
 Get-InterfaceAlias [-AddressFamily <String>] [-Session <PSSession>] [-WildCardOption <WildcardOptions>]
- [-Physical] [-Virtual] [-Visible] [-Hidden] [-Connected] [<CommonParameters>]
+ [-Physical] [-Virtual] [-Visible] [-Hidden] [-Connected] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -222,6 +223,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -14,7 +14,7 @@ Get installed .NET Frameworks
 ## SYNTAX
 
 ```powershell
-Get-NetFramework [[-Domain] <String>] [<CommonParameters>]
+Get-NetFramework [[-Domain] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -50,6 +50,22 @@ Aliases: ComputerName, CN
 Required: False
 Position: 1
 Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

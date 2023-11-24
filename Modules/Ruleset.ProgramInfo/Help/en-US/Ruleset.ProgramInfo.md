@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.ProgramInfo
 Module Guid: 49f11777-b8b6-4fed-bd82-32c8f48db81e
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.15.0
-Help Version: 0.15.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.16.0
+Help Version: 0.16.0
 Locale: en-US
 ---
 
@@ -58,7 +58,7 @@ Get SQL server information from a local or remote servers
 
 Get store apps installed system wide
 
-### [Get-SystemSoftware](Get-SystemSoftware.md)
+### [Get-SystemProgram](Get-SystemProgram.md)
 
 Search installed programs for all users, system wide
 
@@ -66,7 +66,7 @@ Search installed programs for all users, system wide
 
 Get store apps for specific user
 
-### [Get-UserSoftware](Get-UserSoftware.md)
+### [Get-UserProgram](Get-UserProgram.md)
 
 Get a list of programs installed by specific user
 

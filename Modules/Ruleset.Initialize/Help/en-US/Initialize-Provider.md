@@ -17,14 +17,15 @@ Update or install specified package providers
 
 ```powershell
 Initialize-Provider -ProviderName <String> -RequiredVersion <Version> [-InfoMessage <String>] [-Required]
- [-Scope <String>] [-Force] [<CommonParameters>]
+ [-Scope <String>] [-Force] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### UseProvider
 
 ```powershell
 Initialize-Provider -ProviderName <String> -RequiredVersion <Version> -UseProvider <String> [-Source <Uri>]
- [-InfoMessage <String>] [-Required] [-Scope <String>] [-Force] [<CommonParameters>]
+ [-InfoMessage <String>] [-Required] [-Scope <String>] [-Force] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -188,6 +189,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

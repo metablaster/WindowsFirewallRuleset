@@ -16,19 +16,19 @@ Get operating system SKU information
 ### Domain (Default)
 
 ```powershell
-Get-SystemSKU [-Domain <String[]>] [<CommonParameters>]
+Get-SystemSKU [-Domain <String[]>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Number
 
 ```powershell
-Get-SystemSKU -SKU <Int32> [<CommonParameters>]
+Get-SystemSKU -SKU <Int32> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### CimSession
 
 ```powershell
-Get-SystemSKU [-CimSession <CimSession>] [<CommonParameters>]
+Get-SystemSKU [-CimSession <CimSession>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -109,6 +109,22 @@ Specifies the CIM session to use
 Type: Microsoft.Management.Infrastructure.CimSession
 Parameter Sets: CimSession
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

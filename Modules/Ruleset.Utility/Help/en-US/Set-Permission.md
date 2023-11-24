@@ -16,8 +16,8 @@ Take ownership or set permissions on file system or registry object
 ### Ownership
 
 ```powershell
-Set-Permission [-LiteralPath] <String> -Owner <String> [-Domain <String>] [-Recurse] [-Force] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Set-Permission [-LiteralPath] <String> -Owner <String> [-Domain <String>] [-Recurse] [-Force]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### FileSystem
@@ -25,7 +25,8 @@ Set-Permission [-LiteralPath] <String> -Owner <String> [-Domain <String>] [-Recu
 ```powershell
 Set-Permission [-LiteralPath] <String> -User <String> [-Domain <String>] [-Type <AccessControlType>]
  -Rights <FileSystemRights> [-Inheritance <InheritanceFlags>] [-Propagation <PropagationFlags>] [-Protected]
- [-PreserveInheritance] [-Recurse] [-Reset] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-PreserveInheritance] [-Recurse] [-Reset] [-Force] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### Registry
@@ -33,14 +34,15 @@ Set-Permission [-LiteralPath] <String> -User <String> [-Domain <String>] [-Type 
 ```powershell
 Set-Permission [-LiteralPath] <String> -User <String> [-Domain <String>] [-Type <AccessControlType>]
  -RegistryRights <RegistryRights> [-Inheritance <InheritanceFlags>] [-Propagation <PropagationFlags>]
- [-Protected] [-PreserveInheritance] [-Recurse] [-Reset] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-Protected] [-PreserveInheritance] [-Recurse] [-Reset] [-Force] [-ProgressAction <ActionPreference>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Reset
 
 ```powershell
 Set-Permission [-LiteralPath] <String> [-Domain <String>] [-Protected] [-PreserveInheritance] [-Recurse]
- [-Reset] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-Reset] [-Force] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -195,7 +197,7 @@ Read: ReadData, ReadExtendedAttributes, ReadAttributes, and ReadPermissions.
 Type: System.Security.AccessControl.FileSystemRights
 Parameter Sets: FileSystem
 Aliases: Permission, Grant
-Accepted values: ListDirectory, ReadData, WriteData, CreateFiles, CreateDirectories, AppendData, ReadExtendedAttributes, WriteExtendedAttributes, Traverse, ExecuteFile, DeleteSubdirectoriesAndFiles, ReadAttributes, WriteAttributes, Write, Delete, ReadPermissions, Read, ReadAndExecute, Modify, ChangePermissions, TakeOwnership, Synchronize, FullControl
+Accepted values: ReadData, ListDirectory, WriteData, CreateFiles, AppendData, CreateDirectories, ReadExtendedAttributes, WriteExtendedAttributes, ExecuteFile, Traverse, DeleteSubdirectoriesAndFiles, ReadAttributes, WriteAttributes, Write, Delete, ReadPermissions, Read, ReadAndExecute, Modify, ChangePermissions, TakeOwnership, Synchronize, FullControl
 
 Required: True
 Position: Named
@@ -390,6 +392,22 @@ Prompts you for confirmation before running the cmdlet.
 Type: System.Management.Automation.SwitchParameter
 Parameter Sets: (All)
 Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named
