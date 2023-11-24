@@ -100,6 +100,7 @@ TODO: OutputType attribute
 TODO: Get rid of blinking progress bar or make your own
 TODO: When run in fresh session for first time it does nothing
 TODO: Log files are generated in Logs root instead of Logs\UpdateHelp
+TODO: $ProgressPreference is a new preference variable and PlatyPS does asks to add description for it to help file
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
