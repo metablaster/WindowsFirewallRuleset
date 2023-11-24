@@ -7,8 +7,9 @@ Here is a list of changes for each of the releases.
 
 - [Changelog](#changelog)
   - [Table of Contents](#table-of-contents)
-  - [v0.15.1 (develop branch)](#v0151-develop-branch)
-  - [v0.15.0  (current release)](#v0150--current-release)
+  - [v0.16.1 (develop branch)](#v0161-develop-branch)
+  - [v0.16.0 (current release)](#v0160-current-release)
+  - [v0.15.0](#v0150)
   - [v0.14.0](#v0140)
   - [v0.13.1](#v0131)
   - [v0.13.0](#v0130)
@@ -25,7 +26,12 @@ Here is a list of changes for each of the releases.
   - [v0.3.0](#v030)
   - [v0.2](#v02)
 
-## v0.15.1 (develop branch)
+## v0.16.1 (develop branch)
+
+To see unreleased changes please do so on `develop` branch [HERE][changelog]\
+**NOTE:** Changes for unreleased version may change or be announced upfront
+
+## v0.16.0 (current release)
 
 - Rules
 
@@ -63,9 +69,9 @@ Here is a list of changes for each of the releases.
   - Updated `Set-ATP.ps1` to adjust CPU throttling type to affect custom scans in addition to scheduled
   - Updated `Set-ATP.ps1` to optionally exclude or include optional and default settings
   - Updated `Set-Privacy.ps1` to not configure settings not available in Windows 11
-  - Fixed an issue in `Grant-Logs` which failed if log location was not configured in GPO
+  - Fixed an issue in `Grant-Logs.ps1` which failed if log location was not configured in GPO
 
-## v0.15.0  (current release)
+## v0.15.0
 
 - Rules
 
