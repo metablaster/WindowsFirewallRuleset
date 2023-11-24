@@ -53,7 +53,8 @@ Todo's in this file are categorized into the following sections:
     - ProjectSettings.ps1 restore variables: TestUser, TestAdmin, DefaultUser, TestDomain
     - ProjectSettings.ps1 verify auto updated variables: ProjectCheck, ModulesCheck, ServicesCheck
     - Increment project version in all places mentioning version:
-      (*.psd1, ProjectSettings, CHANGELOG, scripts, New-PSScriptInfo)
+      (*.psd1, ProjectSettings, CHANGELOG, scripts, New-PSScriptInfo, templates,
+      PssaTestModule helpinfo and this release checklist)
     - Run PScriptAnalyzer and resolve issues.
     - Confirm `Deploy-Firewall.ps1` master script calls all rule scripts
     - Test machine should have 2 standard, 2 administrator and 2 MS accounts of which 1 disabled
@@ -77,9 +78,9 @@ Todo's in this file are categorized into the following sections:
     - `git prune --dry-run` `git prune`
     - `git repack -d -F`
     - Create and publish a new tag:
-    - `git tag -a v0.15.1 -m "Windows Firewall Ruleset 0.15.1" -s`
-    - `git tag -v v0.15.1`
-    - `git push origin v0.15.1`
+    - `git tag -a v0.16.0 -m "Windows Firewall Ruleset 0.16.0" -s`
+    - `git tag -v v0.16.0`
+    - `git push origin v0.16.0`
     - Generate SHA `Get-FileHash -Algorithm SHA256 -Path FILENAME`
 
 5. Documentation
