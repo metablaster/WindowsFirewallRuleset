@@ -314,6 +314,7 @@ function Initialize-Project
 			if (!(Initialize-Provider -Required -ProviderName "NuGet" -RequiredVersion $RequireNuGetVersion `
 						-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider"))
 			{
+				# TODO: This is a workaround that shouldn't be necessary, see HACK in Initialize-Provider line 444
 				if ($script:Restart)
 				{
 					Write-Warning -Message "[$($MyInvocation.InvocationName)] Please restart PowerShell for changes to take effect and run last command again"

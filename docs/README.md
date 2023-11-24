@@ -294,9 +294,10 @@ by running `Scripts\Unblock-Project.ps1`\
 Master script `Scripts\Deploy-Firewall.ps1` does this in case if you forget, but initial YES/NO
 questions will still be present in that case.
 
-- If you download code to location that is under "Ransomware protection" (in Windows Defender),
+- If you have "Ransomware protection" enabled (in Windows Defender),
 make sure to whitelist either `pwsh.exe` (Core edition) or `powershell.exe` (Desktop edition)
-otherwise doing anything may be blocked.\
+or both, otherwise errors happens in develop mode during installation of modules.\
+If Repository code is downloaded to a folder under ransomware protection anything may be blocked.\
 PowerShell console might need to be restarted for "Controlled folder access" changes to take effect.
 
 - By default rules are made for `Users` group while for `Administrators` group only if necessary,
