@@ -120,7 +120,7 @@ if ((Confirm-Installation "LGHUB" ([ref] $LogitechProgramRoot)) -or $ForceLoad)
 	$Program = "$LogitechProgramRoot\lghub.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Logitech G HUB" `
+		New-NetFirewallRule -DisplayName "Logitech G HUB Main program" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -135,7 +135,7 @@ if ((Confirm-Installation "LGHUB" ([ref] $LogitechProgramRoot)) -or $ForceLoad)
 	$Program = "$LogitechProgramRoot\lghub_agent.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Logitech G HUB" `
+		New-NetFirewallRule -DisplayName "Logitech G HUB Agent" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -150,7 +150,7 @@ if ((Confirm-Installation "LGHUB" ([ref] $LogitechProgramRoot)) -or $ForceLoad)
 	$Program = "$LogitechProgramRoot\lghub_updater.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Logitech G HUB" `
+		New-NetFirewallRule -DisplayName "Logitech G HUB Updater" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `

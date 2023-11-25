@@ -444,7 +444,6 @@ function Initialize-Provider
 					# HACK: Set-PackageSource : Unable to find package source 'NuGet'. Use Get-PackageSource to see all available package sources
 					# This errored in Windows PowerShell on Windows 11 23H2 after automatic bootstraping of NuGet,
 					# a workaround is to restart PS and try again which is handled in Initialize-Project
-					# This happened only once and it's strange because NuGet is no package source but provider
 					# TODO: It won't be set to Trusted in that case which needs to be fixed,
 					# perhaps a new function to set Trusted flag on package source for modularity reasons
 					# See also beggining of this script, if it's found there it could be it's not trusted
@@ -456,7 +455,7 @@ function Initialize-Provider
 					{
 						# PowerShell needs to restart
 						Set-Variable -Name Restart -Scope Script -Value $true
-						return $false
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed setting '$($FoundPackageSource.ProviderName)' package provider to trusted, please set manually"
 					}
 
 					Write-Error -ErrorRecord $_

@@ -188,7 +188,6 @@ function Invoke-Process
 		}
 	}
 
-	$InvocationName = $MyInvocation.InvocationName
 	[ScriptBlock] $Code = {
 		param (
 			$Path,
@@ -201,7 +200,7 @@ function Invoke-Process
 			$ArgumentList,
 			$Async,
 			$Domain,
-			[string] $InvocationName = $InvocationName
+			[string] $InvocationName = $MyInvocation.InvocationName
 		)
 
 		$CommandName = Split-Path -Path $Path -Leaf

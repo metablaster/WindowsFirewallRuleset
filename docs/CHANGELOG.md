@@ -28,8 +28,17 @@ Here is a list of changes for each of the releases.
 
 ## v0.16.1 (develop branch)
 
-To see unreleased changes please do so on `develop` branch [HERE][changelog]\
-**NOTE:** Changes for unreleased version may change or be announced upfront
+- Rules
+
+  - Updated rule description for Logitech G HUB
+
+- Modules
+
+  - Improved or updated module functions
+
+    - `Invoke-Process` Fixed invalid use of a variable resulting in error message
+    - `Initialize-Provider` Confirmed a bug with NuGet installation,
+    warning is shown if NuGet package source was not set to trusted in that case only
 
 ## v0.16.0 (current release)
 
