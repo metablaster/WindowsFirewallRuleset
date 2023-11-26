@@ -31,6 +31,7 @@ Here is a list of changes for each of the releases.
 - Rules
 
   - Updated rule description for Logitech G HUB
+  - Added rules for Microsoft PowerToys
 
 - Modules
 

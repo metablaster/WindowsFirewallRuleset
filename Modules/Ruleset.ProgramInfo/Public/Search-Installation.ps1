@@ -154,6 +154,10 @@ function Search-Installation
 
 	switch ($Application)
 	{
+		"PowerToys"
+		{
+			Update-Table -Search "PowerToys"
+		}
 		"BlueStacks"
 		{
 			Update-Table -Search "BlueStacks"

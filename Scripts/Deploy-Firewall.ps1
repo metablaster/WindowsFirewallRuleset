@@ -534,6 +534,7 @@ if (Approve-Execute @ExecuteParams)
 		& "$Destination\Software\Microsoft\EdgeChromium.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\Microsoft\MicrosoftOffice.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\Microsoft\OneDrive.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\Microsoft\PowerToys.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\Microsoft\SysInternals.ps1" @ScriptParams @AllScriptParams
 		$AllCurrent = $YesToAll
 	}

@@ -30,6 +30,7 @@ SOFTWARE.
 # Services and store apps are not part of this enumeration
 enum TargetProgram
 {
+	PowerToys
 	GoogleUpdate
 	BlueStacks
 	BlueStacksServices
