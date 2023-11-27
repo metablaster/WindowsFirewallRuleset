@@ -41,6 +41,10 @@ Here is a list of changes for each of the releases.
     - `Initialize-Provider` Confirmed a bug with NuGet installation,
     warning is shown if NuGet package source was not set to trusted in that case only
 
+- Scripts
+
+  - Updated README with GPO settings of interest not handled by security scripts
+
 ## v0.16.0 (current release)
 
 - Rules

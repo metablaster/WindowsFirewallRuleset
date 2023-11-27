@@ -65,7 +65,7 @@ limitations under the License.
 
 	# Version number of this module.
 	# NOTE: Last checked out official version was 3.0.1
-	ModuleVersion = "0.16.0"
+	ModuleVersion = "0.16.1"
 
 	# Supported PSEditions
 	CompatiblePSEditions = @(
