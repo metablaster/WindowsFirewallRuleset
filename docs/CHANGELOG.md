@@ -44,6 +44,7 @@ Here is a list of changes for each of the releases.
 - Scripts
 
   - Updated README with GPO settings of interest not handled by security scripts
+  - `Set-ATP.ps1` script improved to handle more options and AV scans
 
 ## v0.16.0 (current release)
 

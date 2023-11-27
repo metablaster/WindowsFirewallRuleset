@@ -31,22 +31,12 @@ Computer Configuration\Windows Settings\Security Settings\Local Policies\Securit
 - Maximum password age (42)
 - Minimum password length (10)
 
-### Computer Configuration\Administrative Templates\Windows Components\Apps runtime
-
-- Allow Microsoft accounts to be optional
-
 PAUSED:
 
 ### Computer Configuration\Administrative Templates\Windows Components\Search
 
 - Allow Cortana (Disabled)
-  - NOTE: Cortan will be removed in the future
-
-TEST:
-
-### Computer Configuration\Administrative Templates\Windows Components\Cloud Content
-
-- Turn off Microsoft consumer experiences
+  - NOTE: Cortana will be removed in the future
 
 UNUSED:
 
@@ -76,6 +66,7 @@ UNUSED:
 ### Computer Configuration\Administrative Templates\System\Device Guard
 
 - Turn On Virtualization Based Security
+  - NOTE: The "Not Configured" setting is the default, and allows configuration of the feature by Administrative users.
 
 ### Computer Configuration\Windows Settings\Scripts (Startup/Shutdown)
 
@@ -86,18 +77,22 @@ UNUSED:
 App locker
 ex. Block USB execute
 
-UNUSED: configured in settings
+UNUSED: Configured in settings
 
 ### Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
 
 - Prevent Changing proxy settings (Enabled)
 
-UNUSED: enterprise
+UNUSED: Enterprise
 
 ### Computer Configuration\Administrative Templates\Windows Components\Microsoft Defender Application Guard
 
 - Allow camera and microphone access in Microsoft Defender Application Guard (Disabled)
 - Allow files to download and save to host operating system (Disabled) enabled if needed
+
+### Computer Configuration\Administrative Templates\Windows Components\Cloud Content
+
+- Turn off Microsoft consumer experiences
 
 ALREADY DEFAULT:
 
