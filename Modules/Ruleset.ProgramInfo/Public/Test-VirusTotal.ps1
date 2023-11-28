@@ -53,6 +53,11 @@ By default working directory and PATH is searched for sigcheck64.exe.
 On 32 bit operating system sigcheck.exe is searched instead.
 If location to sigcheck executable is not found then no VirusTotal scan and report is done.
 
+.PARAMETER SkipPositivies
+Specify count of detections up to which VirusTotal detections will be considered false positives.
+If the number of detection is greater than this value, the file being scanned is considered malware.
+The default value is 0, meaning it must be clean of any detections.
+
 .PARAMETER Timeout
 Specify maximum wait time expressed in seconds for VirusTotal to scan individual file.
 Value 0 means an immediate return, and a value of -1 specifies an infinite wait.
@@ -108,6 +113,9 @@ function Test-VirusTotal
 		[string] $SigcheckLocation,
 
 		[Parameter()]
+		[int32] $SkipPositivies = $DefaultSkipPositivies,
+
+		[Parameter()]
 		[ValidateRange(1, 650)]
 		[int32] $TimeOut = 300,
 
@@ -141,13 +149,14 @@ function Test-VirusTotal
 		}
 
 		# TODO: Use $PSBoundParameters?
-		Invoke-Command @SessionParams -ArgumentList $MyInvocation.InvocationName, $SigcheckLocation, $TimeOut, $LiteralPath, $Domain, $Force -ScriptBlock {
+		Invoke-Command @SessionParams -ArgumentList $MyInvocation.InvocationName, $SigcheckLocation, $TimeOut, $LiteralPath, $SkipPositivies, $Domain, $Force -ScriptBlock {
 			[CmdletBinding()]
 			param (
 				[string] $InvocationName,
 				[string] $SigcheckLocation,
 				[int32] $TimeOut,
 				[string] $LiteralPath,
+				[int32] $SkipPositivies,
 				[string] $Domain,
 				# TODO: [switch] doesn't work "A positional parameter cannot be found that accepts argument 'False'"
 				[bool] $Force
@@ -384,7 +393,7 @@ function Test-VirusTotal
 								$TotalDetections = [regex]::Match($Detection.Value, "\d+")
 								if ($TotalDetections.Success)
 								{
-									if ([int32] $TotalDetections.Value -gt 0)
+									if ([int32] $TotalDetections.Value -gt $SkipPositivies)
 									{
 										$FileIsMalware = $true
 										# TODO: Write-ColorMessage does not work here, should be red text

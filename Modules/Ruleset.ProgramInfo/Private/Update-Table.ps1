@@ -36,8 +36,9 @@ installation directory and principal to the table.
 This information is sufficient to make a firewall rule based on executable.
 
 .PARAMETER Search
-Search string which is a partial name of the program name as shown in the Name property of
+Search string which is a full or partial name of the program name as shown in the Name property of
 program search functions.
+Wildcard characters are supported.
 
 .PARAMETER Domain
 Computer name which to check for installed programs
@@ -90,6 +91,7 @@ function Update-Table
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true, ParameterSetName = "Search")]
+		[SupportsWildcards()]
 		[string] $Search,
 
 		[Parameter()]
@@ -210,8 +212,7 @@ function Update-Table
 		}
 
 		# TODO: try to search also for path in addition to program name
-		# TODO: SearchString may pick up irrelevant paths (ie. unreal engine), or even miss
-		$SearchString = "*$Search*"
+		$SearchString = $Search
 
 		# Search system wide installed programs
 		if ($SystemPrograms -and ($SystemPrograms.Name -like $SearchString))

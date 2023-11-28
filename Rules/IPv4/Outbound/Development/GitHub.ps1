@@ -123,14 +123,20 @@ if ((Confirm-Installation "Git" ([ref] $GitRoot)) -or $ForceLoad)
 	# Administrators are needed for git auto update scheduled task
 	$CurlUsers = Get-SDDL -Group "Administrators", "Users" -Merge
 	$Program = "$GitRoot\mingw64\bin\curl.exe"
+
+	# Because curl.exe that comes with git is unsigned and has 1 positive report, very likely false positive
+	$OldDefaultSkipPositivies = Get-Variable -Scope Global -Name DefaultSkipPositivies
+	Set-Variable -Name DefaultSkipPositivies -Scope Global -Option ReadOnly -Force -Value 1
+
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
+		# NOTE: Scheculed task to update git will run and succeed only if Administrative user is logged in
 		New-NetFirewallRule -DisplayName "Git - curl" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443 `
+			-LocalPort Any -RemotePort 80, 110, 143, 443, 993, 995 `
 			-LocalUser $CurlUsers `
 			-InterfaceType $DefaultInterface `
 			-Description "curl download tool, also used by Git for Windows updater
@@ -140,6 +146,8 @@ using one of the supported protocols:
 RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 		Format-RuleOutput
 	}
+
+	Set-Variable -Name DefaultSkipPositivies -Scope Global -Option ReadOnly -Force -Value $OldDefaultSkipPositivies.Value
 
 	# TODO: unsure if it's 443 or 80, and not sure what's the purpose
 	$Program = "$GitRoot\mingw64\bin\git.exe"

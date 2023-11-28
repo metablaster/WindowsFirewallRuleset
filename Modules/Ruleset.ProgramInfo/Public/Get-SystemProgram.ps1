@@ -51,6 +51,7 @@ None. You cannot pipe objects to Get-SystemProgram
 .NOTES
 We should return empty PSCustomObject if test computer fails
 TODO: Parameter for x64 vs x86 software, then update Search-Installation switch as needed
+TODO: One of the entries is blank program name leading to %SystemRoot%\System32
 #>
 function Get-SystemProgram
 {
@@ -169,12 +170,29 @@ function Get-SystemProgram
 					}
 				}
 
+				$ProgramName = $SubKey.GetValue("DisplayName")
+				if ([string]::IsNullOrEmpty($ProgramName))
+				{
+					$ProgramName = $SubKey.GetValue("DisplayIcon")
+
+					if ([string]::IsNullOrEmpty($ProgramName))
+					{
+						# Skip entries without name
+						continue
+					}
+					else
+					{
+						# Get executable name
+						$ProgramName = Split-Path -Path $ProgramName -Leaf
+					}
+				}
+
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key '$HKLMSubKey'"
 
 				# Get more key entries as needed
 				[PSCustomObject]@{
 					Domain = $Domain
-					Name = $SubKey.GetValue("DisplayName")
+					Name = $ProgramName
 					Version = $SubKey.GetValue("DisplayVersion")
 					Publisher = $SubKey.GetValue("Publisher")
 					InstallLocation = $InstallLocation

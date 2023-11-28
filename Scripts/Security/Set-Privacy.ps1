@@ -63,7 +63,7 @@ None. Set-Privacy.ps1 does not generate any output
 
 .NOTES
 TODO: More Windows privacy options can be set in GPO
-TODO: A script is needed to reset privacy modification to factory defaults
+TODO: A script is needed to reset privacy modification to system defaults
 TODO: Need to exclude settings which don't apply to target computer
 
 .LINK

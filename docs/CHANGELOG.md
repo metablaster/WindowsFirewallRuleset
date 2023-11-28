@@ -32,6 +32,7 @@ Here is a list of changes for each of the releases.
 
   - Updated rule description for Logitech G HUB
   - Added rules for Microsoft PowerToys
+  - Updated rule for curl which ships with Git for automatic updates
 
 - Modules
 
@@ -40,12 +41,16 @@ Here is a list of changes for each of the releases.
     - `Invoke-Process` Fixed invalid use of a variable resulting in error message
     - `Initialize-Provider` Confirmed a bug with NuGet installation,
     warning is shown if NuGet package source was not set to trusted in that case only
+    - `Update-Table` function no longer assumes wildcard search but accepts wildcards
+    - `Get-SystemProgram` Updated to get executable if program name can't be determined, or skiped otherwise
 
 - Scripts
 
   - Updated README with GPO settings of interest not handled by security scripts
   - `Set-ATP.ps1` Script improved to handle more options and AV scans
   - `Deploy-ASR.ps1` Now handles a known bug when "Block Win32 API calls from Office macros" is enabled
+  - `ProjectSettings.ps1` and `Test-VirusTotal` added variable and parameter to control false positives from VirusTotal scan
+  The default is 0, to not tolerate any detections, but you can specify higher number and treat them as false positives.
 
 ## v0.16.0 (current release)
 

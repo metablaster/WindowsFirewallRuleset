@@ -71,7 +71,8 @@ None. You cannot pipe objects to Search-Installation
 [bool] true or false if installation directory if found, installation table is updated
 
 .NOTES
-None.
+TODO: Search string for Update-Table -Search contains * on both side, this need to be more
+restrictive to avoid duplicate matches or misses.
 #>
 function Search-Installation
 {
@@ -156,11 +157,11 @@ function Search-Installation
 	{
 		"PowerToys"
 		{
-			Update-Table -Search "PowerToys"
+			Update-Table -Search "*PowerToys*"
 		}
 		"BlueStacks"
 		{
-			Update-Table -Search "BlueStacks"
+			Update-Table -Search "*BlueStacks*"
 			break
 		}
 		"BlueStacksServices"
@@ -182,18 +183,18 @@ function Search-Installation
 		"GooglePlay"
 		{
 			# TODO: This was not tested
-			Update-Table -Search "GooglePlay"
+			Update-Table -Search "*GooglePlay*"
 			#Edit-Table "%ProgramFiles%\Google\Play Games"
 			break
 		}
 		"Chrome"
 		{
-			Update-Table -Search "Google Chrome" -UserProfile
+			Update-Table -Search "*Google Chrome*" -UserProfile
 			break
 		}
 		"GoogleDrive"
 		{
-			Update-Table -Search "Google Drive"
+			Update-Table -Search "*Google Drive*"
 			break
 		}
 		"dotnet"
@@ -204,7 +205,7 @@ function Search-Installation
 		}
 		"CMake"
 		{
-			Update-Table -Search "CMake"
+			Update-Table -Search "*CMake*"
 			break
 		}
 		"SqlPath"
@@ -332,31 +333,31 @@ function Search-Installation
 		}
 		"AzureDataStudio"
 		{
-			Update-Table -Search "Azure Data Studio"
+			Update-Table -Search "*Azure Data Studio*"
 			break
 		}
 		"ArenaChess"
 		{
-			Update-Table -Search "Arena Chess"
+			Update-Table -Search "*Arena Chess*"
 			break
 		}
 		"ColorMania"
 		{
-			Update-Table -Search "ColorMania"
+			Update-Table -Search "*ColorMania*"
 		}
 		"RivaTuner"
 		{
-			Update-Table -Search "RivaTuner Statistics Server"
+			Update-Table -Search "*RivaTuner Statistics Server*"
 			break
 		}
 		"Incredibuild"
 		{
-			Update-Table -Search "Incredibuild"
+			Update-Table -Search "*Incredibuild*"
 			break
 		}
 		"MetaTrader"
 		{
-			Update-Table -Search "InstaTrader"
+			Update-Table -Search "*InstaTrader*"
 			break
 		}
 		"RealWorld"
@@ -366,37 +367,37 @@ function Search-Installation
 		}
 		"qBittorrent"
 		{
-			Update-Table -Search "qBittorrent"
+			Update-Table -Search "*qBittorrent*"
 			break
 		}
 		"OpenTTD"
 		{
-			Update-Table -Search "OpenTTD"
+			Update-Table -Search "*OpenTTD*"
 			break
 		}
 		"EveOnline"
 		{
-			Update-Table -Search "Eve Online"
+			Update-Table -Search "*Eve Online*"
 			break
 		}
 		"DemiseOfNations"
 		{
-			Update-Table -Search "Demise of Nations - Rome"
+			Update-Table -Search "*Demise of Nations - Rome*"
 			break
 		}
 		"Audacity"
 		{
-			Update-Table -Search "Audacity"
+			Update-Table -Search "*Audacity*"
 			break
 		}
 		"CounterStrikeGO"
 		{
-			Update-Table -Search "Counter-Strike Global Offensive"
+			Update-Table -Search "*Counter-Strike Global Offensive*"
 			break
 		}
 		"PinballArcade"
 		{
-			Update-Table -Search "PinballArcade"
+			Update-Table -Search "*PinballArcade*"
 			break
 		}
 		"JavaUpdate"
@@ -407,12 +408,12 @@ function Search-Installation
 		"JavaRuntime"
 		{
 			# TODO: This depends on x64 or x86 installation for plugin
-			Update-Table -Search "Java"
+			Update-Table -Search "*Java*"
 			break
 		}
 		"EdgeWebView"
 		{
-			Update-Table -Search "Microsoft Edge WebView"
+			Update-Table -Search "*Microsoft Edge WebView*"
 
 			if ($InstallTable.Rows.Count -gt 0)
 			{
@@ -453,43 +454,43 @@ function Search-Installation
 		"AdobeReader"
 		{
 			# Adobe Acrobat Reader DC
-			Update-Table -Search "Acrobat Reader"
+			Update-Table -Search "*Acrobat Reader*"
 			break
 		}
 		"AdobeAcrobat"
 		{
 			# Adobe Acrobat DC
-			Update-Table -Search "Adobe Acrobat DC"
+			Update-Table -Search "*Adobe Acrobat DC*"
 			break
 		}
 		"LoLGame"
 		{
-			Update-Table -Search "League of Legends" -UserProfile
+			Update-Table -Search "*League of Legends*" -UserProfile
 			break
 		}
 		"FileZilla"
 		{
-			Update-Table -Search "FileZilla FTP Client"
+			Update-Table -Search "*FileZilla FTP Client*"
 			break
 		}
 		"PathOfExile"
 		{
-			Update-Table -Search "Path of Exile"
+			Update-Table -Search "*Path of Exile*"
 			break
 		}
 		"HWMonitor"
 		{
-			Update-Table -Search "HWMonitor"
+			Update-Table -Search "*HWMonitor*"
 			break
 		}
 		"CPUZ"
 		{
-			Update-Table -Search "CPU-Z"
+			Update-Table -Search "*CPU-Z*"
 			break
 		}
 		"MSIAfterburner"
 		{
-			Update-Table -Search "MSI Afterburner"
+			Update-Table -Search "*MSI Afterburner*"
 			break
 		}
 		"MSI"
@@ -499,27 +500,27 @@ function Search-Installation
 		}
 		"GPG"
 		{
-			Update-Table -Search "GNU Privacy Guard"
+			Update-Table -Search "*GNU Privacy Guard*"
 			break
 		}
 		"OBSStudio"
 		{
-			Update-Table -Search "OBS Studio"
+			Update-Table -Search "*OBS Studio*"
 			break
 		}
 		"PasswordSafe"
 		{
-			Update-Table -Search "Password Safe"
+			Update-Table -Search "*Password Safe*"
 			break
 		}
 		"Greenshot"
 		{
-			Update-Table -Search "Greenshot" -UserProfile
+			Update-Table -Search "*Greenshot*" -UserProfile
 			break
 		}
 		"DnsCrypt"
 		{
-			Update-Table -Search "Simple DNSCrypt"
+			Update-Table -Search "*Simple DNSCrypt*"
 			break
 		}
 		"OpenSSH"
@@ -548,7 +549,7 @@ function Search-Installation
 			# It was in appdata user folder
 			# Edit-Table "%ProgramFiles(x86)%\Microsoft OneDrive"
 
-			Update-Table -Search "OneDrive" -UserProfile
+			Update-Table -Search "*OneDrive*" -UserProfile
 			break
 		}
 		"HelpViewer"
@@ -559,14 +560,14 @@ function Search-Installation
 		}
 		"VSCode"
 		{
-			Update-Table -Search "Visual Studio Code"
+			Update-Table -Search "*Visual Studio Code*"
 			break
 		}
 		"MicrosoftOffice"
 		{
 			# TODO: Returned path is missing \root\Office16
 			# versions: https://en.wikipedia.org/wiki/History_of_Microsoft_Office
-			# Update-Table -Search "Microsoft Office"
+			# Update-Table -Search "*Microsoft Office*"
 
 			# LastPolicyStore first in comparison since it's null initially
 			if ($script:LastPolicyStore -ne $Domain)
@@ -586,21 +587,21 @@ function Search-Installation
 		}
 		"TeamViewer"
 		{
-			Update-Table -Search "Team Viewer"
+			Update-Table -Search "*Team Viewer*"
 			break
 		}
 		"EdgeChromium"
 		{
-			Update-Table -Search "Microsoft Edge" -Executable "msedge.exe"
+			Update-Table -Search "*Microsoft Edge*" -Executable "msedge.exe"
 			break
 		}
 		"Brave"
 		{
-			Update-Table -Search "Brave"
+			Update-Table -Search "*Brave*"
 		}
 		"nmap"
 		{
-			Update-Table -Search "Nmap"
+			Update-Table -Search "*Nmap*"
 		}
 		"SteamCMD"
 		{
@@ -609,12 +610,12 @@ function Search-Installation
 		}
 		"Firefox"
 		{
-			Update-Table -Search "Firefox" -UserProfile
+			Update-Table -Search "*Firefox*" -UserProfile
 			break
 		}
 		"Yandex"
 		{
-			Update-Table -Search "Yandex" -UserProfile
+			Update-Table -Search "*Yandex*" -UserProfile
 			break
 		}
 		"Tor"
@@ -624,17 +625,17 @@ function Search-Installation
 		}
 		"uTorrent"
 		{
-			Update-Table -Search "uTorrent" -UserProfile
+			Update-Table -Search "*uTorrent*" -UserProfile
 			break
 		}
 		"Thuderbird"
 		{
-			Update-Table -Search "Thuderbird" -UserProfile
+			Update-Table -Search "*Thuderbird*" -UserProfile
 			break
 		}
 		"Steam"
 		{
-			Update-Table -Search "Steam"
+			Update-Table -Search "*Steam*"
 			break
 		}
 		"Nvidia64"
@@ -653,7 +654,7 @@ function Search-Installation
 			# see also related todo in Nvidia.ps1
 			# NOTE: calling script must not use this path, it is used only to check if installation
 			# exists, the real path is obtained with "Nvidia" switch case
-			Update-Table -Search "GeForce Experience"
+			Update-Table -Search "*GeForce Experience*"
 			break
 		}
 		"WarThunder"
@@ -663,7 +664,7 @@ function Search-Installation
 		}
 		"PokerStars"
 		{
-			Update-Table -Search "PokerStars"
+			Update-Table -Search "*PokerStars*"
 			break
 		}
 		"VisualStudio"
@@ -683,12 +684,12 @@ function Search-Installation
 		}
 		"VisualStudioInstaller"
 		{
-			Update-Table -Search "Visual Studio Installer"
+			Update-Table -Search "*Visual Studio Installer*"
 			break
 		}
 		"MSYS2"
 		{
-			Update-Table -Search "MSYS2" -UserProfile
+			Update-Table -Search "*MSYS2*" -UserProfile
 			break
 		}
 		"Git"
@@ -698,17 +699,17 @@ function Search-Installation
 		}
 		"LGHUB"
 		{
-			Update-Table -Search "Logitech G HUB"
+			Update-Table -Search "*Logitech G HUB*"
 			break
 		}
 		"GitHubDesktop"
 		{
-			Update-Table -Search "GitHub Desktop" -UserProfile
+			Update-Table -Search "*GitHub Desktop*" -UserProfile
 			break
 		}
 		"EpicGames"
 		{
-			Update-Table -Search "Epic Games Launcher"
+			Update-Table -Search "*Epic Games Launcher*"
 			break
 		}
 		"UnrealEngine"
@@ -748,7 +749,7 @@ function Search-Installation
 		}
 		"Motrix"
 		{
-			Update-Table -Search "Motrix" -UserProfile
+			Update-Table -Search "*Motrix*" -UserProfile
 			break
 		}
 		"ytdlp"
@@ -758,7 +759,7 @@ function Search-Installation
 		}
 		"calibre"
 		{
-			Update-Table -Search "calibre"
+			Update-Table -Search "*calibre*"
 			break
 		}
 		default

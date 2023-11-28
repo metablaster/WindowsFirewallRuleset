@@ -73,7 +73,7 @@ None. Set-ATP.ps1 does not generate any output
 
 .NOTES
 TODO: There are some exotic options for Set-MpPreference which we don't use
-TODO: A script is needed to reset ATP modification to factory defaults
+TODO: A script is needed to reset ATP modification to system defaults
 TODO: More options can be configured
 TODO: Need to exclude settings which don't apply to target computer
 
@@ -94,6 +94,9 @@ https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/next-
 
 .LINK
 https://gpsearch.azurewebsites.net
+
+.LINK
+https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/troubleshoot-microsoft-defender-antivirus
 #>
 
 #Requires -Version 5.1
@@ -429,14 +432,35 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 		}
 
 		#
+		# Scan status configured here can be viewed in event viewer in the following location:
+		# Event Viewer -> Application and Services Logs -> Microsoft -> Windows -> Windows Defender -> Operational
+		#
+		# The event 1151 will tell if and how a scan was initiated and it's completion status, decipher output from the link below:
+		# https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/troubleshoot-microsoft-defender-antivirus?view=o365-worldwide#event-id-1151
+		#
+		# Example:
+		# Last quick scan source: Last quick scan source (0 = scan didn't run, 1 = user initiated, 2 = system initiated)
+		# Last full scan source: Last full scan source (0 = scan didn't run, 1 = user initiated, 2 = system initiated)
+		#
+		# It must be 2 (system initiated), indicating these settings work, example output:
+		# Last full scan start time: 2023-11-28T09:13:21Z
+		# Last full scan end time: 2023-11-28T16:34:43Z
+		# Last full scan source: 2
+		#
+
+		#
 		# Quick scan settings
 		#
 
 		# Quick scan and signature updates interval (every x hours)
-		$DefaultInterval = 6 # Every 6h
+		$DefaultInterval = 24 # Every 24h
+
+		# Time when full scan starts, also used to calculate when to update AV prior full scan
+		# and also use to calculate daily quick scan start time
+		$ScheduledTime = 600 # 10AM
 
 		# It doesn't make sense to have both quick scan settings enabled
-		if ($false)
+		if ($true)
 		{
 
 			Write-Information -MessageData "INFO: Specify the time for a daily quick scan"
@@ -444,12 +468,17 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 			# decimal: Minutes past the midnight (default = 120, 2AM)
 			# Default: Not Configured, same as Disabled
 			$ValueName = "ScheduleQuickScanTime"
-			$Value = 840 # 2PM
+			# NOTE: Because Scheduled scan is set to start at 10 AM, then assuming it will take some 10h,
+			# quick scan should not start during full scan but at least 10h later
+			$Value = $ScheduledTime + 600 # 10h after full scan was started or 8PM
 			$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
 			Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
 		}
 		else
 		{
+			# TODO: What happens if interval is triggered during a full scan, could it interfere somehow with full scan?
+			# Example, stopping it or even worse restarting the full scan?
+			# NOTE: According to event viewer a quick scan will run as soon as scheduled full scan was finished
 			Write-Information -MessageData "INFO: Specify the interval to run quick scans per day"
 			# Specify the interval to run quick scans per day (Optional)
 			# decimal: 0 (default) [the number of hours between quick scans, 0 = no quick scan interval]
@@ -463,9 +492,6 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 		#
 		# Scheduled scan settings (used to automate full scans at least once a month)
 		#
-
-		# Time when full scan starts, also used to calculate when to update AV prior full scan
-		$ScheduledTime = 600 # 10AM
 
 		Write-Information -MessageData "INFO: Specify the scan type to use for a scheduled scan"
 		# Specify the scan type to use for a scheduled scan (Optional)
@@ -490,7 +516,7 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 		# decimal: 7 => Saturday
 		# Default: Not Configured, same as Disabled
 		$ValueName = "ScheduleDay"
-		$Value = 3
+		$Value = 1
 		$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
 		Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
 
@@ -503,6 +529,8 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 		$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
 		Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
 
+		# TODO: This should be set to enabled (1) to make full scan run once per month assuming computer is in use all the time
+		# Currently disabled for testing purposes
 		Write-Information -MessageData "INFO: Start the scheduled scan only when computer is on but not in use"
 		# Start the scheduled scan only when computer is on but not in use (Optional)
 		# Enabled Value: decimal: 1
@@ -561,8 +589,10 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 
 		if (!$SkipDefault)
 		{
+			# HACK: What is "automatic" scan? if it's scheduled scan then it's a problem if scheduled scan is full scan and is already running?
 			Write-Information -MessageData "INFO: Turn on scan after security intelligence update"
 			# Turn on scan after security intelligence update (Optional)
+			# This policy setting allows you to configure the automatic scan which starts after a security intelligence update has occurred.
 			# Enabled Value: decimal: 0
 			# Disabled Value: decimal: 1
 			# Default: Not Configured, same as Enabled
@@ -609,8 +639,10 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 		$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
 		Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
 
-		Write-Information -MessageData "INFO: Specify the time to check for security intelligence updates"
-		# Specify the time to check for security intelligence updates (Optional)
+		# HACK: Could new intelligence update trigger another full scan if full scan is already running?
+		Write-Information -MessageData "INFO: Specify the interval to check for security intelligence updates"
+		# Specify the interval to check for security intelligence updates (Optional)
+		# The default value could be 24 based on "Specify the day of the week to check for security intelligence updates"
 		# decimal: The number of hours between update checks (1-24)
 		# Default: Not Configured, same as Disabled
 		$ValueName = "SignatureUpdateInterval"

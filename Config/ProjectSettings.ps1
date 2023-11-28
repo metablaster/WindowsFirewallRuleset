@@ -526,6 +526,11 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	# Set to true to disable VirusTotal check of executables without valid digital signature
 	Set-Variable -Name SkipVirusTotalCheck -Scope Global -Value $false
 
+	# Specify count of detections up to which VirusTotal detections will be considered false positives.
+	# If the number of detection is greater than this value, the file being scanned is considered malware
+	# The default value is 0, meaning it must be clean of any detections.
+	Set-Variable -Name DefaultSkipPositivies -Scope Global -Option ReadOnly -Force -Value 0
+
 	# Specify path to sigcheck64.exe if your instance of sigcheck executable isn't in PATH
 	# If digital signature check of a program for which firewall rule is being loaded fails, then
 	# sigcheck64.exe is used to perform hash based online malware analysis via VirusTotal service.

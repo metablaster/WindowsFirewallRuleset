@@ -184,6 +184,9 @@ Todo's in this file are categorized into the following sections:
     - Repository initialization fails when hardware NIC is shared with virtual adapter configured
     in Virtual switch manager (external switch) when and networking over default switch does not work.
     - Need to test the behavior and errors when deploying on public network.
+    - Document needed for VM network configuration, ex. if a computer has 2 adapters where one is used
+    for internet and another is either bridged to VM or switched to VM, (switching won't work with 2
+    adapters out of the box and needs advanced setup)
 
 [Table of Contents](#table-of-contents)
 
