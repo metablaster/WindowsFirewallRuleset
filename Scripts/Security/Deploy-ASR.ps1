@@ -172,14 +172,14 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy attack surfa
 	)
 
 	# Enabled, Disabled or AuditMode
-	$Actions = @(
+	[array] $Actions = @(
 		"Enabled"
 		"Enabled"
 		"Enabled"
 		"Enabled"
 		"Enabled"
 		# Disable for programs such as b2 from boost
-		# This will also block programs that you develop
+		# If enabled, this will also block programs that you develop
 		"Disabled"
 		"Enabled"
 		"Enabled"
@@ -188,12 +188,23 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy attack surfa
 		"Enabled"
 		"Enabled"
 		"Enabled"
-		# BUG: https://www.bleepingcomputer.com/news/microsoft/buggy-microsoft-defender-asr-rule-deletes-windows-app-shortcuts
-		"Disabled"
+		"Enabled"
 		"Enabled"
 		# Disable for PS remoting
 		"Disabled"
 	)
+
+	# On January 13th, Windows Security and Microsoft Defender for Endpoint customers may have experienced a series
+	# of false positive detections after updating to security intelligence builds between 1.381.2134.0 and 1.381.2163.0.
+	# BUG: https://techcommunity.microsoft.com/t5/microsoft-defender-for-endpoint/recovering-from-attack-surface-reduction-rule-shortcut-deletions/ba-p/3716011
+	[Version] $AntivirusSignatureVersion = Get-MpComputerStatus | Select-Object -ExpandProperty AntivirusSignatureVersion
+	if (($AntivirusSignatureVersion -ge "1.381.2134.0") -and ($AntivirusSignatureVersion -le "1.381.2163.0"))
+	{
+		$Actions.SetValue("Disabled", 13)
+
+		Write-Warning -Message "[$ThisScript] ASR rule 'Block Win32 API calls from Office macros' has been explicitly disabled due to a known bug"
+		Write-Information -MessageData "INFO: To enable this rule update your Windows Defender to intelligence build above 1.381.2163.0"
+	}
 
 	try
 	{

@@ -44,7 +44,8 @@ Here is a list of changes for each of the releases.
 - Scripts
 
   - Updated README with GPO settings of interest not handled by security scripts
-  - `Set-ATP.ps1` script improved to handle more options and AV scans
+  - `Set-ATP.ps1` Script improved to handle more options and AV scans
+  - `Deploy-ASR.ps1` Now handles a known bug when "Block Win32 API calls from Office macros" is enabled
 
 ## v0.16.0 (current release)
 
