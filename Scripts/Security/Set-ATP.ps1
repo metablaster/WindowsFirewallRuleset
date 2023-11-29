@@ -72,10 +72,13 @@ None. You cannot pipe objects to Set-ATP.ps1
 None. Set-ATP.ps1 does not generate any output
 
 .NOTES
+ATP (Advanced Thread Protection) is how it was called before, it seems now this is called
+"cloud protection" or "next generation protection", it's based on MAPS
 TODO: There are some exotic options for Set-MpPreference which we don't use
 TODO: A script is needed to reset ATP modification to system defaults
 TODO: More options can be configured
 TODO: Need to exclude settings which don't apply to target computer
+NOTE: Comments with (optional) indicate a setting is not ATP setting
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
@@ -297,7 +300,7 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 	# decimal: 6 => Zero tolerance blocking level
 	# Default: Not Configured
 	$ValueName = "MpCloudBlockLevel"
-	$Value = 4
+	$Value = 2
 	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
 	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
 
@@ -457,6 +460,8 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 
 		# Time when full scan starts, also used to calculate when to update AV prior full scan
 		# and also use to calculate daily quick scan start time
+		# NOTE: According to current settings full scan will run once a week if computer is not in
+		# use at 10 AM, to make full scan once a month change this value to when computer is always turned off
 		$ScheduledTime = 600 # 10AM
 
 		# It doesn't make sense to have both quick scan settings enabled
@@ -491,6 +496,7 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 
 		#
 		# Scheduled scan settings (used to automate full scans at least once a month)
+		# TODO: Figure out how to stop scheduled scan
 		#
 
 		Write-Information -MessageData "INFO: Specify the scan type to use for a scheduled scan"
@@ -529,20 +535,19 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 		$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
 		Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
 
-		# TODO: This should be set to enabled (1) to make full scan run once per month assuming computer is in use all the time
-		# Currently disabled for testing purposes
+		# NOTE: This is set to enabled (1) to make full scan run once per month assuming computer is always in use at scheduled time
 		Write-Information -MessageData "INFO: Start the scheduled scan only when computer is on but not in use"
 		# Start the scheduled scan only when computer is on but not in use (Optional)
 		# Enabled Value: decimal: 1
 		# Disabled Value: decimal: 0
 		# Default: Not Configured, same as Enabled
 		$ValueName = "ScanOnlyIfIdle"
-		$Value = 0
+		$Value = 1
 		$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
 		Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
 
 		Write-Information -MessageData "INFO: Define the number of days after which a catch-up scan is forced"
-		# Define the number of days after which a catch-up scan is forced (Optional)
+		# Define the number of consecutive scheduled scans that can be missed after which a catch-up scan will be forced (Optional)
 		# decimal: 2 (default)
 		# Default: Not Configured, same as Disabled
 		$ValueName = "MissedScheduledScanCountBeforeCatchup"

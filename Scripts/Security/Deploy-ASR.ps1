@@ -198,12 +198,16 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy attack surfa
 	# of false positive detections after updating to security intelligence builds between 1.381.2134.0 and 1.381.2163.0.
 	# BUG: https://techcommunity.microsoft.com/t5/microsoft-defender-for-endpoint/recovering-from-attack-surface-reduction-rule-shortcut-deletions/ba-p/3716011
 	[Version] $AntivirusSignatureVersion = Get-MpComputerStatus | Select-Object -ExpandProperty AntivirusSignatureVersion
+
+	# NOTE: AntivirusSignatureVersion and AntispywareSignatureVersion seem to be always the same and
+	# it's safe to assume this corresponds to "intelligence builds" as referred from link above
+	# See also: https://www.microsoft.com/en-us/wdsi/defenderupdates
 	if (($AntivirusSignatureVersion -ge "1.381.2134.0") -and ($AntivirusSignatureVersion -le "1.381.2163.0"))
 	{
 		$Actions.SetValue("Disabled", 13)
 
 		Write-Warning -Message "[$ThisScript] ASR rule 'Block Win32 API calls from Office macros' has been explicitly disabled due to a known bug"
-		Write-Information -MessageData "INFO: To enable this rule update your Windows Defender to intelligence build above 1.381.2163.0"
+		Write-Information -MessageData "INFO: Before enabling this rule update your Windows Defender to intelligence build above 1.381.2163.0"
 	}
 
 	try
