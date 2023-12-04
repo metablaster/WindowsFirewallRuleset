@@ -272,7 +272,7 @@ function Update-Table
 
 				# TODO: We handle OneDrive case here but there may be more such programs in the future
 				# so this obviously means we need better approach to handle this
-				if ($Search -eq "OneDrive")
+				if ($Search -like "*OneDrive*")
 				{
 					# NOTE: For one drive registry drilling procedure is different
 					$UserPrograms = Get-OneDrive $UserInfo.User @CimParams @SessionParams
