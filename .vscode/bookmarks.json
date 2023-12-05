@@ -49,7 +49,7 @@
 					"label": ""
 				},
 				{
-					"line": 554,
+					"line": 555,
 					"column": 1,
 					"label": ""
 				}
@@ -81,6 +81,16 @@
 				{
 					"line": 111,
 					"column": 0,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Rules/IPv4/Outbound/StoreApps.ps1",
+			"bookmarks": [
+				{
+					"line": 343,
+					"column": 10,
 					"label": ""
 				}
 			]

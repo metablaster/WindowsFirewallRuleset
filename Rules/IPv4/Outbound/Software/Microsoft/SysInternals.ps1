@@ -112,6 +112,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 #
 # SysInternals installation directories
+# TODO: If sysinternals suite is installed by MS Store app, executables will be all x64 without "64" suffix
 #
 $SysInternalsRoot = "%SystemDrive%\tools"
 

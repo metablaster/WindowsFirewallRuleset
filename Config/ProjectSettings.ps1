@@ -273,7 +273,7 @@ $OFS = " "
 # 4. Enables some disabled unit tests and disables logging
 # 5. Enables setting preference variables for modules
 # NOTE: If changed to $true, change requires PowerShell restart
-Set-Variable -Name Develop -Scope Global -Value $false
+Set-Variable -Name Develop -Scope Global -Value $true
 
 if ($Develop)
 {
@@ -532,6 +532,7 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	Set-Variable -Name DefaultSkipPositivies -Scope Global -Option ReadOnly -Force -Value 0
 
 	# Specify path to sigcheck64.exe if your instance of sigcheck executable isn't in PATH
+	# If sysinternals suite is installed by MS store app it will be in PATH
 	# If digital signature check of a program for which firewall rule is being loaded fails, then
 	# sigcheck64.exe is used to perform hash based online malware analysis via VirusTotal service.
 	# You can get sigcheck64.exe from Microsoft sysinternals site below:

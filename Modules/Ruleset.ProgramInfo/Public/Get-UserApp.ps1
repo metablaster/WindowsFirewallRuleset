@@ -167,7 +167,7 @@ function Get-UserApp
 			Get-AppxPackage -Name $using:Name -User $using:User -PackageTypeFilter Main
 		}
 
-		# HACK: Hardcoded, a new functioned needed to get remote shares
+		# HACK: Hardcoded, a new function needed to get remote shares
 		[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
 		Select-Object -ExpandProperty SystemDrive
 

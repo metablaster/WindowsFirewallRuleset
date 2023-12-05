@@ -335,6 +335,231 @@ foreach ($Principal in $Users)
 			Update-Log
 		}
 	}
+
+	#
+	# The following are special rules for executables within store app directories which are either not
+	# handled by auto generated store app rules or because the auto genrated rule doesn't work
+	# TODO: This is a hackery, a better design or function is needed to detect programs within app folders
+	# TODO: Not affected by $ForceLoad
+	# TODO: -LocalUser should be set to $Principal.User or otherwise rule moved outside foreach loop
+	#
+
+	#
+	# A special rule for TerminalAzBridge.exe (Azure Cloud Shell) which is part of Windows Terminal
+	# which is distinct from autogenrated rule
+	#
+	$TerminalApp = Get-UserApp -User $Principal.User -Name "*WindowsTerminal*" -Session $SessionInstance
+	if ($TerminalApp)
+	{
+		$ParentPath = Split-Path -Path $TerminalApp.InstallLocation
+
+		Invoke-Command -Session $SessionInstance -ScriptBlock {
+			# There are 2 paths one of which is invalid and should be ignored
+			Get-Item -Path "$using:ParentPath\Microsoft.WindowsTerminal*" -Exclude "*_~_*"
+		} |	Select-Object PSPath | Convert-Path | ForEach-Object {
+
+			$Program = Format-Path "$_\TerminalAzBridge.exe"
+
+			if ((Test-ExecutableFile $Program) -or $ForceLoad)
+			{
+				$AzureShellUsers = Get-SDDL -Group $DefaultGroup -Merge
+				Merge-SDDL -SDDL ([ref] $AzureShellUsers) -From $AdminGroupSDDL -Unique
+
+				New-NetFirewallRule -DisplayName "Azure Cloud Shell" `
+					-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+					-Service Any -Program $Program -Group $AppSubGroup `
+					-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+					-LocalAddress Any -RemoteAddress Internet4 `
+					-LocalPort Any -RemotePort 443 `
+					-LocalUser $AzureShellUsers `
+					-InterfaceType $DefaultInterface `
+					-Description "Rule for Azure Cloud Shell in Windows Terminal" |
+				Format-RuleOutput
+			}
+		}
+	}
+
+	#
+	# A special rule for EngHost.exe because rule for WinDbg is distinct from this one
+	#
+	$WinDbgApp = Get-UserApp -User $Principal.User -Name "*WinDbg*" -Session $SessionInstance
+	if ($WinDbgApp)
+	{
+		$ParentPath = Split-Path -Path $WinDbgApp.InstallLocation
+
+		Invoke-Command -Session $SessionInstance -ScriptBlock {
+			# There are 2 paths one of which is invalid and should be ignored
+			Get-Item -Path "$using:ParentPath\Microsoft.WinDbg_*" -Exclude "*_~_*"
+		} |	Select-Object PSPath | Convert-Path | ForEach-Object {
+
+			$Program = Format-Path "$_\amd64\EngHost.exe"
+
+			# MSDN: WinDBG Preview is a UWP application that has very limited access to the system, certainly not enough to debug a process.
+			# Hence the WinDBG UI and the WinDBG debugger workhorse are in separate processes that communicate
+			# using the named pipe inter-process communication (IPC) mechanism.
+			# The WinDBG Preview UI process is DBG.X.Shell.exe which connects over a named pipe to EngHost.exe which is the process
+			# responsible for attaching or launching the process being debugged.
+			if ((Test-ExecutableFile $Program) -or $ForceLoad)
+			{
+				# Port 80 is needed for CRL (Certificate Revocation List), for MS symbol server
+				New-NetFirewallRule -DisplayName "WinDbg engine host" `
+					-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+					-Service Any -Program $Program -Group $AppSubGroup `
+					-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+					-LocalAddress Any -RemoteAddress Internet4 `
+					-LocalPort Any -RemotePort 80, 443 `
+					-LocalUser $UsersGroupSDDL `
+					-InterfaceType $DefaultInterface `
+					-Description "EngHost.exe is the process responsible for attaching or launching the process being debugged.
+Because WinDbg UWP app has limited system access this process is used via the IPC mechanism" |
+				Format-RuleOutput
+			}
+		}
+	}
+
+	#
+	# A special rule for Microsoft.Desktopappinstaller app
+	#
+	$DesktopappInstallerApp = Get-UserApp -User $Principal.User -Name "Microsoft.Desktopappinstaller" -Session $SessionInstance
+	if ($DesktopappInstallerApp)
+	{
+		$ParentPath = Split-Path -Path $DesktopappInstallerApp.InstallLocation
+
+		Invoke-Command -Session $SessionInstance -ScriptBlock {
+			# There are multiple paths but only one is correct
+			Get-Item -Path "$using:ParentPath\Microsoft.Desktopappinstaller*" -Exclude "*neutral*"
+		} |	Select-Object PSPath | Convert-Path | ForEach-Object {
+
+			$Program = Format-Path "$_\WindowsPackageManagerServer.exe"
+
+			if ((Test-ExecutableFile $Program) -or $ForceLoad)
+			{
+				New-NetFirewallRule -DisplayName "Windows Package Manager Server" `
+					-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+					-Service Any -Program $Program -Group $AppSubGroup `
+					-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+					-LocalAddress Any -RemoteAddress Internet4 `
+					-LocalPort Any -RemotePort 443 `
+					-LocalUser $UsersGroupSDDL `
+					-InterfaceType $DefaultInterface `
+					-Description "WindowsPackageManagerServer.exe is used to download apps" |
+				Format-RuleOutput
+			}
+		}
+	}
+
+	#
+	# TODO: There is auto generated rule for Microsoft Teams app but it doesn't work
+	# This code should probably exist only for msteamsupdate.exe, auto generated rule is supposed to
+	# work for msteams.exe
+	#
+	$TeamsApp = Get-UserApp -User $Principal.User -Name "Microsoftteams" -Session $SessionInstance
+	if ($TeamsApp)
+	{
+		$ParentPath = Split-Path -Path $TeamsApp.InstallLocation
+
+		Invoke-Command -Session $SessionInstance -ScriptBlock {
+			# There are multiple paths but only one is correct
+			Get-Item -Path "$using:ParentPath\Microsoftteams*"
+		} |	Select-Object PSPath | Convert-Path | ForEach-Object {
+
+			$Program = Format-Path "$_\msteams.exe"
+
+			if ((Test-ExecutableFile $Program) -or $ForceLoad)
+			{
+				New-NetFirewallRule -DisplayName "Microsoft Teams" `
+					-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+					-Service Any -Program $Program -Group $AppSubGroup `
+					-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+					-LocalAddress Any -RemoteAddress Internet4 `
+					-LocalPort Any -RemotePort 443 `
+					-LocalUser $UsersGroupSDDL `
+					-InterfaceType $DefaultInterface `
+					-Description "Microsoft Teams app" |
+				Format-RuleOutput
+			}
+
+			$Program = Format-Path "$_\msteamsupdate.exe"
+
+			if ((Test-ExecutableFile $Program) -or $ForceLoad)
+			{
+				New-NetFirewallRule -DisplayName "Microsoft Teams update" `
+					-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+					-Service Any -Program $Program -Group $AppSubGroup `
+					-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+					-LocalAddress Any -RemoteAddress Internet4 `
+					-LocalPort Any -RemotePort 443 `
+					-LocalUser $UsersGroupSDDL `
+					-InterfaceType $DefaultInterface `
+					-Description "Microsoft Teams app updater" |
+				Format-RuleOutput
+			}
+		}
+	}
+
+	#
+	# A special rule for Widgets.exe which is part of MicrosoftWindows.Client.WebExperience (Widgets) app
+	# Widgets.exe is invoked when adding new widgets by clicking "+" button
+	# TODO: Even though rule is made "add widget" dialog doesn't display contents as if no connection is made
+	#
+	$WidgetsApp = Get-UserApp -User $Principal.User -Name "MicrosoftWindows.Client.WebExperience" -Session $SessionInstance
+	if ($WidgetsApp)
+	{
+		$ParentPath = Split-Path -Path $WidgetsApp.InstallLocation
+
+		Invoke-Command -Session $SessionInstance -ScriptBlock {
+			# There are 2 paths but only one is correct
+			Get-Item -Path "$using:ParentPath\MicrosoftWindows.Client.WebExperience*" -Exclude "*neutral*"
+		} |	Select-Object PSPath | Convert-Path | ForEach-Object {
+
+			$Program = Format-Path "$_\Dashboard\Widgets.exe"
+
+			if ((Test-ExecutableFile $Program) -or $ForceLoad)
+			{
+				New-NetFirewallRule -DisplayName "Widgets" `
+					-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+					-Service Any -Program $Program -Group $AppSubGroup `
+					-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+					-LocalAddress Any -RemoteAddress Internet4 `
+					-LocalPort Any -RemotePort 443 `
+					-LocalUser $UsersGroupSDDL `
+					-InterfaceType $DefaultInterface `
+					-Description "Used when adding new widgets" |
+				Format-RuleOutput
+			}
+		}
+	}
+
+	#
+	# A special rule for Microsoft Phone Link app to handle PhoneExperienceHost.exe
+	#
+	$PhoneLinkApp = Get-UserApp -User $Principal.User -Name "Microsoft.YourPhone" -Session $SessionInstance
+	if ($PhoneLinkApp)
+	{
+		$ParentPath = Split-Path -Path $PhoneLinkApp.InstallLocation
+
+		Invoke-Command -Session $SessionInstance -ScriptBlock {
+			# There are multiple paths but only one is correct
+			Get-Item -Path "$using:ParentPath\Microsoft.YourPhone*" -Exclude "*neutral*"
+		} |	Select-Object PSPath | Convert-Path | ForEach-Object {
+
+			$Program = Format-Path "$_\PhoneExperienceHost.exe"
+
+			if ((Test-ExecutableFile $Program) -or $ForceLoad)
+			{
+				New-NetFirewallRule -DisplayName "Microsoft Phone Link" `
+					-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+					-Service Any -Program $Program -Group $AppSubGroup `
+					-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+					-LocalAddress Any -RemoteAddress Internet4 `
+					-LocalPort Any -RemotePort 443 `
+					-LocalUser $UsersGroupSDDL `
+					-InterfaceType $DefaultInterface `
+					-Description "PhoneExperienceHost.exe is used to pair with your phone" |
+				Format-RuleOutput
+			}
+		}
+	}
 } # foreach
 
 #
@@ -421,230 +646,6 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-InterfaceType $DefaultInterface `
 		-Description "App host registration verifier tool tests the configuration of store app and website" |
 	Format-RuleOutput
-}
-
-#
-# The following are special rules for executables within store app directories which are either not
-# handled auto generated store app rules or because the auto genrated rule doesn't work
-# TODO: This is a hackery, a better design or function is needed to detect programs within app folders
-# TODO: Not affected by $ForceLoad
-#
-
-#
-# A special rule for TerminalAzBridge.exe (Azure Cloud Shell) which is part of Windows Terminal
-# which is distinct from autogenrated rule
-#
-$TerminalApp = Get-UserApp -User $Principal.User -Name "*WindowsTerminal*" -Session $SessionInstance
-if ($TerminalApp)
-{
-	$ParentPath = Split-Path -Path $TerminalApp.InstallLocation
-
-	Invoke-Command -Session $SessionInstance -ScriptBlock {
-		# There are 2 paths one of which is invalid and should be ignored
-		Get-Item -Path "$using:ParentPath\Microsoft.WindowsTerminal*" -Exclude "*_~_*"
-	} |	Select-Object PSPath | Convert-Path | ForEach-Object {
-
-		$Program = Format-Path "$_\TerminalAzBridge.exe"
-
-		if ((Test-ExecutableFile $Program) -or $ForceLoad)
-		{
-			$AzureShellUsers = Get-SDDL -Group $DefaultGroup -Merge
-			Merge-SDDL -SDDL ([ref] $AzureShellUsers) -From $AdminGroupSDDL -Unique
-
-			New-NetFirewallRule -DisplayName "Azure Cloud Shell" `
-				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-				-Service Any -Program $Program -Group $AppSubGroup `
-				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-				-LocalAddress Any -RemoteAddress Internet4 `
-				-LocalPort Any -RemotePort 443 `
-				-LocalUser $AzureShellUsers `
-				-InterfaceType $DefaultInterface `
-				-Description "Rule for Azure Cloud Shell in Windows Terminal" |
-			Format-RuleOutput
-		}
-	}
-}
-
-#
-# A special rule for EngHost.exe because rule for WinDbg is distinct from this one
-#
-$WinDbgApp = Get-UserApp -User $Principal.User -Name "*WinDbg*" -Session $SessionInstance
-if ($WinDbgApp)
-{
-	$ParentPath = Split-Path -Path $WinDbgApp.InstallLocation
-
-	Invoke-Command -Session $SessionInstance -ScriptBlock {
-		# There are 2 paths one of which is invalid and should be ignored
-		Get-Item -Path "$using:ParentPath\Microsoft.WinDbg_*" -Exclude "*_~_*"
-	} |	Select-Object PSPath | Convert-Path | ForEach-Object {
-
-		$Program = Format-Path "$_\amd64\EngHost.exe"
-
-		# MSDN: WinDBG Preview is a UWP application that has very limited access to the system, certainly not enough to debug a process.
-		# Hence the WinDBG UI and the WinDBG debugger workhorse are in separate processes that communicate
-		# using the named pipe inter-process communication (IPC) mechanism.
-		# The WinDBG Preview UI process is DBG.X.Shell.exe which connects over a named pipe to EngHost.exe which is the process
-		# responsible for attaching or launching the process being debugged.
-		if ((Test-ExecutableFile $Program) -or $ForceLoad)
-		{
-			# Port 80 is needed for CRL (Certificate Revocation List), for MS symbol server
-			New-NetFirewallRule -DisplayName "WinDbg engine host" `
-				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-				-Service Any -Program $Program -Group $AppSubGroup `
-				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-				-LocalAddress Any -RemoteAddress Internet4 `
-				-LocalPort Any -RemotePort 80, 443 `
-				-LocalUser $UsersGroupSDDL `
-				-InterfaceType $DefaultInterface `
-				-Description "EngHost.exe is the process responsible for attaching or launching the process being debugged.
-Because WinDbg UWP app has limited system access this process is used via the IPC mechanism" |
-			Format-RuleOutput
-		}
-	}
-}
-
-#
-# A special rule for Microsoft.Desktopappinstaller app
-#
-$DesktopappInstallerApp = Get-UserApp -User $Principal.User -Name "Microsoft.Desktopappinstaller" -Session $SessionInstance
-if ($DesktopappInstallerApp)
-{
-	$ParentPath = Split-Path -Path $DesktopappInstallerApp.InstallLocation
-
-	Invoke-Command -Session $SessionInstance -ScriptBlock {
-		# There are multiple paths but only one is correct
-		Get-Item -Path "$using:ParentPath\Microsoft.Desktopappinstaller*" -Exclude "*neutral*"
-	} |	Select-Object PSPath | Convert-Path | ForEach-Object {
-
-		$Program = Format-Path "$_\WindowsPackageManagerServer.exe"
-
-		if ((Test-ExecutableFile $Program) -or $ForceLoad)
-		{
-			New-NetFirewallRule -DisplayName "Windows Package Manager Server" `
-				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-				-Service Any -Program $Program -Group $AppSubGroup `
-				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-				-LocalAddress Any -RemoteAddress Internet4 `
-				-LocalPort Any -RemotePort 443 `
-				-LocalUser $UsersGroupSDDL `
-				-InterfaceType $DefaultInterface `
-				-Description "WindowsPackageManagerServer.exe is used to download apps" |
-			Format-RuleOutput
-		}
-	}
-}
-
-#
-# TODO: There is auto generated rule for Microsoft Teams app but it doesn't work
-# This code should probably exist only for msteamsupdate.exe, auto generated rule is supposed to
-# work for msteams.exe
-#
-$TeamsApp = Get-UserApp -User $Principal.User -Name "Microsoftteams" -Session $SessionInstance
-if ($TeamsApp)
-{
-	$ParentPath = Split-Path -Path $TeamsApp.InstallLocation
-
-	Invoke-Command -Session $SessionInstance -ScriptBlock {
-		# There are multiple paths but only one is correct
-		Get-Item -Path "$using:ParentPath\Microsoftteams*"
-	} |	Select-Object PSPath | Convert-Path | ForEach-Object {
-
-		$Program = Format-Path "$_\msteams.exe"
-
-		if ((Test-ExecutableFile $Program) -or $ForceLoad)
-		{
-			New-NetFirewallRule -DisplayName "Microsoft Teams" `
-				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-				-Service Any -Program $Program -Group $AppSubGroup `
-				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-				-LocalAddress Any -RemoteAddress Internet4 `
-				-LocalPort Any -RemotePort 443 `
-				-LocalUser $UsersGroupSDDL `
-				-InterfaceType $DefaultInterface `
-				-Description "Microsoft Teams app" |
-			Format-RuleOutput
-		}
-
-		$Program = Format-Path "$_\msteamsupdate.exe"
-
-		if ((Test-ExecutableFile $Program) -or $ForceLoad)
-		{
-			New-NetFirewallRule -DisplayName "Microsoft Teams update" `
-				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-				-Service Any -Program $Program -Group $AppSubGroup `
-				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-				-LocalAddress Any -RemoteAddress Internet4 `
-				-LocalPort Any -RemotePort 443 `
-				-LocalUser $UsersGroupSDDL `
-				-InterfaceType $DefaultInterface `
-				-Description "Microsoft Teams app updater" |
-			Format-RuleOutput
-		}
-	}
-}
-
-#
-# A special rule for Widgets.exe which is part of MicrosoftWindows.Client.WebExperience (Widgets) app
-# Widgets.exe is invoked when adding new widgets by clicking "+" button
-# TODO: Even though rule is made "add widget" dialog doesn't display contents as if no connection is made
-#
-$WidgetsApp = Get-UserApp -User $Principal.User -Name "MicrosoftWindows.Client.WebExperience" -Session $SessionInstance
-if ($WidgetsApp)
-{
-	$ParentPath = Split-Path -Path $WidgetsApp.InstallLocation
-
-	Invoke-Command -Session $SessionInstance -ScriptBlock {
-		# There are 2 paths but only one is correct
-		Get-Item -Path "$using:ParentPath\MicrosoftWindows.Client.WebExperience*" -Exclude "*neutral*"
-	} |	Select-Object PSPath | Convert-Path | ForEach-Object {
-
-		$Program = Format-Path "$_\Dashboard\Widgets.exe"
-
-		if ((Test-ExecutableFile $Program) -or $ForceLoad)
-		{
-			New-NetFirewallRule -DisplayName "Widgets" `
-				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-				-Service Any -Program $Program -Group $AppSubGroup `
-				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-				-LocalAddress Any -RemoteAddress Internet4 `
-				-LocalPort Any -RemotePort 443 `
-				-LocalUser $UsersGroupSDDL `
-				-InterfaceType $DefaultInterface `
-				-Description "Used when adding new widgets" |
-			Format-RuleOutput
-		}
-	}
-}
-
-#
-# A special rule for Microsoft Phone Link app to handle PhoneExperienceHost.exe
-#
-$PhoneLinkApp = Get-UserApp -User $Principal.User -Name "Microsoft.YourPhone" -Session $SessionInstance
-if ($PhoneLinkApp)
-{
-	$ParentPath = Split-Path -Path $PhoneLinkApp.InstallLocation
-
-	Invoke-Command -Session $SessionInstance -ScriptBlock {
-		# There are multiple paths but only one is correct
-		Get-Item -Path "$using:ParentPath\Microsoft.YourPhone*" -Exclude "*neutral*"
-	} |	Select-Object PSPath | Convert-Path | ForEach-Object {
-
-		$Program = Format-Path "$_\PhoneExperienceHost.exe"
-
-		if ((Test-ExecutableFile $Program) -or $ForceLoad)
-		{
-			New-NetFirewallRule -DisplayName "Microsoft Phone Link" `
-				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-				-Service Any -Program $Program -Group $AppSubGroup `
-				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-				-LocalAddress Any -RemoteAddress Internet4 `
-				-LocalPort Any -RemotePort 443 `
-				-LocalUser $UsersGroupSDDL `
-				-InterfaceType $DefaultInterface `
-				-Description "PhoneExperienceHost.exe is used to pair with your phone" |
-			Format-RuleOutput
-		}
-	}
 }
 
 if ($UpdateGPO)

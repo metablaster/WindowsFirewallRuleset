@@ -279,7 +279,29 @@ function Search-Installation
 		}
 		"SysInternals"
 		{
-			# NOTE: ask user for standalone installation directory of SysInternals
+			if ($Domain -eq [System.Environment]::MachineName)
+			{
+				# TODO: Show warning instead of error when failed (ex. in non elevated run check is Admin)
+				# NOTE: There is supposed to be no Bundle package that is also not Main
+				# TODO: We have Get-UserApp but it doesn't have -AllUsers switch so this is duplicate code,
+				# either implement the switch or make a new function ex. Get-AllUsersApp
+				$SysinternalsSuite = Get-AppxPackage -Name "Microsoft.SysinternalsSuite" -AllUsers -PackageTypeFilter Main
+			}
+			else
+			{
+				$SysinternalsSuite = Invoke-Command @SessionParams -ScriptBlock {
+					# HACK: This will fail in Windows PowerShell with "The system cannot find the file specified"
+					# ISSUE: https://github.com/MicrosoftDocs/windows-powershell-docs/issues/344
+					# See also: https://www.reddit.com/r/sysadmin/comments/lrm3nj/will_getappxpackage_allusers_work_in_remote/
+					Get-AppxPackage -Name "Microsoft.SysinternalsSuite" -AllUsers -PackageTypeFilter Main
+				}
+			}
+
+			if ($SysinternalsSuite)
+			{
+				# NOTE: Otherwise ask user for standalone installation directory of SysInternals
+				Edit-Table $(Format-Path "$($SysinternalsSuite.InstallLocation)\Tools")
+			}
 			break
 		}
 		"OpenSpace"
