@@ -51,6 +51,7 @@ Specify path to sigcheck executable program.
 Do not specify sigcheck file, only path to where sigcheck is located.
 By default working directory and PATH is searched for sigcheck64.exe.
 On 32 bit operating system sigcheck.exe is searched instead.
+If SysInternals suite was installed trough MS Store sigcheck is named sigcheck.exe ragless of OS bitness
 If location to sigcheck executable is not found then no VirusTotal scan and report is done.
 
 .PARAMETER SkipPositivies
@@ -205,7 +206,7 @@ function Test-VirusTotal
 					Set-Variable -Name SigcheckPath -Scope Global -Value "C:\tools"
 				}
 
-				# Check if sigcheck is in PATH
+				# Check if sigcheck is in PATH, this includes sigcheck installed by MS Store
 				Write-Debug -Message "[$InvocationName] Checking if sigcheck is in PATH"
 				$Command = Get-Command -Name $SigcheckExecutable -CommandType Application -ErrorAction Ignore |
 				Where-Object {
@@ -384,6 +385,7 @@ function Test-VirusTotal
 							$Publisher = $RawPublisher.Groups["publisher"]
 							$Description = $RawDescription.Groups["description"]
 
+							# HACK: Somewhere around here is errors with "You cannot call a method with null value expression"
 							if ($Detection.Success)
 							{
 								Write-Information -Tags $InvocationName -MessageData "INFO: VirusTotal report for '$Executable' is '$($Detection.Value)'"

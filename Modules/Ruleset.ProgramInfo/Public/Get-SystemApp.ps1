@@ -46,6 +46,8 @@ User name in form of:
 - user_name
 - SID-string
 
+If not specified gets store apps for all user accounts on the computer
+
 .PARAMETER Domain
 NETBIOS Computer name in form of "COMPUTERNAME"
 
@@ -102,7 +104,7 @@ function Get-SystemApp
 		[SupportsWildcards()]
 		[string] $Name = "*",
 
-		[Parameter(Mandatory = $true)]
+		[Parameter()]
 		[Alias("UserName")]
 		[string] $User,
 
@@ -146,7 +148,15 @@ function Get-SystemApp
 	# TODO: it is possible to add -User parameter, what's the purpose? see also StoreApps.ps1
 	if ($Domain -eq [System.Environment]::MachineName)
 	{
-		$Apps = Get-AppxPackage -Name $Name -User $User -PackageTypeFilter Main
+		if ([string]::IsNullOrEmpty($User))
+		{
+			$Apps = Get-AppxPackage -Name $Name -AllUsers -PackageTypeFilter Main
+		}
+		else
+		{
+			$Apps = Get-AppxPackage -Name $Name -User $User -PackageTypeFilter Main
+		}
+
 		$DomainPath = $env:SystemDrive
 	}
 	else
@@ -156,7 +166,14 @@ function Get-SystemApp
 			# HACK: This will fail in Windows PowerShell with "The system cannot find the file specified"
 			# ISSUE: https://github.com/MicrosoftDocs/windows-powershell-docs/issues/344
 			# See also: https://www.reddit.com/r/sysadmin/comments/lrm3nj/will_getappxpackage_allusers_work_in_remote
-			Get-AppxPackage -Name $using:Name -User $using:User -PackageTypeFilter Main
+			if ([string]::IsNullOrEmpty($using:User))
+			{
+				Get-AppxPackage -Name $using:Name -AllUsers -PackageTypeFilter Main
+			}
+			else
+			{
+				Get-AppxPackage -Name $using:Name -User $using:User -PackageTypeFilter Main
+			}
 		}
 
 		# HACK: Hardcoded, a new functioned needed to get remote shares
@@ -179,13 +196,16 @@ function Get-SystemApp
 	{
 		if ($App.SignatureKind -eq "System")
 		{
-			# NOTE: This path will be missing for default apps on Windows server
-			# It may also be missing in fresh installed OS before connecting to internet
-			$RemotePath = "$DomainPath\Users\$User\AppData\Local\Packages\$($App.PackageFamilyName)\AC"
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing app path '$RemotePath'"
+			if (![string]::IsNullOrEmpty($User))
+			{
+				# NOTE: This path will be missing for default apps on Windows server
+				# It may also be missing in fresh installed OS before connecting to internet
+				$RemotePath = "$DomainPath\Users\$User\AppData\Local\Packages\$($App.PackageFamilyName)\AC"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing app path '$RemotePath'"
+			}
 
 			# TODO: See if "$_.Status" property can be used to determine if app is valid
-			if (Test-Path -PathType Container -Path $RemotePath)
+			if ([string]::IsNullOrEmpty($User) -or (Test-Path -PathType Container -Path $RemotePath))
 			{
 				# There is no Domain property, so add one, PSComputerName property is of no use here
 				Add-Member -MemberType NoteProperty -InputObject $App -Name Domain -Value $Domain -PassThru

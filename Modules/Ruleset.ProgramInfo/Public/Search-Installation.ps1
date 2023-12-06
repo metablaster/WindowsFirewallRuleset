@@ -123,6 +123,7 @@ function Search-Installation
 		$PSDefaultParameterValues["Edit-Table:CimSession"] = $CimSession
 		$PSDefaultParameterValues["Update-Table:Session"] = $Session
 		$PSDefaultParameterValues["Update-Table:CimSession"] = $CimSession
+		$PSDefaultParameterValues["Get-UserApp:Session"] = $Session
 	}
 	else
 	{
@@ -134,12 +135,14 @@ function Search-Installation
 			$SessionParams.ComputerName = $Domain
 			$PSDefaultParameterValues["Edit-Table:Domain"] = $Domain
 			$PSDefaultParameterValues["Update-Table:Domain"] = $Domain
+			$PSDefaultParameterValues["Get-UserApp:Domain"] = $Domain
 
 			if ($Credential)
 			{
 				$SessionParams.Credential = $Credential
 				$PSDefaultParameterValues["Edit-Table:Credential"] = $Credential
 				$PSDefaultParameterValues["Update-Table:Credential"] = $Credential
+				$PSDefaultParameterValues["Get-UserApp:Credential"] = $Credential
 			}
 		}
 	}
@@ -279,23 +282,7 @@ function Search-Installation
 		}
 		"SysInternals"
 		{
-			if ($Domain -eq [System.Environment]::MachineName)
-			{
-				# TODO: Show warning instead of error when failed (ex. in non elevated run check is Admin)
-				# NOTE: There is supposed to be no Bundle package that is also not Main
-				# TODO: We have Get-UserApp but it doesn't have -AllUsers switch so this is duplicate code,
-				# either implement the switch or make a new function ex. Get-AllUsersApp
-				$SysinternalsSuite = Get-AppxPackage -Name "Microsoft.SysinternalsSuite" -AllUsers -PackageTypeFilter Main
-			}
-			else
-			{
-				$SysinternalsSuite = Invoke-Command @SessionParams -ScriptBlock {
-					# HACK: This will fail in Windows PowerShell with "The system cannot find the file specified"
-					# ISSUE: https://github.com/MicrosoftDocs/windows-powershell-docs/issues/344
-					# See also: https://www.reddit.com/r/sysadmin/comments/lrm3nj/will_getappxpackage_allusers_work_in_remote/
-					Get-AppxPackage -Name "Microsoft.SysinternalsSuite" -AllUsers -PackageTypeFilter Main
-				}
-			}
+			$SysinternalsSuite = Get-UserApp -Name "Microsoft.SysinternalsSuite"
 
 			if ($SysinternalsSuite)
 			{

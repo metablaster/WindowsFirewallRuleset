@@ -84,16 +84,6 @@
 					"label": ""
 				}
 			]
-		},
-		{
-			"path": "Rules/IPv4/Outbound/StoreApps.ps1",
-			"bookmarks": [
-				{
-					"line": 343,
-					"column": 10,
-					"label": ""
-				}
-			]
 		}
 	]
 }

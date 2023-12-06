@@ -33,6 +33,7 @@ Here is a list of changes for each of the releases.
   - Updated rule description for Logitech G HUB
   - Added rules for Microsoft PowerToys
   - Updated rule for curl which ships with Git for automatic updates
+  - Updated rules for sysinternals suite to handle it if installed trough MS Store
 
 - Modules
 
@@ -43,6 +44,7 @@ Here is a list of changes for each of the releases.
     warning is shown if NuGet package source was not set to trusted in that case only
     - `Update-Table` function no longer assumes wildcard search but accepts wildcards
     - `Get-SystemProgram` Updated to get executable if program name can't be determined, or skiped otherwise
+    - `Get-UserApp` and `Get-SystemApp`, if no user is specified gets store apps for all user accounts on the computer
 
 - Scripts
 
