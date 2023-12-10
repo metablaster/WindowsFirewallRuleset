@@ -59,8 +59,8 @@
 	"editor.codeActionsOnSave": {
 		// No because we don't want to fix auto generated markdown and
 		// also because Markdown All in One is default formatter
-		"source.fixAll.markdownlint": false,
-		"source.fixAll.sortJSON": false
+		"source.fixAll.markdownlint": "never",
+		"source.fixAll.sortJSON": "never"
 	},
 	"editor.comments.ignoreEmptyLines": false,
 	// PSUseConsistentIndentation

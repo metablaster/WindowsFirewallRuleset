@@ -292,6 +292,8 @@ function Initialize-Connection
 			if (!$ConnectionStatus)
 			{
 				# Enable loopback only HTTP
+				# HACK: This call will produce errors when switching from Core to Windows PS
+				# To repro, call some script in Core and then repeat in Windows PS
 				Set-WinRMClient -Protocol HTTP @WinRMClientParams
 				Enable-WinRMServer -Protocol HTTP -KeepDefault -Loopback -Confirm:$false
 				Test-WinRM -Protocol HTTP @TestParams -ErrorAction Stop

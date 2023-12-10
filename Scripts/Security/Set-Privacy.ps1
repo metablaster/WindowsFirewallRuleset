@@ -46,6 +46,10 @@ Configure Windows privacy
 .DESCRIPTION
 Configures Windows privacy in a restrictive way
 
+.PARAMETER IncludeOptional
+If specified, optional privacy related GPO settings are configured which are otherwise
+better left to default value for normal user experience such as use of camera.
+
 .PARAMETER Force
 If specified, no prompt for confirmation is shown to perform actions
 
@@ -81,6 +85,9 @@ https://gpsearch.azurewebsites.net
 [OutputType([void])]
 param (
 	[Parameter()]
+	[switch] $IncludeOptional,
+
+	[Parameter()]
 	[switch] $Force
 )
 
@@ -104,14 +111,17 @@ if ($PSCmdlet.ShouldProcess("Operating system", "Configure Windows privacy"))
 	# GPO: Computer Configuration\Administrative Templates\Windows Components\Camera
 	#
 
-	Write-Information -MessageData "INFO: Allow Use of Camera"
-	# Enabled Value: decimal: 1
-	# Disabled Value: decimal: 0
-	$RegistryPath = "Software\Policies\Microsoft\Camera"
-	$ValueName = "AllowCamera"
-	$Value = 0
-	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
-	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+	if ($IncludeOptional)
+	{
+		Write-Information -MessageData "INFO: Allow Use of Camera"
+		# Enabled Value: decimal: 1
+		# Disabled Value: decimal: 0
+		$RegistryPath = "Software\Policies\Microsoft\Camera"
+		$ValueName = "AllowCamera"
+		$Value = 0
+		$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
+		Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+	}
 
 	#
 	# GPO: Computer Configuration\Administrative Templates\Windows Components\Credential User Interface
@@ -162,7 +172,8 @@ if ($PSCmdlet.ShouldProcess("Operating system", "Configure Windows privacy"))
 
 	if ($false)
 	{
-		# NOTE: This doesn't work as expected, lock screen is shown regardless of what's set
+		# NOTE: This applies only to users that are *not* required to press CTRL + ALT + DEL
+		# However our setup configures CTRL + ALT + DEL so this won't have any effect
 		Write-Information -MessageData "INFO: Do not display the lock screen"
 		# Enabled Value: decimal: 1
 		# Disabled Value: decimal: 0
