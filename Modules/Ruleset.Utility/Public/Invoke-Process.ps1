@@ -200,7 +200,7 @@ function Invoke-Process
 			$ArgumentList,
 			$Async,
 			$Domain,
-			[string] $InvocationName = $MyInvocation.InvocationName
+			$InvocationName
 		)
 
 		$CommandName = Split-Path -Path $Path -Leaf
@@ -629,18 +629,18 @@ function Invoke-Process
 	} # [ScriptBlock] $Code
 
 	Invoke-Command @SessionParams -ArgumentList $Path, $NoNewWindow, $WorkingDirectory,
-	$LoadUserProfile, $Timeout, $Raw, $RunAsCredential, $ArgumentList, $Async, $Domain -ScriptBlock $Code
+	$LoadUserProfile, $Timeout, $Raw, $RunAsCredential, $ArgumentList, $Async, $Domain, $MyInvocation.InvocationName -ScriptBlock $Code
 	return
 
 	# Inactive code
 	if ($Domain -ne [System.Environment]::MachineName)
 	{
 		Invoke-Command @SessionParams -ArgumentList $Path, $NoNewWindow, $WorkingDirectory,
-		$LoadUserProfile, $Timeout, $Raw, $RunAsCredential, $ArgumentList, $Async -ScriptBlock $Code
+		$LoadUserProfile, $Timeout, $Raw, $RunAsCredential, $ArgumentList, $Async, $Domain, $MyInvocation.InvocationName -ScriptBlock $Code
 	}
 	else
 	{
 		# TODO: Invoking scriptblock, if there is an error entire scriptblock will be print to console in red in Windows PS
-		& $Code $Path $NoNewWindow $WorkingDirectory $LoadUserProfile $Timeout $Raw $RunAsCredential $ArgumentList $Async
+		& $Code $Path $NoNewWindow $WorkingDirectory $LoadUserProfile $Timeout $Raw $RunAsCredential $ArgumentList $Async $Domain $MyInvocation.InvocationName
 	}
 }

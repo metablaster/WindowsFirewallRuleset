@@ -176,6 +176,20 @@ New-NetFirewallRule -DisplayName "DNS to gateway" `
 	-Description "Allow DNS (Domain Name System) requests by System to default gateway." |
 Format-RuleOutput
 
+# TODO: It's unknown which service initiates DNS to gateway but svchost is used
+# To reproduce connect WLAN when adapter DNS is set to default gateway
+New-NetFirewallRule -DisplayName "DNS to gateway" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress DefaultGateway4 `
+	-LocalPort Any -RemotePort 53 `
+	-LocalUser $NetworkService `
+	-InterfaceType $DefaultInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "Allow DNS (Domain Name System) requests by NETWORK SERVICE to default gateway." |
+Format-RuleOutput
+
 $DnsAccounts = $UsersGroupSDDL
 Merge-SDDL ([ref] $DnsAccounts) -From $AdminGroupSDDL -Unique
 

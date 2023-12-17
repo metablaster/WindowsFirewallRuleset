@@ -132,7 +132,7 @@ Write-Verbose -Message "[$ThisScript] Verifying firewall log file location"
 if (!(Compare-Path -Path $FirewallLogsFolder -ReferencePath "$ProjectRoot\*" -Loose))
 {
 	# Continue only if firewall logs go to location inside repository
-	Write-Warning -Message "[$ThisScript] Not settings permissions on $FirewallLogsFolder"
+	Write-Warning -Message "[$ThisScript] Not setting permissions on $FirewallLogsFolder"
 	return
 }
 

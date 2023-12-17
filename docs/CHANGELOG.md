@@ -34,6 +34,7 @@ Here is a list of changes for each of the releases.
   - Added rules for Microsoft PowerToys
   - Updated rule for curl which ships with Git for automatic updates
   - Updated rules for sysinternals suite to handle it if installed trough MS Store
+  - Added unfinished (weak) DNS to gateway rule
 
 - Modules
 

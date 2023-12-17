@@ -496,7 +496,9 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 
 		#
 		# Scheduled scan settings (used to automate full scans at least once a month)
-		# TODO: Figure out how to stop scheduled scan
+		# NOTE: To stop scheduled scan open Compunter management and expand:
+		# System Tools -> Task Scheduler -> Task Scheduler Library -> Microsoft -> Windows -> Windows Defender
+		# End task: Windows Defender Scheduled Scan
 		#
 
 		Write-Information -MessageData "INFO: Specify the scan type to use for a scheduled scan"

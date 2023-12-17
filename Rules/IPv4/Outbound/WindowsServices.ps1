@@ -430,6 +430,7 @@ Format-RuleOutput
 
 # BITS to Router info: https://docs.microsoft.com/en-us/windows/win32/bits/network-bandwidth
 # NOTE: Port was 48300, but other random ports can be used too
+# TODO: BITS can't connect to router according to administrative event log
 New-NetFirewallRule -DisplayName "Router capability check (BITS)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service BITS -Program $ServiceHost -Group $Group `
