@@ -6,7 +6,7 @@ This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 TODO: Update Copyright date and author
-Copyright (C) 2020-2023 metablaster zebal@protonmail.ch
+Copyright (C) 2020-2024 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@ SOFTWARE.
 
 .AUTHOR metablaster zebal@protonmail.com
 
-.COPYRIGHT Copyright (C) 2020-2023 metablaster zebal@protonmail.ch
+.COPYRIGHT Copyright (C) 2020-2024 metablaster zebal@protonmail.ch
 
 .TAGS Template
 

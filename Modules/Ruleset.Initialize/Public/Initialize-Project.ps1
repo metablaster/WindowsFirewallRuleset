@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020-2023 metablaster zebal@protonmail.ch
+Copyright (C) 2020-2024 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -84,7 +84,7 @@ function Initialize-Project
 		# Print watermark
 		Write-ColorMessage
 		Write-ColorMessage "Windows Firewall Ruleset v$ProjectVersion" Cyan
-		Write-ColorMessage "Copyright (C) 2019-2023 metablaster zebal@protonmail.ch" Cyan
+		Write-ColorMessage "Copyright (C) 2019-2024 metablaster zebal@protonmail.ch" Cyan
 		Write-ColorMessage "https://github.com/metablaster/WindowsFirewallRuleset" Cyan
 		Write-ColorMessage
 
