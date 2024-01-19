@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.Logging
 Module Guid: 9be5568a-a48e-4e96-a6df-90f699cf1c8a
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.16.0
-Help Version: 0.16.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.16.1
+Help Version: 0.16.1
 Locale: en-US
 ---
 

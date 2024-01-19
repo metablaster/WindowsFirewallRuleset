@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.ProgramInfo
 Module Guid: 49f11777-b8b6-4fed-bd82-32c8f48db81e
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.16.0
-Help Version: 0.16.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.16.1
+Help Version: 0.16.1
 Locale: en-US
 ---
 

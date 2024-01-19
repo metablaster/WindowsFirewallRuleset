@@ -142,6 +142,9 @@ TODO: Some services are logged as change from ex.
 from Manual to Manual, but that's not change,
 this will happen ie.
 if restarting service.
+TODO: Service 'Function Discovery Provider Host (fdPHost)' cannot be stopped due to the following error:
+Cannot stop 'FDResPub' service on computer '.'.
+This error indicates this script fails to recognize service status that is not in valid state to be configured
 
 ## RELATED LINKS
 

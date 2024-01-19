@@ -179,22 +179,32 @@ Build date: 2020/02/15
 
 Changes by metablaster - August 2020:
 
-1. Applied formatting and code style according to project rules
-2. Added parameter to target specific policy store
-3. Added parameter to let specify directory
-4. Added more output streams for debug, verbose and info
-5. Make output formatted and colored
-6. Changed minor flow of execution
+1.
+Applied formatting and code style according to project rules
+2.
+Added parameter to target specific policy store
+3.
+Added parameter to let specify directory
+4.
+Added more output streams for debug, verbose and info
+5.
+Make output formatted and colored
+6.
+Changed minor flow of execution
 
 December 2020:
 
-1. Rename parameters according to standard name convention
-2. Support resolving path wildcard pattern
+1.
+Rename parameters according to standard name convention
+2.
+Support resolving path wildcard pattern
 
 January 2022:
 
-1. Added time measurement code
-2. Added progress bar
+1.
+Added time measurement code
+2.
+Added progress bar
 
 TODO: implement removing rules not according to file
 
@@ -203,3 +213,4 @@ TODO: implement removing rules not according to file
 [https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRule.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRule.md)
 
 [https://github.com/MScholtes/Firewall-Manager](https://github.com/MScholtes/Firewall-Manager)
+

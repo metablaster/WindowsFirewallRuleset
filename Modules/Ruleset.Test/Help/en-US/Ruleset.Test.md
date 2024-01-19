@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.Test
 Module Guid: e40d3133-e3f2-47f3-9f81-572732cc7c91
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.16.0
-Help Version: 0.16.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.16.1
+Help Version: 0.16.1
 Locale: en-US
 ---
 

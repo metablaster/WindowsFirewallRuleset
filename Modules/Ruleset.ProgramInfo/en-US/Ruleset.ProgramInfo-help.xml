@@ -21,6 +21,7 @@
             <maml:para>Predefined program name for which to search</maml:para>
           </maml:description>
           <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">PowerToys</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">GoogleUpdate</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">BlueStacks</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">BlueStacksServices</command:parameterValue>
@@ -198,6 +199,7 @@
             <maml:para>Predefined program name for which to search</maml:para>
           </maml:description>
           <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">PowerToys</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">GoogleUpdate</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">BlueStacks</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">BlueStacksServices</command:parameterValue>
@@ -2084,7 +2086,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>*</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
           <maml:name>User</maml:name>
           <maml:description>
             <maml:para>User name in form of:</maml:para>
@@ -2092,6 +2094,8 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:para>- user_name@fqn.domain.tld</maml:para>
             <maml:para>- user_name</maml:para>
             <maml:para>- SID-string</maml:para>
+            <maml:para></maml:para>
+            <maml:para>If not specified gets store apps for all user accounts on the computer</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -2151,7 +2155,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>*</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
           <maml:name>User</maml:name>
           <maml:description>
             <maml:para>User name in form of:</maml:para>
@@ -2159,6 +2163,8 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:para>- user_name@fqn.domain.tld</maml:para>
             <maml:para>- user_name</maml:para>
             <maml:para>- SID-string</maml:para>
+            <maml:para></maml:para>
+            <maml:para>If not specified gets store apps for all user accounts on the computer</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -2206,7 +2212,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         </dev:type>
         <dev:defaultValue>*</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
         <maml:name>User</maml:name>
         <maml:description>
           <maml:para>User name in form of:</maml:para>
@@ -2214,6 +2220,8 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           <maml:para>- user_name@fqn.domain.tld</maml:para>
           <maml:para>- user_name</maml:para>
           <maml:para>- SID-string</maml:para>
+          <maml:para></maml:para>
+          <maml:para>If not specified gets store apps for all user accounts on the computer</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -2444,7 +2452,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>We should return empty PSCustomObject if test computer fails TODO: Parameter for x64 vs x86 software, then update Search-Installation switch as needed</maml:para>
+        <maml:para>We should return empty PSCustomObject if test computer fails TODO: Parameter for x64 vs x86 software, then update Search-Installation switch as needed TODO: One of the entries is blank program name leading to %SystemRoot%\System32</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2497,7 +2505,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>*</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
           <maml:name>User</maml:name>
           <maml:description>
             <maml:para>User name in form of:</maml:para>
@@ -2505,6 +2513,8 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:para>- user_name@fqn.domain.tld</maml:para>
             <maml:para>- user_name</maml:para>
             <maml:para>- SID-string</maml:para>
+            <maml:para></maml:para>
+            <maml:para>If not specified gets store apps for all user accounts on the computer</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -2564,7 +2574,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>*</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
           <maml:name>User</maml:name>
           <maml:description>
             <maml:para>User name in form of:</maml:para>
@@ -2572,6 +2582,8 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:para>- user_name@fqn.domain.tld</maml:para>
             <maml:para>- user_name</maml:para>
             <maml:para>- SID-string</maml:para>
+            <maml:para></maml:para>
+            <maml:para>If not specified gets store apps for all user accounts on the computer</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -2619,7 +2631,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         </dev:type>
         <dev:defaultValue>*</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
         <maml:name>User</maml:name>
         <maml:description>
           <maml:para>User name in form of:</maml:para>
@@ -2627,6 +2639,8 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           <maml:para>- user_name@fqn.domain.tld</maml:para>
           <maml:para>- user_name</maml:para>
           <maml:para>- SID-string</maml:para>
+          <maml:para></maml:para>
+          <maml:para>If not specified gets store apps for all user accounts on the computer</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -3372,6 +3386,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:para>Predefined program name</maml:para>
           </maml:description>
           <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">PowerToys</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">GoogleUpdate</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">BlueStacks</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">BlueStacksServices</command:parameterValue>
@@ -3537,6 +3552,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:para>Predefined program name</maml:para>
           </maml:description>
           <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">PowerToys</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">GoogleUpdate</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">BlueStacks</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">BlueStacksServices</command:parameterValue>
@@ -3815,7 +3831,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>None.</maml:para>
+        <maml:para>TODO: Search string for Update-Table -Search contains * on both side, this need to be more restrictive to avoid duplicate matches or misses.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -5002,7 +5018,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>SigcheckLocation</maml:name>
           <maml:description>
-            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no VirusTotal scan and report is done.</maml:para>
+            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If SysInternals suite was installed trough MS Store sigcheck is named sigcheck.exe ragless of OS bitness If location to sigcheck executable is not found then no VirusTotal scan and report is done.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -5010,6 +5026,18 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SkipPositivies</maml:name>
+          <maml:description>
+            <maml:para>Specify count of detections up to which VirusTotal detections will be considered false positives. If the number of detection is greater than this value, the file being scanned is considered malware. The default value is 0, meaning it must be clean of any detections.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$DefaultSkipPositivies</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>TimeOut</maml:name>
@@ -5098,7 +5126,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>SigcheckLocation</maml:name>
           <maml:description>
-            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no VirusTotal scan and report is done.</maml:para>
+            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If SysInternals suite was installed trough MS Store sigcheck is named sigcheck.exe ragless of OS bitness If location to sigcheck executable is not found then no VirusTotal scan and report is done.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -5106,6 +5134,18 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SkipPositivies</maml:name>
+          <maml:description>
+            <maml:para>Specify count of detections up to which VirusTotal detections will be considered false positives. If the number of detection is greater than this value, the file being scanned is considered malware. The default value is 0, meaning it must be clean of any detections.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$DefaultSkipPositivies</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>TimeOut</maml:name>
@@ -5218,7 +5258,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>SigcheckLocation</maml:name>
         <maml:description>
-          <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no VirusTotal scan and report is done.</maml:para>
+          <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If SysInternals suite was installed trough MS Store sigcheck is named sigcheck.exe ragless of OS bitness If location to sigcheck executable is not found then no VirusTotal scan and report is done.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -5226,6 +5266,18 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>SkipPositivies</maml:name>
+        <maml:description>
+          <maml:para>Specify count of detections up to which VirusTotal detections will be considered false positives. If the number of detection is greater than this value, the file being scanned is considered malware. The default value is 0, meaning it must be clean of any detections.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>$DefaultSkipPositivies</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>TimeOut</maml:name>

@@ -17,15 +17,16 @@ Analyze file trough VirusTotal API
 
 ```powershell
 Test-VirusTotal -LiteralPath <String> [-Domain <String>] [-Credential <PSCredential>]
- [-SigcheckLocation <String>] [-TimeOut <Int32>] [-Force] [-ProgressAction <ActionPreference>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+ [-SigcheckLocation <String>] [-SkipPositivies <Int32>] [-TimeOut <Int32>] [-Force]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Session
 
 ```powershell
-Test-VirusTotal -LiteralPath <String> [-Session <PSSession>] [-SigcheckLocation <String>] [-TimeOut <Int32>]
- [-Force] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Test-VirusTotal -LiteralPath <String> [-Session <PSSession>] [-SigcheckLocation <String>]
+ [-SkipPositivies <Int32>] [-TimeOut <Int32>] [-Force] [-ProgressAction <ActionPreference>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -113,6 +114,7 @@ Specify path to sigcheck executable program.
 Do not specify sigcheck file, only path to where sigcheck is located.
 By default working directory and PATH is searched for sigcheck64.exe.
 On 32 bit operating system sigcheck.exe is searched instead.
+If SysInternals suite was installed trough MS Store sigcheck is named sigcheck.exe ragless of OS bitness
 If location to sigcheck executable is not found then no VirusTotal scan and report is done.
 
 ```yaml
@@ -123,6 +125,24 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SkipPositivies
+
+Specify count of detections up to which VirusTotal detections will be considered false positives.
+If the number of detection is greater than this value, the file being scanned is considered malware.
+The default value is 0, meaning it must be clean of any detections.
+
+```yaml
+Type: System.Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: $DefaultSkipPositivies
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

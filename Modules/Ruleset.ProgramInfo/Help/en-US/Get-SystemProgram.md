@@ -85,5 +85,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 We should return empty PSCustomObject if test computer fails
 TODO: Parameter for x64 vs x86 software, then update Search-Installation switch as needed
+TODO: One of the entries is blank program name leading to %SystemRoot%\System32
 
 ## RELATED LINKS

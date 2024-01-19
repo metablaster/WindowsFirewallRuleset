@@ -16,14 +16,14 @@ Get store apps for specific user
 ### Domain (Default)
 
 ```powershell
-Get-UserApp [[-Name] <String>] -User <String> [-Domain <String>] [-Credential <PSCredential>]
+Get-UserApp [[-Name] <String>] [-User <String>] [-Domain <String>] [-Credential <PSCredential>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Session
 
 ```powershell
-Get-UserApp [[-Name] <String>] -User <String> [-Session <PSSession>] [-ProgressAction <ActionPreference>]
+Get-UserApp [[-Name] <String>] [-User <String>] [-Session <PSSession>] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
@@ -74,12 +74,14 @@ User name in form of:
 - user_name
 - SID-string
 
+If not specified gets store apps for all user accounts on the computer
+
 ```yaml
 Type: System.String
 Parameter Sets: (All)
 Aliases: UserName
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
