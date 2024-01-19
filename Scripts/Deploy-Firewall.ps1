@@ -307,6 +307,7 @@ if (Approve-Execute @ExecuteParams)
 		$AllScriptParams["Force"] = $AllCurrent
 		& "$Destination\Software\Calibre.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\FileZilla.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\Motrix.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\qBittorrent.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\Steam.ps1" @ScriptParams @AllScriptParams
 		& "$Destination\Software\TeamViewer.ps1" @ScriptParams @AllScriptParams

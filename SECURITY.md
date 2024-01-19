@@ -12,7 +12,6 @@ The following version of `Windows Firewall Ruleset` are eligible for security re
 
 | Version | Supported |
 | ------- | ----------|
-| 0.15.x  | &check;   |
 | 0.16.x  | &check;   |
 
 ## The difference between privacy and security

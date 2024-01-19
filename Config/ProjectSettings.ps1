@@ -743,7 +743,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 
 		# Recommended minimum PowerShell Core
 		# NOTE: 6.1.0 will not work, but 7.0.3 works, verify with PSUseCompatibleCmdlets
-		New-Variable -Name RequirePSVersion -Scope Global -Option Constant -Value ([version]::new(7, 4, 0))
+		New-Variable -Name RequirePSVersion -Scope Global -Option Constant -Value ([version]::new(7, 4, 1))
 	}
 	else
 	{
@@ -823,7 +823,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 		New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 5, 0))
 
 		# Recommended minimum VSCode version, do not decrement!
-		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 84, 2))
+		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 85, 2))
 
 		# Firewall logs folder
 		# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting
