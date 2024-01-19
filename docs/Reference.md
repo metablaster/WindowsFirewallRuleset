@@ -155,7 +155,6 @@ Also few commandlets from these modules:
 
 - [Advanced troubleshooting for TCP/IP issues](https://docs.microsoft.com/en-us/windows/client-management/troubleshoot-tcpip)
 - [WFP Monitoring](https://docs.microsoft.com/en-us/windows/win32/fwp/wfp-monitoring)
-- [Capture Network Traffic with netsh trace command](https://www.computertechblog.com/capture-network-traffic-with-netsh-trace-windows-command)
 
 [Table of Contents](#table-of-contents)
 
