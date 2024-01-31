@@ -171,6 +171,7 @@
 	"outline.collapseItems": "alwaysCollapse",
 	// VSCode: workbench
 	// TODO: What is a new option, needed for autogenrated files
+	// seems to be user only option?
 	"workbench.action.files.saveWithoutFormatting": [],
 	"workbench.colorCustomizations": {
 		"tab.activeBorder": "#ff0000"
@@ -300,17 +301,18 @@
 		"test": true,
 		"unsorted": true
 	},
+	// TODO: see if desired
 	"cSpell.diagnosticLevel": "Information",
+	"cSpell.enabled": true,
+	"cSpell.showAutocompleteSuggestions": true,
 	// CAUTION: Needs to be set in user settings
 	// "cSpell.showCommandsInEditorContextMenu": true,
 	// "cSpell.showStatus": true,
 	// "cSpell.showStatusAlignment": "Right",
 	// "cSpell.showSuggestionsLinkInEditorContextMenu": true,
-	"cSpell.showAutocompleteSuggestions": true,
+	// "cSpell.spellCheckDelayMs": 50,
 	"cSpell.spellCheckOnlyWorkspaceFiles": true,
 	"cSpell.suggestionMenuType": "quickPick",
-	// CAUTION: Needs to be set in uer settings
-	// "cSpell.spellCheckDelayMs": 50,
 	// Extension: Filter Line
 	// CAUTION: Needs to be set in user settings
 	// "filter-line.historySize": 20,
@@ -795,6 +797,8 @@
 	// CAUTION: Enabling this causes issues writing code according to indentation rules
 	"trailing-spaces.trimOnSave": false,
 	//Extension: XML
+	// NOTE: Configure telemetry if you wish in user settings
+	// ISSUE: https://github.com/redhat-developer/vscode-yaml/issues/564
 	"xml.codeLens.enabled": true,
 	"xml.completion.autoCloseRemovesContent": true,
 	"xml.completion.autoCloseTags": true,
