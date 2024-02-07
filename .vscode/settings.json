@@ -16,6 +16,7 @@
 		// Markdown All in One (yzhang.markdown-all-in-one) formats lists, tables and TOC
 		// markdownlint (DavidAnson.vscode-markdownlint) formats only certain violations
 		// Therefore use right click -> Format Document With...
+		// NOTE: markdown-all-in-one formatting will work only with newly created lists, tables and TOC
 		"editor.defaultFormatter": "yzhang.markdown-all-in-one"
 	},
 	"[powershell]": {
@@ -141,7 +142,7 @@
 		"*PssaTest.Module*": "unittest",
 		"*.test": "unittest",
 		"*.ansi": "ansi",
-		"config": "ssh_config",
+		"config": "properties",
 		"LICENSE": "plaintext",
 		"sshd_config": "ssh_config"
 	},
@@ -170,9 +171,6 @@
 	// VSCode: outline
 	"outline.collapseItems": "alwaysCollapse",
 	// VSCode: workbench
-	// TODO: What is a new option, needed for autogenrated files
-	// seems to be user only option?
-	"workbench.action.files.saveWithoutFormatting": [],
 	"workbench.colorCustomizations": {
 		"tab.activeBorder": "#ff0000"
 	},
@@ -195,7 +193,7 @@
 	"bookmarks.sideBar.expanded": true,
 	"bookmarks.wrapNavigation": true,
 	// Extension: Code Spell Checker
-	// CAUTION: Settings for cSpell defined in settings.json are not recognized in cspell.json
+	// WARN: Settings for cSpell defined in settings.json are not recognized in cspell.json
 	"cSpell.autoFormatConfigFile": false,
 	"cSpell.blockCheckingWhenAverageChunkSizeGreaterThan": 120,
 	"cSpell.blockCheckingWhenLineLengthGreaterThan": 10000,
@@ -203,6 +201,13 @@
 	"cSpell.checkLimit": 500,
 	"cSpell.checkOnlyEnabledFileTypes": true,
 	"cSpell.customDictionaries": {
+		"dic.foul": {
+			"description": "Spellcheck rude words which to mark as forbidden",
+			"name": "foul",
+			"path": "${workspaceRoot}/Config/cSpell/foul/foul.dic",
+			"scope": "workspace",
+			"addWords": false
+		},
 		"dic.commands": {
 			"description": "Spellcheck words related to command line commands and arguments",
 			"name": "commands",
@@ -228,13 +233,6 @@
 			"description": "Spellcheck words related to networking, firewall and WFP terms",
 			"name": "firewall",
 			"path": "${workspaceRoot}/Config/cSpell/firewall.dic",
-			"scope": "workspace",
-			"addWords": true
-		},
-		"dic.foul": {
-			"description": "Spellcheck rude words which to mark as forbidden",
-			"name": "foul",
-			"path": "${workspaceRoot}/Config/cSpell/foul/foul.dic",
 			"scope": "workspace",
 			"addWords": true
 		},
@@ -288,11 +286,11 @@
 			"addWords": true
 		},
 		// Enable\disable specific custom dictionaries:
+		"foul": true,
 		"commands": true,
 		"computer": true,
 		"development": true,
 		"firewall": true,
-		"foul": true,
 		"identifiers": true,
 		"names": true,
 		"programs": true,
@@ -305,7 +303,7 @@
 	"cSpell.diagnosticLevel": "Information",
 	"cSpell.enabled": true,
 	"cSpell.showAutocompleteSuggestions": true,
-	// CAUTION: Needs to be set in user settings
+	// WARN: Needs to be set in user settings
 	// "cSpell.showCommandsInEditorContextMenu": true,
 	// "cSpell.showStatus": true,
 	// "cSpell.showStatusAlignment": "Right",
@@ -314,7 +312,7 @@
 	"cSpell.spellCheckOnlyWorkspaceFiles": true,
 	"cSpell.suggestionMenuType": "quickPick",
 	// Extension: Filter Line
-	// CAUTION: Needs to be set in user settings
+	// WARN: Needs to be set in user settings
 	// "filter-line.historySize": 20,
 	// Extension: Highlight Bad Chars
 	"highlight-bad-chars.additionalUnicodeChars": [
@@ -497,7 +495,7 @@
 	"powershell.analyzeOpenDocumentsOnly": false,
 	"powershell.buttons.showPanelMovementButtons": false,
 	"powershell.buttons.showRunButtons": true,
-	// CAUTION: Setting this to true requires test scripts to implement removing created PS sessions.
+	// WARN: Setting this to true requires test scripts to implement removing created PS sessions.
 	// TODO: One possibility is to set "ProjectCheck" variable to true in Config\ProjectSettings.ps1
 	// and instruct unit tests to remove old PS sessions with Disconnect-Computer if ProjectCheck is true.
 	"powershell.debugging.createTemporaryIntegratedConsole": false,
@@ -587,7 +585,6 @@
 	"todo-tree.filtering.includeHiddenFiles": false,
 	"todo-tree.filtering.useBuiltInExcludes": "file and search excludes",
 	"todo-tree.general.debug": false,
-	"todo-tree.general.enableFileWatcher": false,
 	"todo-tree.general.revealBehaviour": "start of todo",
 	"todo-tree.general.rootFolder": "${workspaceFolder}",
 	"todo-tree.general.showActivityBarBadge": false,
@@ -603,7 +600,7 @@
 		"FIX",
 		"MSDN",
 		"DOCS",
-		"CAUTION",
+		"WARN",
 		"ISSUE",
 		"cSpell",
 		"[ ]",
@@ -705,7 +702,7 @@
 			"opacity": 65
 		},
 		// Warning to developer
-		"CAUTION": {
+		"WARN": {
 			"icon": "alert",
 			"type": "tag",
 			"foreground": "#ffffff",
@@ -794,7 +791,7 @@
 		"\""
 	],
 	// Extension: Trailing Spaces
-	// CAUTION: Enabling this causes issues writing code according to indentation rules
+	// WARN: Enabling this causes issues writing code according to indentation rules
 	"trailing-spaces.trimOnSave": false,
 	//Extension: XML
 	// NOTE: Configure telemetry if you wish in user settings
@@ -840,7 +837,6 @@
 	"xml.format.emptyElements": "expand",
 	"xml.format.enabled": true,
 	"xml.format.enforceQuoteStyle": "preferred",
-	"xml.format.experimental": false,
 	"xml.format.grammarAwareFormatting": true,
 	"xml.format.joinCDATALines": false,
 	"xml.format.joinCommentLines": false,
@@ -862,7 +858,7 @@
 	// "redhat.telemetry.enabled": false,
 	// NOTE: If desired, it must be configured in user settings
 	// "xml.server.binary.trustedHashes": [],
-	// CAUTION: For XML extension to work it must be allowed internet access, there is rule in Rules\VSCode.ps1
+	// WARN: For XML extension to work it must be allowed internet access, there is rule in Rules\VSCode.ps1
 	"xml.server.preferBinary": true,
 	"xml.server.silenceExtensionWarning": false,
 	"xml.symbols.enabled": true,

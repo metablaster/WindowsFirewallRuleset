@@ -6,19 +6,14 @@
 	"enabled": true,
 	// "checkOnlyEnabledFileTypes" (in settings)
 	"enableFiletypes": [
-		// TODO: publish.sh in Actions not spellchecked
 		"json",
 		"jsonc",
 		"ignore",
-		"properties", // gitattributes
+		"properties", // gitattributes, *.conf, config
 		"log",
 		"csv (semicolon)", // exported rules
 		"ini", // mTail configuration
-		"csharp", // Source code for DLL's
-		"yaml", // GitHub actions
-		"html", // In docs folder
-		"ssh_config", // Remote-SSH configuration
-		"javascript" // In Actions - publish sitemap
+		"ssh_config" // Remote-SSH configuration, config
 	],
 	// BUG: Does not work, but ${workspaceFolder} is the default anyway
 	//"globRoot": "${workspaceFolder}",
@@ -44,7 +39,11 @@
 		"markdown",
 		"plaintext",
 		"powershell",
-		"xml"
+		"xml",
+		"csharp", // Source code for DLL's
+		"yaml", // GitHub actions
+		"html", // In docs folder
+		"javascript" // In Actions - publish sitemap
 	],
 	// "blockCheckingWhenAverageChunkSizeGreaterThan" (in settings)
 	// "blockCheckingWhenLineLengthGreaterThan": (in settings)
