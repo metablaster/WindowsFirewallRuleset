@@ -495,7 +495,7 @@ $Program = "%SystemRoot%\System32\ftp.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	# TODO: need to test and adjust for passive vs active and various types of protocol:
-	# FTP, SFPT, FTPS etc... All this have to be updated also for other FTP programs
+	# FTP, SFTP, FTPS etc... All this have to be updated also for other FTP programs
 	New-NetFirewallRule -DisplayName "FTP Client" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `

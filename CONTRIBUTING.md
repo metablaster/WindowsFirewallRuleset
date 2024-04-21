@@ -126,6 +126,10 @@ You can get it from [gpg4win.org][gpg4win]
 If you don't want your computer to be testing ground and subject to potential problems you'll also
 want to set up virtual machine, suggested virtual machine is [Hyper-V][hyperv]
 
+Spellchecking configuration depends on [devdict](https://github.com/metablaster/devdict), therefore
+that repository should be cloned as well and then the `cSpell` configuration in `./vscode/settings.json`
+should be adjusted to point to path where `devdict` was cloned.
+
 ### Recommended workspace extensions
 
 When you open up repository with VSCode the following extensions will be suggested for installation.\

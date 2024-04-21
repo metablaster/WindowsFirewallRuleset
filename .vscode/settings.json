@@ -205,13 +205,154 @@
 	"cSpell.checkLimit": 500,
 	"cSpell.checkOnlyEnabledFileTypes": true,
 	"cSpell.customDictionaries": {
+		"dic.computer-acronyms": {
+			"name": "computer-acronyms",
+			"path": "~/dev/GitHub/devdict/Computer/computer-acronyms.dic",
+			"description": "OS agnostic dictionary of computer acronyms",
+			"scope": "user",
+			"addWords": true
+		},
+		"dic.computer-software-names": {
+			"name": "computer-software-names",
+			"path": "~/dev/GitHub/devdict/Computer/computer-software-names.dic",
+			"description": "OS agnostic dictionary of program, services (daemons) and driver (modules) names",
+			"scope": "user",
+			"addWords": true
+		},
+		"dic.computer-software-parameters": {
+			"name": "computer-software-parameters",
+			"path": "~/dev/GitHub/devdict/Computer/computer-software-parameters.dic",
+			"description": "Dictionary OS agnostic program, services (daemons) and driver (modules) parameters (options)",
+			"scope": "user",
+			"addWords": true
+		},
+		"dic.computer": {
+			"name": "computer",
+			"path": "~/dev/GitHub/devdict/Computer/computer.dic",
+			"description": "OS agnostic dictionary of computer terms",
+			"scope": "user",
+			"addWords": true
+		},
+		"dic.filetypes": {
+			"name": "filetypes",
+			"path": "~/dev/GitHub/devdict/Computer/filetypes.dic",
+			"description": "Dictionary of file types and extensions",
+			"scope": "user",
+			"addWords": true
+		},
+		"dic.cpp": {
+			"name": "cpp",
+			"path": "~/dev/GitHub/devdict/Development/cpp.dic",
+			"description": "Dictionary of C++ development terms or symbols",
+			"scope": "user",
+			"addWords": true
+		},
+		"dic.development": {
+			"name": "development",
+			"path": "~/dev/GitHub/devdict/Development/development.dic",
+			"description": "Dictionary of general software development terms or symbols",
+			"scope": "user",
+			"addWords": true
+		},
+		"dic.powershell": {
+			"name": "powershell",
+			"path": "~/dev/GitHub/devdict/Development/powershell.dic",
+			"description": "Dictionary of PowerShell development terms or symbols",
+			"scope": "user",
+			"addWords": true
+		},
+		"dic.windowsdev": {
+			"name": "windowsdev",
+			"path": "~/dev/GitHub/devdict/Development/windowsdev.dic",
+			"description": "Dictionary of software development terms or symbols specific to Windows",
+			"scope": "user",
+			"addWords": true
+		},
 		"dic.foul": {
-			"description": "Spellcheck rude words which to mark as forbidden",
 			"name": "foul",
-			"path": "${workspaceRoot}/Config/cSpell/foul/foul.dic",
-			"scope": "workspace",
+			"path": "~/dev/GitHub/devdict/Foul/foul.dic",
+			"description": "Dictionary of rude words which to flag as forbidden",
+			"scope": "user",
 			"addWords": false
 		},
+		"dic.linux-acronyms": {
+			"name": "linux-acronyms",
+			"path": "~/dev/GitHub/devdict/Linux/linux-acronyms.dic",
+			"description": "Dictionary of computer acronyms on Linux system",
+			"scope": "user",
+			"addWords": true
+		},
+		"dic.linux-software-names": {
+			"name": "linux-software-names",
+			"path": "~/dev/GitHub/devdict/Linux/linux-software-names.dic",
+			"description": "Dictionary of program, services (daemons) and driver (modules) names on Linux system",
+			"scope": "user",
+			"addWords": true
+		},
+		"dic.linux-software-parameters": {
+			"name": "linux-software-parameters",
+			"path": "~/dev/GitHub/devdict/Linux/linux-software-parameters.dic",
+			"description": "Dictionary of program, services (daemons) and driver (modules) parameters (options) on Linux system",
+			"scope": "user",
+			"addWords": true
+		},
+		"dic.linux": {
+			"name": "linux",
+			"path": "~/dev/GitHub/devdict/Linux/linux.dic",
+			"description": "Dictionary of computer terms on Linux system",
+			"scope": "user",
+			"addWords": true
+		},
+		"dic.networking": {
+			"name": "networking",
+			"path": "~/dev/GitHub/devdict/Networking/networking.dic",
+			"description": "Dictionary of computer networking terms and acronyms (not protocols)",
+			"scope": "user",
+			"addWords": true
+		},
+		"dic.nftables": {
+			"name": "nftables",
+			"path": "~/dev/GitHub/devdict/Networking/nftables.dic",
+			"description": "Dictionary of nftables firewall keywords",
+			"scope": "user",
+			"addWords": true
+		},
+		"dic.protocols": {
+			"name": "protocols",
+			"path": "~/dev/GitHub/devdict/Networking/protocols.dic",
+			"description": "Dictionary of network protocol acronyms",
+			"scope": "user",
+			"addWords": true
+		},
+		"dic.windows-acronyms": {
+			"name": "windows-acronyms",
+			"path": "~/dev/GitHub/devdict/Windows/windows-acronyms.dic",
+			"description": "Dictionary of computer acronyms on Windows system",
+			"scope": "user",
+			"addWords": true
+		},
+		"dic.windows-software-names": {
+			"name": "windows-software-names",
+			"path": "~/dev/GitHub/devdict/Windows/windows-software-names.dic",
+			"description": "Dictionary of program, services (daemons) and driver (modules) names on Windows system",
+			"scope": "user",
+			"addWords": true
+		},
+		"dic.windows-software-parameters": {
+			"name": "windows-software-parameters",
+			"path": "~/dev/GitHub/devdict/Windows/windows-software-parameters.dic",
+			"description": "Dictionary of program, services (daemons) and driver (modules) parameters (options) on Windows system",
+			"scope": "user",
+			"addWords": true
+		},
+		"dic.windows": {
+			"name": "windows",
+			"path": "~/dev/GitHub/devdict/Windows/windows.dic",
+			"description": "Dictionary of computer terms on Windows system",
+			"scope": "user",
+			"addWords": true
+		},
+		// Workspace scope dictionaries
 		"dic.commands": {
 			"description": "Spellcheck words related to command line commands and arguments",
 			"name": "commands",
@@ -219,24 +360,24 @@
 			"scope": "workspace",
 			"addWords": true
 		},
-		"dic.computer": {
+		"dic.computer2": {
 			"description": "Spellcheck words related to computer, system components and files",
-			"name": "computer",
-			"path": "${workspaceRoot}/Config/cSpell/computer.dic",
+			"name": "computer2",
+			"path": "${workspaceRoot}/Config/cSpell/computer2.dic",
 			"scope": "workspace",
 			"addWords": true
 		},
-		"dic.development": {
+		"dic.development2": {
 			"description": "Spellcheck words related to language keywords, files and programing terms",
-			"name": "development",
-			"path": "${workspaceRoot}/Config/cSpell/development.dic",
+			"name": "development2",
+			"path": "${workspaceRoot}/Config/cSpell/development2.dic",
 			"scope": "workspace",
 			"addWords": true
 		},
-		"dic.firewall": {
+		"dic.firewall2": {
 			"description": "Spellcheck words related to networking, firewall and WFP terms",
-			"name": "firewall",
-			"path": "${workspaceRoot}/Config/cSpell/firewall.dic",
+			"name": "firewall2",
+			"path": "${workspaceRoot}/Config/cSpell/firewall2.dic",
 			"scope": "workspace",
 			"addWords": true
 		},
@@ -268,13 +409,6 @@
 			"scope": "workspace",
 			"addWords": true
 		},
-		"dic.protocols": {
-			"description": "Spellcheck words identifying computer and network protocols",
-			"name": "protocols",
-			"path": "${workspaceRoot}/Config/cSpell/protocols.dic",
-			"scope": "workspace",
-			"addWords": true
-		},
 		"dic.test": {
 			"description": "Spellcheck words used in unit tests in this repository, intentionally bad words",
 			"name": "test",
@@ -289,17 +423,39 @@
 			"scope": "workspace",
 			"addWords": true
 		},
-		// Enable\disable specific custom dictionaries:
+		// Enable\disable specific devdict dictionaries:
+		// Read-only
 		"foul": true,
-		"commands": true,
+		// Read-write
+		"computer-acronyms": true,
+		"computer-software-names": true,
+		"computer-software-parameters": true,
 		"computer": true,
+		"filetypes": true,
+		"cpp": true,
 		"development": true,
-		"firewall": true,
+		"powershell": true,
+		"windowsdev": true,
+		"networking": true,
+		"nftables": true,
+		"protocols": true,
+		"linux-acronyms": true,
+		"linux-software-names": true,
+		"linux-software-parameters": true,
+		"linux": true,
+		"windows-acronyms": true,
+		"windows-software-names": true,
+		"windows-software-parameters": true,
+		"windows": true,
+		// Enable\disable specific workspace dictionaries:
+		"commands": true,
+		"computer2": true,
+		"development2": true,
+		"firewall2": true,
 		"identifiers": true,
 		"names": true,
 		"programs": true,
 		"project": true,
-		"protocols": true,
 		"test": true,
 		"unsorted": true
 	},
