@@ -7,7 +7,7 @@
 {
 	// VSCode: File specific settings
 	"[markdown]": {
-		// Word wrapping must be explicity set for markdown
+		// Word wrapping must be explicitly set for markdown
 		// see: https://github.com/microsoft/vscode/issues/72559
 		"editor.wordWrap": "off",
 		// Markdown standard is 2 spaces for indentation
@@ -28,7 +28,7 @@
 		"editor.formatOnPaste": false,
 		"editor.formatOnSave": false,
 		"editor.formatOnType": false,
-		"editor.trimAutoWhitespace": false,
+		"editor.trimAutoWhitespace": false
 	},
 	"[ansi]": {
 		// BUG: Working in diffeditor but not in normal editor
@@ -47,11 +47,14 @@
 		// YAML extension
 		"editor.defaultFormatter": "redhat.vscode-yaml"
 	},
-	// VSCode: audio cues
+	// VSCode: Accessibility
 	"accessibility.signals.lineHasError": {
 		"sound": "off"
 	},
 	"accessibility.signals.lineHasWarning": {
+		"sound": "off"
+	},
+	"accessibility.signals.terminalBell": {
 		"sound": "off"
 	},
 	// VSCode: diffeditor
@@ -254,6 +257,13 @@
 			"scope": "user",
 			"addWords": true
 		},
+		"dic.extensions": {
+			"name": "extensions",
+			"path": "~/dev/GitHub/devdict/Development/extensions.dic",
+			"description": "Dictionary of VSCode extension identifiers",
+			"scope": "user",
+			"addWords": true
+		},
 		"dic.powershell": {
 			"name": "powershell",
 			"path": "~/dev/GitHub/devdict/Development/powershell.dic",
@@ -434,6 +444,7 @@
 		"filetypes": true,
 		"cpp": true,
 		"development": true,
+		"extensions": true,
 		"powershell": true,
 		"windowsdev": true,
 		"networking": true,
@@ -716,7 +727,8 @@
 	// PowerShell: integrated console version
 	// NOTE: Run in command palette "PowerShell: Show Session Menu" to list available sessions to set here
 	// To configure some other shell use "powershell.powerShellAdditionalExePaths": { "name": "path" }
-	"powershell.powerShellDefaultVersion": "PowerShell (x64)",
+	"powershell.powerShellDefaultVersion": "PowerShell", // Linux
+	//"powershell.powerShellDefaultVersion": "PowerShell (x64)", // Windows
 	// Extension: Rainbow CSV
 	"rainbow_csv.csv_lint_detect_trailing_spaces": true,
 	"rainbow_csv.enable_auto_csv_lint": true,
@@ -975,7 +987,7 @@
 			// https://www.google.com/schemas/sitemap/0.84/
 			"systemId": "https://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd",
 			"pattern": "**/*sitemap.xml"
-		},
+		}
 		// NOTE: Not possible to use PlatyPS schema because:
 		// The schema files are stored in $PSHOME/Schemas/PSMaml.
 		// The MAML format is made up of multiple schemas.
