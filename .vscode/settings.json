@@ -236,6 +236,13 @@
 			"scope": "user",
 			"addWords": true
 		},
+		"dic.domains": {
+			"name": "domains",
+			"path": "~/dev/GitHub/devdict/Computer/domains.dic",
+			"description": "Dictionary of web domains",
+			"scope": "user",
+			"addWords": true
+		},
 		"dic.filetypes": {
 			"name": "filetypes",
 			"path": "~/dev/GitHub/devdict/Computer/filetypes.dic",
@@ -334,6 +341,13 @@
 			"scope": "user",
 			"addWords": true
 		},
+		"dic.storeapps": {
+			"name": "storeapps",
+			"path": "~/dev/GitHub/devdict/Windows/storeapps.dic",
+			"description": "Dictionary of Microsoft store app identifiers",
+			"scope": "user",
+			"addWords": true
+		},
 		"dic.windows-acronyms": {
 			"name": "windows-acronyms",
 			"path": "~/dev/GitHub/devdict/Windows/windows-acronyms.dic",
@@ -363,73 +377,10 @@
 			"addWords": true
 		},
 		// Workspace scope dictionaries
-		"dic.commands": {
-			"description": "Spellcheck words related to command line commands and arguments",
-			"name": "commands",
-			"path": "${workspaceRoot}/Config/cSpell/commands.dic",
-			"scope": "workspace",
-			"addWords": true
-		},
-		"dic.computer2": {
-			"description": "Spellcheck words related to computer, system components and files",
-			"name": "computer2",
-			"path": "${workspaceRoot}/Config/cSpell/computer2.dic",
-			"scope": "workspace",
-			"addWords": true
-		},
-		"dic.development2": {
-			"description": "Spellcheck words related to language keywords, files and programing terms",
-			"name": "development2",
-			"path": "${workspaceRoot}/Config/cSpell/development2.dic",
-			"scope": "workspace",
-			"addWords": true
-		},
-		"dic.firewall2": {
-			"description": "Spellcheck words related to networking, firewall and WFP terms",
-			"name": "firewall2",
-			"path": "${workspaceRoot}/Config/cSpell/firewall2.dic",
-			"scope": "workspace",
-			"addWords": true
-		},
-		"dic.identifiers": {
-			"description": "Spellcheck words for Windows store apps and VSCode extension identifiers",
-			"name": "identifiers",
-			"path": "${workspaceRoot}/Config/cSpell/identifiers.dic",
-			"scope": "workspace",
-			"addWords": true
-		},
 		"dic.names": {
 			"description": "Spellcheck words related to names of repositories, websites and people",
 			"name": "names",
 			"path": "${workspaceRoot}/Config/cSpell/names.dic",
-			"scope": "workspace",
-			"addWords": true
-		},
-		"dic.programs": {
-			"description": "Spellcheck words identifying executables, apps, services and drivers",
-			"name": "programs",
-			"path": "${workspaceRoot}/Config/cSpell/programs.dic",
-			"scope": "workspace",
-			"addWords": true
-		},
-		"dic.project": {
-			"description": "Spellcheck words specific to this repository such as setting names",
-			"name": "project",
-			"path": "${workspaceRoot}/Config/cSpell/project.dic",
-			"scope": "workspace",
-			"addWords": true
-		},
-		"dic.test": {
-			"description": "Spellcheck words used in unit tests in this repository, intentionally bad words",
-			"name": "test",
-			"path": "${workspaceRoot}/Config/cSpell/test.dic",
-			"scope": "workspace",
-			"addWords": true
-		},
-		"dic.unsorted": {
-			"description": "Specific words used in this project which don't fit into any other category",
-			"name": "unsorted",
-			"path": "${workspaceRoot}/Config/cSpell/unsorted.dic",
 			"scope": "workspace",
 			"addWords": true
 		},
@@ -441,34 +392,27 @@
 		"computer-software-names": true,
 		"computer-software-parameters": true,
 		"computer": true,
+		"domains": false,
 		"filetypes": true,
-		"cpp": true,
+		"cpp": false,
 		"development": true,
 		"extensions": true,
 		"powershell": true,
 		"windowsdev": true,
 		"networking": true,
-		"nftables": true,
+		"nftables": false,
 		"protocols": true,
-		"linux-acronyms": true,
-		"linux-software-names": true,
-		"linux-software-parameters": true,
-		"linux": true,
+		"linux-acronyms": false,
+		"linux-software-names": false,
+		"linux-software-parameters": false,
+		"linux": false,
+		"storeapps": true,
 		"windows-acronyms": true,
 		"windows-software-names": true,
 		"windows-software-parameters": true,
 		"windows": true,
 		// Enable\disable specific workspace dictionaries:
-		"commands": true,
-		"computer2": true,
-		"development2": true,
-		"firewall2": true,
-		"identifiers": true,
-		"names": true,
-		"programs": true,
-		"project": true,
-		"test": true,
-		"unsorted": true
+		"names": true
 	},
 	// TODO: see if desired
 	"cSpell.diagnosticLevel": "Information",
