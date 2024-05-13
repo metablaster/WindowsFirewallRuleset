@@ -271,6 +271,13 @@
 			"scope": "user",
 			"addWords": true
 		},
+		"dic.linuxdev": {
+			"name": "linuxdev",
+			"path": "~/dev/GitHub/devdict/Development/linuxdev.dic",
+			"description": "Dictionary of software development terms or symbols specific to Linux",
+			"scope": "user",
+			"addWords": true
+		},
 		"dic.powershell": {
 			"name": "powershell",
 			"path": "~/dev/GitHub/devdict/Development/powershell.dic",
@@ -397,6 +404,7 @@
 		"cpp": false,
 		"development": true,
 		"extensions": true,
+		"linuxdev": false,
 		"powershell": true,
 		"windowsdev": true,
 		"networking": true,
@@ -698,7 +706,7 @@
 	"sortLines.sortEntireFile": true,
 	// Extension: Todo Tree
 	// NOTE: For markdown settings https://github.com/Gruntfuggly/todo-tree#markdown-support
-	"todo-tree.filtering.includeHiddenFiles": false,
+	"todo-tree.filtering.includeHiddenFiles": true,
 	"todo-tree.filtering.useBuiltInExcludes": "file and search excludes",
 	"todo-tree.general.debug": false,
 	"todo-tree.general.revealBehaviour": "start of todo",

@@ -19,6 +19,7 @@
 	//"globRoot": "${workspaceFolder}",
 	"ignorePaths": [
 		"/.git",
+		"!/.vscode",
 		"/Logs",
 		"/Test/Ruleset.Utility/Encoding",
 		"/Config/cSpell/foul/foul.dic",
@@ -71,7 +72,6 @@
 		"Behaviour",
 		"bigendianutf",
 		"CONTOSO",
-		"devdict",
 		"dmcertinst",
 		"FilterRTID",
 		"informations",
