@@ -236,6 +236,13 @@
 			"scope": "user",
 			"addWords": true
 		},
+		"dic.cryptography": {
+			"name": "cryptography",
+			"path": "~/dev/GitHub/devdict/Computer/cryptography.dic",
+			"description": "Dictionary of cryptographic terms",
+			"scope": "user",
+			"addWords": true
+		},
 		"dic.domains": {
 			"name": "domains",
 			"path": "~/dev/GitHub/devdict/Computer/domains.dic",
@@ -298,6 +305,20 @@
 			"description": "Dictionary of rude words which to flag as forbidden",
 			"scope": "user",
 			"addWords": false
+		},
+		"dic.english": {
+			"name": "english",
+			"path": "~/dev/GitHub/devdict/Language/english.dic",
+			"description": "Dictionary of English words including compound words",
+			"scope": "user",
+			"addWords": true
+		},
+		"dic.legal": {
+			"name": "legal",
+			"path": "~/dev/GitHub/devdict/Language/legal.dic",
+			"description": "Dictionary of English legal words",
+			"scope": "user",
+			"addWords": true
 		},
 		"dic.linux-acronyms": {
 			"name": "linux-acronyms",
@@ -399,6 +420,7 @@
 		"computer-software-names": true,
 		"computer-software-parameters": true,
 		"computer": true,
+		"cryptography": false,
 		"domains": false,
 		"filetypes": true,
 		"cpp": false,
@@ -407,13 +429,15 @@
 		"linuxdev": false,
 		"powershell": true,
 		"windowsdev": true,
-		"networking": true,
-		"nftables": false,
-		"protocols": true,
+		"english": false,
+		"legal": false,
 		"linux-acronyms": false,
 		"linux-software-names": false,
 		"linux-software-parameters": false,
 		"linux": false,
+		"networking": true,
+		"nftables": false,
+		"protocols": true,
 		"storeapps": true,
 		"windows-acronyms": true,
 		"windows-software-names": true,
@@ -971,7 +995,7 @@
 	"xml.format.preserveEmptyContent": false,
 	"xml.format.preserveSpace": [],
 	"xml.format.spaceBeforeEmptyCloseTag": true,
-	"xml.format.splitAttributes": false,
+	"xml.format.splitAttributes": "preserve",
 	"xml.format.splitAttributesIndentSize": 2,
 	"xml.format.xsiSchemaLocationSplit": "onPair",
 	"xml.logs.client": false,
